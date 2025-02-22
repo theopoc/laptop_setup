@@ -1,0 +1,10 @@
+[tools]
+{% for tool in mise_tools %}
+{{ tool }} = "{{ mise_tools[tool] }}"
+{% endfor %}
+
+[settings]
+experimental = false
+always_keep_download = false
+always_keep_install = false
+legacy_version_file = false 

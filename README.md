@@ -23,4 +23,4 @@ pip3 install ansible
 ```
 ansible-galaxy role install -r requirements.yml
 ansible-playbook main.yml --ask-become-pass
-```# ansible-mgmt-laptop
+```

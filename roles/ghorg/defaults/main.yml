@@ -1,0 +1,2 @@
+---
+ghorg_output_dir: "{{ ansible_env.HOME }}/ghorg-clones" 

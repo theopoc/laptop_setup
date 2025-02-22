@@ -1,0 +1,22 @@
+---
+- name: Check if oh-my-zsh is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_installed
+
+- name: Download oh-my-zsh installer
+  get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/install_oh_my_zsh.sh
+    mode: '0755'
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Install oh-my-zsh
+  shell: /tmp/install_oh_my_zsh.sh --unattended
+  when: not oh_my_zsh_installed.stat.exists
+
+- name: Clean up installer
+  file:
+    path: /tmp/install_oh_my_zsh.sh
+    state: absent
+  when: not oh_my_zsh_installed.stat.exists 

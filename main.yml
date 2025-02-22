@@ -1,0 +1,33 @@
+---
+- name: Ping Test Playbook
+  hosts: localhost
+  connection: local
+  become: true
+  gather_facts: true
+  vars:
+    homebrew_cask_apps:
+      - google-chrome
+      - firefox
+      - slack
+      - spotify
+    homebrew_installed_packages:
+      - git
+      - python
+      - python3
+      - pip
+      - pip3
+      - nmap
+      - openssl
+      - wget
+      - curl
+      - jq
+      - htop
+      - gopass
+      - mise
+      - direnv
+    
+  roles:
+    - role: geerlingguy.homebrew
+    - role: mise
+    - role: ghorg
+    - role: gita
