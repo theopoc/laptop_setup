@@ -1,6 +1,5 @@
 ---
 
-cursor_application_path: /Applications/Cursor.app
-
+cursor_application_path: /Applications/Cursor.app/Contents/MacOS/Cursor
 # Override default extensions or add environment-specific ones
 additional_cursor_extensions: []

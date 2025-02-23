@@ -5,15 +5,39 @@
     state: present
   tags: ['cursor']
 
-- name: Add Cursor to Gatekeeper
-  ansible.builtin.command: xattr -dr com.apple.quarantine {{ cursor_application_path }}
-  changed_when: false
-  become: true
-  tags: cursor
+# - name: Install cursor command with osascript
+#   ansible.builtin.command: |
+#     osascript -e 'tell application "Cursor" to quit' || true
+#     ln -sf "{{ cursor_application_path }}/Contents/MacOS/Cursor" /usr/local/bin/cursor
+#   args:
+#     creates: /usr/local/bin/cursor
+#   become: true
+#   tags: cursor
+
+# - name: Create symbolic link for cursor CLI
+#   file:
+#     src: "{{ cursor_application_path }}"
+#     dest: "/usr/local/bin/cursor"
+#     state: link
+#   become: true
+#   tags: cursor
+
+# - name: Wait for Cursor CLI to be available
+#   wait_for:
+#     path: "/usr/local/bin/cursor"
+#     timeout: 10
+#   tags: cursor
+
+# - name: Add Cursor to Gatekeeper
+#   ansible.builtin.command: xattr -dr com.apple.quarantine {{ cursor_application_path }}
+#   changed_when: false
+#   become: true
+#   tags: cursor
 
 - name: Install Cursor extensions
-  ansible.builtin.command:
-  with_items: "{{ cursor.extensions }}"
+  ansible.builtin.command: 
+    cmd: /opt/homebrew/bin/cursor --install-extension {{ item.id | default(item.name) }}
+  with_items: "{{ cursor_extensions }}"
   register: cursor_result
   changed_when: "'already installed' not in cursor_result.stdout"
   tags: cursor
