@@ -1,0 +1,11 @@
+---
+
+ohmyzsh:
+  url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+
+powerlevel10k:
+  theme:
+    url: https://github.com/romkatv/powerlevel10k.git
+    version: master
+
+username: "{{ ansible_user }}"

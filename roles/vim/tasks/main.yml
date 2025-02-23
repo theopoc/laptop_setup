@@ -1,0 +1,10 @@
+---
+
+- name: Copy vim settings
+  ansible.builtin.copy:
+    src: ".vimrc"
+    dest: "{{ ansible_env.HOME }}/.vimrc"
+    owner: "{{ username }}"
+    group: "{{ group }}"
+    mode: "0700"
+  tags: vim

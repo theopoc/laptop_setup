@@ -1,0 +1,6 @@
+---
+
+- name: Install Rosetta 2
+  ansible.builtin.command: 
+    cmd: /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+    creates: "/Library/Apple/System/Library/Receipts/com.apple.pkg.RosettaUpdateAuto.plist"

@@ -1,0 +1,34 @@
+---
+
+homebrew:
+  taps: []
+
+  formulae:
+    - git
+    - python
+    - nmap
+    - openssl
+    - wget
+    - curl
+    - jq
+    - htop
+    - gopass
+    - mise
+    - direnv
+    - yq
+
+
+  casks:
+    - google-chrome
+    - firefox
+    - slack
+    - spotify
+    - arc
+    - cursor
+    - libreoffice
+    - postman
+
+
+appstore_apps:
+  - { id: 441258766, name: "Magnet" }
+  - { id: 937984704, name: "Amphetamine" }

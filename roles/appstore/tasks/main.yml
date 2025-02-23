@@ -1,0 +1,35 @@
+---
+- name: Ensure mas is installed
+  community.general.homebrew:
+    name: mas
+    state: present
+  tags: ['mas']
+
+- name: Check if user is signed into Mac App Store
+  command: mas account
+  register: mas_account
+  ignore_errors: true
+  changed_when: false
+
+- name: Check if user is signed into Mac App Store
+  assert:
+    that: mas_account.rc == 0
+    fail_msg: "Please sign into the Mac App Store first!"
+
+- name: Install Mac App Store Applications
+  command: "mas install {{ item.id }}"
+  loop: "{{ appstore_apps }}"
+  when: 
+    - mas_account.rc == 0
+    - item.id not in mas_list.stdout
+  register: mas_result
+  changed_when: mas_result.rc == 0
+  failed_when: 
+    - mas_result.rc != 0 
+    - '"is already installed" not in mas_result.stderr'
+
+- name: Upgrade all Mac App Store Applications
+  command: mas upgrade
+  when: mas_account.rc == 0
+  register: mas_upgrade
+  changed_when: mas_upgrade.rc == 0 

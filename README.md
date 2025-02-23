@@ -12,6 +12,8 @@ This repository contains an Ansible playbook for macOS. It installs Homebrew and
 xcode-select --install
 ```
 
+# Sign into Mac App Store
+
 
 # install ansible with pip
 ```
