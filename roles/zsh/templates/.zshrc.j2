@@ -126,6 +126,9 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # direnv
 #eval "$(direnv hook zsh)"
 
+# mise
+eval "$(mise activate zsh)"
+
 # Powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -138,3 +141,4 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 #############
 alias myip="curl http://ipecho.net/plain; echo"
 alias l="lsd -alh"
+alias gita="python3 -m gita"

@@ -2,7 +2,9 @@
 - name: Ping Test Playbook
   hosts: mymac
   # connection: local
-  gather_facts: true    
+  gather_facts: true
+  environment:
+    PATH: "/opt/homebrew/bin:{{ ansible_env.PATH }}"
   roles:
     - role: homebrew
       tags: ['homebrew']
@@ -11,15 +13,13 @@
     - role: rosetta
       when: ansible_machine == 'arm64'
       tags: ['rosetta']
-    - role: zsh
-      tags: ['zsh']
     - role: vim
       tags: ['vim']
     - role: cursor
       tags: ['cursor']
     - role: mise
       tags: ['mise']
-    - role: ghorg
-      tags: ['ghorg']
     - role: gita
       tags: ['gita']
+    - role: zsh
+      tags: ['zsh']

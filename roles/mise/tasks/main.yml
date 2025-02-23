@@ -18,7 +18,7 @@
 
 - name: Install mise plugins
   ansible.builtin.command: "mise plugin install {{ item }}"
-  loop: "{{ mise_tools }}"
+  loop: "{{ mise_tools | dict2items | map(attribute='key') | list }}"
   changed_when: false
 
 - name: Install latest versions
@@ -26,12 +26,6 @@
   changed_when: false
 
 - name: Set global versions for mise plugins
-  ansible.builtin.command: "mise use -g {{ item }}@{{ mise_tools[item] }}"
-  loop: "{{ mise_tools }}"
+  ansible.builtin.command: "mise use -g {{ item.key }}@{{ item.value }}"
+  loop: "{{ mise_tools | dict2items }}"
   changed_when: false
-
-- name: Add mise to shell configuration
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'eval "$(mise activate zsh)"'
-    create: yes 

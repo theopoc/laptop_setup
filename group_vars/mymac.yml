@@ -17,6 +17,7 @@ homebrew:
     - direnv
     - yq
     - autojump
+    - s5cmd
 
   casks:
     - google-chrome
@@ -48,3 +49,25 @@ cursor_extensions:
   - { name: "Shellcheck", id: "timonwong.shellcheck" }
   - { name: "Markdown", id: "yzhang.markdown-all-in-one" }
   - { name: "Gitlab", id: "gitlab.gitlab-workflow" }
+
+mise_tools:
+  awscli: "latest"
+  kubectl: "latest"
+  k9s: "latest"
+  kubectx: "latest"
+  helm: "latest"
+  packer: "latest"
+  infracost: "latest"
+  terraform: "latest"
+  tflint: "latest"
+  tfupdate: "latest"
+  terraformer: "latest"
+  terraform-docs: "latest"
+  pre-commit: "latest"
+  ghorg: "latest"
+  trivy: "latest"
+  glab: "latest"
+  vault: "latest"
+  updatecli: "latest"
+  pipx: "latest"
+  granted: "latest"
