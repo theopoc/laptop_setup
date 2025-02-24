@@ -15,6 +15,8 @@
       tags: ['rosetta']
     - role: vim
       tags: ['vim']
+    - role: iterm2
+      tags: ['iterm2']
     - role: cursor
       tags: ['cursor']
     - role: mise
@@ -23,3 +25,5 @@
       tags: ['gita']
     - role: zsh
       tags: ['zsh']
+    - role: macos_settings
+      tags: ['macos_settings']
