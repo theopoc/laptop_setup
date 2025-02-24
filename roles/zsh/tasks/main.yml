@@ -9,16 +9,22 @@
     state: present
   tags: zsh
 
+- name: Set default shell
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: /bin/zsh
+  tags: zsh
+
 - name: Check if oh-my-zsh is installed
   stat:
     path: "/Users/{{ username }}/.oh-my-zsh"
   register: oh_my_zsh_installed
 
-- name: Install Oh My Zsh
-  ansible.builtin.shell: |
-    sh -c "$(curl -fsSL {{ ohmyzsh.url }})"
-  when: not oh_my_zsh_installed.stat.exists
-  changed_when: true
+- name: Install Oh My Zsh # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ~/.oh-my-zsh
+    depth: 1
   tags: zsh
 
 - name: Install powerlevel10k theme
@@ -42,8 +48,3 @@
     mode: "0644"
   tags: zsh
 
-- name: Set default shell
-  ansible.builtin.user:
-    name: "{{ username }}"
-    shell: /bin/zsh
-  tags: zsh
