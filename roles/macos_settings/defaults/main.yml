@@ -203,28 +203,28 @@ textedit:
 # Network
 ##
 
-network_configuration:
-  - interface_name: Ethernet
-    dns_servers:
-      - 9.9.9.9
-      - 149.112.112.112
-      - 2620:fe::fe
-      - 2620:fe::9
+network_configuration: []
+  # - interface_name: Ethernet
+  #   dns_servers:
+  #     - 9.9.9.9
+  #     - 149.112.112.112
+  #     - 2620:fe::fe
+  #     - 2620:fe::9
 
 ##
 # Siri
 ##
 siri:
-  defaults:
-    - { name: Disable Siri 1/2, domain: com.apple.assistant.support, key: "Assistant Enabled", type: int, value: 0 }
-    - { name: Disable Siri 2/2, domain: com.apple.Siri, key: SiriPrefStashedStatusMenuVisible, type: bool, value: false }
-    - { name: Disable voice feedback, domain: com.apple.assistant.backedup, key: "Use device speaker for TTS", type: int, value: 3 }
-    - { name: Opt out of voice data sharing, domain: com.apple.assistant.support, key: "Siri Data Sharing Opt-In Status", type: int, value: 2 }
-    - { name: No Siri on lockscreen, domain: com.apple.Siri, key: LockscreenEnabled, type: int, value: 0 }
-    - { name: Disable Type to Siri, domain: com.apple.Siri, key: TypeToSiriEnabled, type: int, value: 0 }
-    - { name: Disable Siri visible in Menu Bar, domain: com.apple.Siri, key: StatusMenuVisible, type: int, value: 0 }
-    - { name: Don't listen for "Hey Siri", domain: com.apple.voicetrigger, key: "VoiceTrigger Enabled", type: int, value: 0 }
-    - { name: Don't listen for "Hey Siri" on headphones, domain: com.apple.voicetrigger, key: VoiceTriggerUserEnabled, type: int, value: 0 }
+  defaults: []
+  #   - { name: Disable Siri 1/2, domain: com.apple.assistant.support, key: "Assistant Enabled", type: int, value: 0 }
+  #   - { name: Disable Siri 2/2, domain: com.apple.Siri, key: SiriPrefStashedStatusMenuVisible, type: bool, value: false }
+    # - { name: Disable voice feedback, domain: com.apple.assistant.backedup, key: "Use device speaker for TTS", type: int, value: 3 }
+    # - { name: Opt out of voice data sharing, domain: com.apple.assistant.support, key: "Siri Data Sharing Opt-In Status", type: int, value: 2 }
+    # - { name: No Siri on lockscreen, domain: com.apple.Siri, key: LockscreenEnabled, type: int, value: 0 }
+    # - { name: Disable Type to Siri, domain: com.apple.Siri, key: TypeToSiriEnabled, type: int, value: 0 }
+    # - { name: Disable Siri visible in Menu Bar, domain: com.apple.Siri, key: StatusMenuVisible, type: int, value: 0 }
+    # - { name: Don't listen for "Hey Siri", domain: com.apple.voicetrigger, key: "VoiceTrigger Enabled", type: int, value: 0 }
+    # - { name: Don't listen for "Hey Siri" on headphones, domain: com.apple.voicetrigger, key: VoiceTriggerUserEnabled, type: int, value: 0 }
 
 ##
 # Others
