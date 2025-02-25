@@ -19,7 +19,8 @@ homebrew:
     - autojump
     - s5cmd
     - tldr
-    
+    - ca-certificates
+
   casks:
     - google-chrome
     - firefox
@@ -72,3 +73,6 @@ mise_tools:
   updatecli: "latest"
   pipx: "latest"
   granted: "latest"
+
+
+username: "{{ ansible_user_id }}"

@@ -1,0 +1,41 @@
+---
+
+- name: Create config directories for users
+  become: true
+  become_user: '{{ username }}'
+  ansible.builtin.file:
+    path: '/Users/{{ username }}/Library/Application Support/Cursor'
+    state: directory
+    mode: 'u=rwx,go=rx'
+  tags: cursor, config, settings, keybindings
+
+- name: Create settings directory
+  become: true
+  become_user: '{{ username }}'
+  ansible.builtin.file:
+    path: '/Users/{{ username }}/Library/Application Support/Cursor/User'
+    state: directory
+    mode: 'u=rwx,go='
+  tags: cursor, settings, keybindings
+
+- name: Write settings
+  become: true
+  become_user: '{{ username }}'
+  ansible.builtin.template:
+    src: settings.json.j2
+    dest: '/Users/{{ username }}/Library/Application Support/Cursor/User/settings.json'
+    force: '{{ cursor_settings_overwrite | default(False) | bool }}'
+    mode: 'u=rw,go='
+  tags: cursor, settings
+  when: (cursor_settings_overwrite | default(False) | bool)
+
+- name: Write keybindings
+  become: true
+  become_user: '{{ username }}'
+  ansible.builtin.template:
+    src: keybindings.json.j2
+    dest: '/Users/{{ username }}/Library/Application Support/Cursor/User/keybindings.json'
+    force: '{{ cursor_keybindings_overwrite | default(False) | bool }}'
+    mode: 'u=rw,go='
+  tags: cursor, keybindings
+  when: (cursor_keybindings_overwrite | default(False) | bool)

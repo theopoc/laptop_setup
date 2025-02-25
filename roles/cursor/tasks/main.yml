@@ -34,10 +34,10 @@
 #   become: true
 #   tags: cursor
 
+- name: Setup Cursor settings
+  ansible.builtin.include_tasks: setup-settings.yml
+  tags: cursor
+
 - name: Install Cursor extensions
-  ansible.builtin.command: 
-    cmd: /opt/homebrew/bin/cursor --install-extension {{ item.id | default(item.name) }}
-  with_items: "{{ cursor_extensions }}"
-  register: cursor_result
-  changed_when: "'already installed' not in cursor_result.stdout"
+  ansible.builtin.include_tasks: install-extensions.yml
   tags: cursor

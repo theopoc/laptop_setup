@@ -1,0 +1,6 @@
+// Place your settings in this file to overwrite the default settings
+{% if cursor_settings is mapping -%}
+{{ cursor_settings | to_nice_json }}
+{% else -%}
+{{ '{}' }}
+{% endif -%}

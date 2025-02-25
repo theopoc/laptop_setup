@@ -9,3 +9,15 @@ cursor_extensions:
   - "ms-azuretools.vscode-docker"
   - "github.copilot"
   # Add more extensions as needed 
+
+users:
+  username: "{{ ansible_user_id }}"
+  # visual_studio_code_settings: "{{ cursor_settings }}"
+
+cursor_settings_overwrite: false
+cursor_keybindings_overwrite: false
+
+cursor_settings:
+  extensions.verifySignature: false
+
+cursor_keybindings: {}

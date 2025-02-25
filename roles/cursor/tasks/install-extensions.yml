@@ -1,0 +1,9 @@
+---
+
+- name: Install Cursor extensions
+  ansible.builtin.command: 
+    cmd: /opt/homebrew/bin/cursor --install-extension {{ item.id | default(item.name) }}
+  with_items: "{{ cursor_extensions }}"
+  register: cursor_result
+  changed_when: "'already installed' not in cursor_result.stdout"
+  tags: cursor
