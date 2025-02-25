@@ -8,8 +8,8 @@
   roles:
     - role: homebrew
       tags: ['homebrew']
-    - role: appstore
-      tags: ['appstore']
+    # - role: appstore
+    #   tags: ['appstore']
     - role: rosetta
       when: ansible_machine == 'arm64'
       tags: ['rosetta']

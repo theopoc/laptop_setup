@@ -14,8 +14,8 @@ users:
   username: "{{ ansible_user_id }}"
   # visual_studio_code_settings: "{{ cursor_settings }}"
 
-cursor_settings_overwrite: false
-cursor_keybindings_overwrite: false
+cursor_settings_overwrite: true
+cursor_keybindings_overwrite: true
 
 cursor_settings:
   extensions.verifySignature: false

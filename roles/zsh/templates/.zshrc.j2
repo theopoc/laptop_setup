@@ -109,6 +109,9 @@ export LANG=fr_FR.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Path for GNU tools
 #PATH="$(brew --prefix)/opt/grep/libexec/gnubin:$PATH"
 #PATH="$(brew --prefix)/opt/gawk/libexec/gnubin:$PATH"
@@ -130,6 +133,8 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # mise
 eval "$(mise activate zsh)"
+
+
 
 # Powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
