@@ -21,17 +21,5 @@ if [[ ! -x /usr/local/bin/ansible ]]; then
   brew install ansible
 fi
 
-# Create dev directory in home directory
-if [[ ! -d ~/dev ]]; then
-  echo "[INFO] Create dev directory in home directory"
-  mkdir -p ~/dev
-fi
-
-# Checkout Git repository
-if [[ ! -d ~/dev/macbook-setup ]]; then
-  echo "[INFO] Clone macbook-setup in dev folder"
-  git clone https://github.com/axinorm/macbook-setup ~/dev/macbook-setup
-fi
-
 echo "[INFO] Done"
 exit 0
