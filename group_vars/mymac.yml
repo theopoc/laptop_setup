@@ -1,7 +1,8 @@
 ---
 
 homebrew:
-  taps: []
+  taps:
+    - homebrew/command-not-found
 
   formulae:
     - git
@@ -20,6 +21,8 @@ homebrew:
     - s5cmd
     - tldr
     - ca-certificates
+    - when
+    - docker
 
   casks:
     - google-chrome
@@ -74,6 +77,6 @@ mise_tools:
   updatecli: "latest"
   pipx: "latest"
   granted: "latest"
-
+  docker-slim: "latest"
 
 username: "{{ ansible_user_id }}"
