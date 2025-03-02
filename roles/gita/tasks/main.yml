@@ -9,7 +9,7 @@
     name: gita
     state: present
     extra_args: --user --upgrade
-    executable: /usr/local/bin/pip3
+    executable: /opt/homebrew/bin/pip3
 
 - name: Create gita config directory
   ansible.builtin.file:
