@@ -27,7 +27,7 @@ homebrew:
     - mysql-client
     - session-manager-plugin
     - shellcheck
-    
+
 
   casks:
     - google-chrome
@@ -60,6 +60,7 @@ cursor_extensions:
   - { name: "Shellcheck", id: "timonwong.shellcheck" }
   - { name: "Markdown", id: "yzhang.markdown-all-in-one" }
   - { name: "Gitlab", id: "gitlab.gitlab-workflow" }
+  - { name: "AWS Toolkit", id: "amazonwebservices.aws-toolkit-vscode" }
 
 mise_tools:
   awscli: "latest"
@@ -84,3 +85,67 @@ mise_tools:
   granted: "latest"
 
 username: "{{ ansible_user_id }}"
+
+
+cursor_settings:
+  "editor.bracketPairColorization.enabled": true
+  "editor.mouseWheelZoom": true
+  "terminal.external.osxExec": "Rosetta iTerm.app"
+  "files.autoSave": "afterDelay"
+  "gitlab.instanceUrl": "https://gitlab.com"
+  "editor.minimap.enabled": false
+  "git.confirmSync": false
+  "gitlens.remotes":
+    - domain: "gitlab.com"
+      type: "GitLab"
+  "workbench.enableExperiments": false
+  "redhat.telemetry.enabled": false
+  "files.associations":
+    "*.yml": "ansible"
+    "*.tf": "terraform"
+    "*.tfvars": "terraform"
+    ".gitlab-ci.yml": "plaintext"
+  "[json]":
+    "editor.defaultFormatter": "vscode.json-language-features"
+  "git.enableSmartCommit": true
+  "[terraform]":
+    "editor.defaultFormatter": "hashicorp.terraform"
+    "editor.formatOnSave": true
+    "editor.formatOnSaveMode": "file"
+  "[terraform-vars]":
+    "editor.defaultFormatter": "hashicorp.terraform"
+    "editor.formatOnSave": true
+    "editor.formatOnSaveMode": "file"
+  "editor.formatOnSave": false
+  "search.exclude":
+    "**/.git": true
+    "**/.terraform": true
+  "git.followTagsWhenSync": true
+  "git.mergeEditor": false
+  "[ansible]":
+    "editor.detectIndentation": true
+    "editor.insertSpaces": true
+    "editor.tabSize": 2
+    "editor.quickSuggestions":
+      "comments": true
+      "other": true
+      "strings": true
+  "ansible.executionEnvironment.volumeMounts": []
+  "editor.codeActionsOnSave": {}
+  "trailing-spaces.highlightCurrentLine": false
+  "window.zoomLevel": 1
+  "terraform.languageServer.enable": true
+  "terraform.experimentalFeatures.prefillRequiredFields": true
+  "terraform.codelens.referenceCount": false
+  "editor.largeFileOptimizations": true
+  "editor.suggest.preview": false
+  "extensions.autoUpdate": "onlyEnabledExtensions"
+  "aws.codeWhisperer.shareCodeWhispererContentWithAWS": false
+  "aws.telemetry": false
+  "ansible.validation.lint.enabled": false
+  "gitlab.duoChat.enabled": false
+  "gitlens.ai.experimental.provider": "openai"
+  "gitlens.ai.experimental.openai.model": "gpt-4-1106-preview"
+  "gitlab.duoCodeSuggestions.enabled": false
+  "diffEditor.codeLens": true
+  "diffEditor.ignoreTrimWhitespace": false
