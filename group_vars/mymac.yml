@@ -60,7 +60,7 @@ cursor_extensions:
   - { name: "Shellcheck", id: "timonwong.shellcheck" }
   - { name: "Markdown", id: "yzhang.markdown-all-in-one" }
   - { name: "Gitlab", id: "gitlab.gitlab-workflow" }
-  - { name: "AWS Toolkit", id: "0B82CB16-0E52-4363-9BC0-61E758689176" }
+  - { name: "AWS Toolkit", id: "amazonwebservices.aws-toolkit-vscode" }
 
 mise_tools:
   awscli: "latest"
