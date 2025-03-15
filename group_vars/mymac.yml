@@ -28,6 +28,7 @@ homebrew:
     - session-manager-plugin
     - shellcheck
     - ipcalc
+    - lsd
 
 
   casks:
