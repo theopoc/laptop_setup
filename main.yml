@@ -25,6 +25,8 @@
       tags: ['gita']
     - role: copier
       tags: ['copier']
+    - role: pipx
+      tags: ['pipx']
     - role: zsh
       tags: ['zsh']
     - role: macos_settings

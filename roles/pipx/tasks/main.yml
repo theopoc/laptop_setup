@@ -1,0 +1,7 @@
+---
+# tasks file for roles/pipx
+
+- name: Run pipx ensurepath to add pipx binary paths
+  ansible.builtin.command: pipx ensurepath
+  register: ensurepath_result
+  changed_when: ensurepath_result.rc != 0
