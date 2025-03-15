@@ -39,6 +39,8 @@ settings:
     - { name: Disable the system alert sound 1/2, key: com.apple.sound.beep.volume, type: int, value: 0 }
     - { name: Disable the system alert sound 2/2, key: com.apple.sound.uiaudio.enabled, type: int, value: 0 }
     - { name: Disable volume change feedback, key: com.apple.sound.beep.feedback, type: bool, value: false }
+    # Invert scroll direction (natural scrolling)
+    - { name: Invert scroll direction, key: com.apple.swipescrolldirection, type: bool, value: false }
 
   # Disable startup chime
   disable_sound_effects_on_boot: false
