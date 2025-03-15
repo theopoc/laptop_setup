@@ -1,12 +1,4 @@
 ---
-- name: Ensure pipx is installed
-  community.general.homebrew:
-    name: pipx
-    state: present
-  tags:
-    - copier
-    - pipx
-
 - name: Get copier version if installed
   ansible.builtin.command: pipx list | grep copier
   register: copier_check

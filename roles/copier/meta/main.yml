@@ -17,4 +17,4 @@ galaxy_info:
     - tools
 
 dependencies:
-  - role: homebrew 
+  - role: mise 

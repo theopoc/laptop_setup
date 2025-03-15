@@ -29,3 +29,4 @@
   ansible.builtin.command: "mise use -g {{ item.key }}@{{ item.value }}"
   loop: "{{ mise_tools | dict2items }}"
   changed_when: false
+
