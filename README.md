@@ -20,7 +20,9 @@ cd ansible-mgmt-laptop
 ./setup.sh
 ```
 
-4. Run the playbook
+4. Ensure you're logged in Apple ID
+
+5. Run the playbook
 ```
 /opt/homebrew/bin/ansible-galaxy install -r requirements.yml
 /opt/homebrew/bin/ansible-playbook main.yml --ask-become-pass
