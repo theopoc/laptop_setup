@@ -14,7 +14,6 @@
   community.general.homebrew:
     name: "{{ homebrew.formulae }}"
     state: present
-  become: true
   tags: homebrew, formulae
 
 - name: Install homebrew casks
