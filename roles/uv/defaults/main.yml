@@ -1,2 +1,4 @@
 ---
 # Default variables for uv role
+
+pipx_executable: ""

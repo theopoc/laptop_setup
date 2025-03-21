@@ -186,3 +186,5 @@ cursor_keybindings:
 
   - key: "shift+cmd+l"
     command: "-continue.focusContinueInputWithoutClear"
+
+pipx_executable: "{{ ansible_env.PATH.split(':') | select('search', '/Users/[^/]+/.local/share/mise/installs/pipx/[^/]+/bin') | first }}/pipx"
