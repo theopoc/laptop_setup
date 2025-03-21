@@ -91,7 +91,6 @@ mise_tools:
   updatecli: "latest"
   pipx: "latest"
   granted: "latest"
-  vault: "latest"
 
 username: "{{ ansible_user_id }}"
 
