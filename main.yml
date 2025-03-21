@@ -3,8 +3,6 @@
   hosts: mymac
   connection: local
   gather_facts: true
-  environment:
-    PATH: "/opt/homebrew/bin:{{ ansible_env.PATH }}"
   roles:
     - role: homebrew
       tags: ['homebrew']

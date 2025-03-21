@@ -12,13 +12,14 @@ fi
 # Install Homebrew
 if [[ ! -x /usr/local/bin/brew ]]; then
   echo "[INFO] Install Homebrew"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Install Ansible
 if [[ ! -x /usr/local/bin/ansible ]]; then
   echo "[INFO] Install Ansible"
-  /opt/homebrew/bin/brew install ansible
+  brew install ansible
 fi
 
 echo "[INFO] Done"
