@@ -1,24 +1,24 @@
 ---
-- name: Ensure pip3 is installed
-  community.general.homebrew:
-    name: python3
-    state: present
-
-- name: Install gita via pip3
-  ansible.builtin.pip:
+- name: Install gita using pipx
+  community.general.pipx:
     name: gita
-    state: present
-    extra_args: --user --upgrade
-    executable: /opt/homebrew/bin/pip3
+    state: "present"
+    executable: "{{ pipx_executable | default(omit) }}"
+  tags:
+    - gita
 
 - name: Create gita config directory
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/gita"
     state: directory
     mode: '0755'
+  tags:
+    - gita
 
 - name: Configure gita default settings
   ansible.builtin.template:
     src: gita.yml.j2
     dest: "{{ ansible_env.HOME }}/.config/gita/repo.yml"
     mode: '0644'
+  tags:
+    - gita
