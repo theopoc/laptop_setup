@@ -1,15 +1,8 @@
 ---
-- name: Get copier version if installed
-  ansible.builtin.command: pipx list | grep copier
-  register: copier_check
-  changed_when: false
-  failed_when: false
-  check_mode: false
-  tags:
-    - copier
-
 - name: Install copier using pipx
-  ansible.builtin.command: pipx install copier
-  when: copier_check.rc != 0
+  community.general.pipx:
+    name: copier
+    state: "present"
+    executable: "{{ pipx_executable | default(omit) }}"
   tags:
     - copier
