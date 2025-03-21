@@ -3,6 +3,8 @@
 homebrew:
   taps:
     - homebrew/command-not-found
+    - falcosuessgott/tap
+    - starkandwayne/cf
 
   formulae:
     - git
@@ -29,6 +31,9 @@ homebrew:
     - shellcheck
     - ipcalc
     - lsd
+    - vsh
+    - vkv
+    - safe
 
 
   casks:
