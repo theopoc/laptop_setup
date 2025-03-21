@@ -44,7 +44,7 @@
   ansible.builtin.file:
     path: '/Users/{{ username }}/Documents/cursor'
     state: directory
-    mode: '0644'
+    mode: '0755'
   tags: cursor, rules
 
 - name: Copy rules files
