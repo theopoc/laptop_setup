@@ -68,6 +68,7 @@ cursor_extensions:
   - { name: "Markdown", id: "yzhang.markdown-all-in-one" }
   - { name: "Gitlab", id: "gitlab.gitlab-workflow" }
   - { name: "AWS Toolkit", id: "amazonwebservices.aws-toolkit-vscode" }
+  - { name: "Ansible", id: "redhat.ansible" }
 
 mise_tools:
   awscli: "latest"
