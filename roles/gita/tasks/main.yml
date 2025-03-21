@@ -3,7 +3,7 @@
   community.general.pipx:
     name: gita
     state: "present"
-   # executable: "{{ pipx_executable | default(omit) }}"
+    executable: "{{ pipx_executable | default(omit) }}"
   tags:
     - gita
 

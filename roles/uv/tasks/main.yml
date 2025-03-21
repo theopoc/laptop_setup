@@ -4,6 +4,6 @@
   community.general.pipx:
     name: uv
     state: "present"
-   # executable: "{{ pipx_executable | default(omit) }}"
+    executable: "{{ pipx_executable | default(omit) }}"
   tags:
     - uv
