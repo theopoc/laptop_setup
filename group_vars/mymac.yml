@@ -34,6 +34,7 @@ homebrew:
     - vsh
     - vkv
     - safe
+    - pug
 
 
   casks:
