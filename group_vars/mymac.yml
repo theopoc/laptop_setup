@@ -38,6 +38,7 @@ homebrew:
     - pug                     # CLI tool for managing terraform resources and state interactively
     - tfautomv                # Terraform automatic resource move suggestions
     - tfmv                    # Terraform state mv command generator
+    - hcledit                 # CLI tool for editing HCL files
 
 
   casks:
