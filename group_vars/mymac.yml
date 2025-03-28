@@ -52,6 +52,7 @@ appstore_apps:
   - { id: 441258766, name: "Magnet" }
   - { id: 937984704, name: "Amphetamine" }
   - { id: 985367838, name: "Microsoft Outlook" }
+  - { id: 1446549608, name: "Mozilla Firefox" }
 
 cursor_extensions:
   - { name: "Gitignore", id: "codezombiech.gitignore" }
