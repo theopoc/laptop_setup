@@ -35,6 +35,7 @@ homebrew:
     - vkv
     - safe
     - pug
+    - tfautomv
 
 
   casks:
