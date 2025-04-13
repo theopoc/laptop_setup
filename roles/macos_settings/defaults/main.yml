@@ -255,6 +255,7 @@ others:
     - { name: Show Screen mirroring, domain: com.apple.controlcenter, key: ScreenMirroring, type: int, value: 18 }
     - { name: Show Sound, domain: com.apple.controlcenter, key: Sound, type: int, value: 18 }
     - { name: Show WiFi, domain: com.apple.controlcenter, key: WiFi, type: int, value: 18 }
+    - { name: Show Music Recognition, domain: com.apple.controlcenter, key: MusicRecognition, type: int, value: 18 }
     - { name: Don't show Now Playing, domain: com.apple.controlcenter, key: NowPlaying, type: int, value: 24 }
     # Battery
     - { name: Show battery percentage, host: currentHost, domain: com.apple.controlcenter, key: BatteryShowPercentage, type: bool, value: true }
