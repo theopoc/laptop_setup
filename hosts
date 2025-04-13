@@ -1,2 +1,2 @@
 [mymac]
-127.0.0.1 ansible_user=tpoccard ansible_password=tpoccard ansible_become_pass=tpoccard
+127.0.0.1 ansible_user=tpoccard

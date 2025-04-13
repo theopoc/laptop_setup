@@ -29,7 +29,17 @@ cd ansible-mgmt-laptop
 
 5. Ensure you're logged in Apple ID
 
-6. Run the playbook
+6. Change the username in the Ansible configuration (if needed):
+   - Open the `hosts` file in your favorite text editor
+   - Modify the `ansible_user` value to match your desired username:
+     ```
+     [mymac]
+     127.0.0.1 ansible_user=your_new_username
+     ```
+   - Save the file
+   - Note: Make sure the username you specify exists on your system and has the necessary permissions to execute the playbook tasks.
+
+7. Run the playbook
 ```
 ansible-playbook main.yml -i hosts --ask-become-pass
 ```
