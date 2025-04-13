@@ -246,7 +246,7 @@ others:
     - { name: Show WiFi, domain: com.apple.controlcenter, key: WiFi, type: int, value: 18 }
     - { name: Don't show Now Playing, domain: com.apple.controlcenter, key: NowPlaying, type: int, value: 24 }
     # Battery
-    - { name: Show battery percentage, domain: com.apple.menuextra.battery, key: ShowPercent, type: bool, value: true }
+    - { name: Show battery percentage, host: currentHost, domain: com.apple.controlcenter, key: BatteryShowPercentage, type: bool, value: true }
     # Screensaver
     - { name: Require password after sleep or screen saver begins, domain: com.apple.screensaver, key: askForPassword, type: int, value: 1 }
     - { name: Require password immediately after sleep or screen saver begins, domain: com.apple.screensaver, key: askForPasswordDelay, type: int, value: 0 }
