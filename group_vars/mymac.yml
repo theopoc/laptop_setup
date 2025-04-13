@@ -114,7 +114,6 @@ cursor_settings:
   "gitlens.remotes":
     - domain: "gitlab.com"
       type: "GitLab"
-  "workbench.enableExperiments": false
   "redhat.telemetry.enabled": false
   "files.associations":
     "*.yml": "ansible"
@@ -166,6 +165,11 @@ cursor_settings:
   "gitlab.duoCodeSuggestions.enabled": false
   "diffEditor.codeLens": true
   "diffEditor.ignoreTrimWhitespace": false
+  "workbench.enableExperiments": false
+  "window.commandCenter": 1
+  "workbench.colorTheme": "Cursor Dark Midnight"
+  "cursor.cpp.disabledLanguages":
+    - "plaintext"
 
 cursor_keybindings:
   - key: "ctrl+shift+j"
@@ -190,11 +194,14 @@ cursor_keybindings:
     command: "-workbench.actions.view.problems"
     when: "workbench.panel.markers.view.active"
 
-  - key: "shift+cmd+m"
-    command: "continue.focusContinueInputWithoutClear"
+  - key: "shift+alt+l"
+    command: "editor.action.selectHighlights"
+    when: "editorFocus"
 
-  - key: "shift+cmd+l"
-    command: "-continue.focusContinueInputWithoutClear"
+  - key: "alt+l"
+    command: "editor.action.addSelectionToNextFindMatch"
+    when: "editorFocus"
+
 
 pipx_executable: "/Users/{{ ansible_user }}/.local/share/mise/installs/pipx/latest/bin/pipx"
 
