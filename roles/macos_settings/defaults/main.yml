@@ -228,6 +228,17 @@ siri:
     # - { name: Don't listen for "Hey Siri" on headphones, domain: com.apple.voicetrigger, key: VoiceTriggerUserEnabled, type: int, value: 0 }
 
 ##
+# Arc Browser settings
+##
+arc:
+  defaults:
+    - { name: Set Arc Browser icon, domain: company.thebrowser.Browser, key: "currentAppIconName", type: string, value: "hologram" }
+    - { name: Set auto archive little arc time threshold, domain: company.thebrowser.Browser, key: "autoArchiveLittleArcTimeThreshold", type: string, value: "twelveHours" }
+    - { name: Set Arc Max, domain: company.thebrowser.Browser, key: "arcMaxAutoOptInEnabled", type: bool, value: true }
+    - { name: Native adblock enable, domain: company.thebrowser.Browser, key: "nativeAdblockEnabled", type: bool, value: true }
+    - { name: Native adblock enable, domain: company.thebrowser.Browser, key: "nativeAdblockEnabled", type: bool, value: true }
+
+##
 # Others
 ##
 others:

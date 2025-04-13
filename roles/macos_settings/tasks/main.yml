@@ -31,6 +31,10 @@
   ansible.builtin.include_tasks: configure_network.yml
   tags: network
 
+- name: Setup Arc Browser
+  ansible.builtin.include_tasks: configure_arc.yml
+  tags: arc
+
 - name: Setup others
   ansible.builtin.include_tasks: configure_others.yml
   tags: others
