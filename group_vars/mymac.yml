@@ -120,6 +120,7 @@ cursor_settings:
     "*.tf": "terraform"
     "*.tfvars": "terraform"
     ".gitlab-ci.yml": "plaintext"
+    "*.md": "markdown"
   "[json]":
     "editor.defaultFormatter": "vscode.json-language-features"
   "git.enableSmartCommit": true
