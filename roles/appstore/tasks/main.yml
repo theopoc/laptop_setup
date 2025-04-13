@@ -15,15 +15,14 @@
   assert:
     that: mas_account.rc == 0
     fail_msg: "Please sign into the Mac App Store first!"
+  ignore_errors: true
 
 - name: Install Mac App Store Applications
   community.general.mas:
     id: "{{ item.id }}"
     state: present
   loop: "{{ appstore_apps }}"
-  when: mas_account is success
 
 - name: Upgrade all Mac App Store Applications
   community.general.mas:
     upgrade_all: true
-  when: mas_account is success
