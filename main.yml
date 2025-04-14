@@ -31,3 +31,5 @@
       tags: ['macos_settings']
     - role: git
       tags: ['git']
+    - role: rancher-desktop
+      tags: ['rancher-desktop']

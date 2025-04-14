@@ -25,7 +25,6 @@ homebrew:
     - tldr                    # Simplified and community-driven man pages
     - ca-certificates         # Common CA certificates for SSL applications
     - when                    # Simple calendar and task management tool
-    - docker                  # Platform for developing, shipping, and running applications in containers
     - ripgrep                 # Fast line-oriented search tool (alternative to grep)
     - mysql-client            # MySQL database client
     - session-manager-plugin  # AWS Session Manager plugin for the AWS CLI

@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for roles/rancher-desktop
+
+rancher_desktop:
+  repo: "rancher-sandbox/rancher-desktop"
+  asset_pattern: "Rancher.Desktop-.+\\.aarch64\\.dmg$"
+  version: "1"

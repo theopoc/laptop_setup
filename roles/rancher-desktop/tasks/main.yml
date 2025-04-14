@@ -1,0 +1,87 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for rancher-desktop
+
+- name: Check if Rancher Desktop is already installed
+  stat:
+    path: /Applications/Rancher Desktop.app
+  register: rancher_desktop_installed
+  changed_when: false
+
+- name: Display Rancher Desktop configuration
+  ansible.builtin.debug:
+    var: rancher_desktop
+    verbosity: 0
+
+
+- name: Get latest Rancher Desktop release info
+  uri:
+    url: "https://api.github.com/repos/{{ rancher_desktop.repo }}/releases?per_page={{ rancher_desktop.version }}"
+    method: GET
+    return_content: yes
+    status_code: 200
+  register: latest_release
+  when: not rancher_desktop_installed.stat.exists
+  retries: 3
+  delay: 5
+  until: latest_release is success
+
+- name: Extract download URL for Apple Silicon
+  set_fact:
+    download_url: "{{ item.browser_download_url }}"
+  loop: "{{ latest_release.json[0].assets }}"
+  when:
+    - not rancher_desktop_installed.stat.exists
+    - item.name is regex(rancher_desktop.asset_pattern)
+  register: download_url_result
+  failed_when: (item | length) == 0
+
+- name: Download Rancher Desktop for Apple Silicon
+  get_url:
+    url: "{{ download_url }}"
+    dest: /tmp/Rancher.Desktop.dmg
+  when:
+    - not rancher_desktop_installed.stat.exists
+  retries: 3
+  delay: 5
+
+- name: Mount Rancher Desktop DMG
+  command: hdiutil attach /tmp/Rancher.Desktop.dmg
+  when: not rancher_desktop_installed.stat.exists
+  register: mount_result
+  failed_when: mount_result.rc != 0
+
+- name: Find mounted Rancher Desktop volume
+  ansible.builtin.find:
+    paths: /Volumes
+    file_type: directory
+    patterns: "Rancher Desktop*"
+    depth: 1
+  register: rancher_volume_find
+  when: not rancher_desktop_installed.stat.exists
+
+- name: Set Rancher Desktop volume path
+  ansible.builtin.set_fact:
+    rancher_volume_path: "{{ rancher_volume_find.files[0].path }}"
+  when:
+    - not rancher_desktop_installed.stat.exists
+    - rancher_volume_find.files | length > 0
+
+- name: Install Rancher Desktop
+  copy:
+    src: "{{ rancher_volume_path }}/Rancher Desktop.app"
+    dest: /Applications/
+    remote_src: yes
+  when: not rancher_desktop_installed.stat.exists
+
+- name: Unmount Rancher Desktop DMG
+  command: hdiutil detach "{{ rancher_volume_path }}"
+  when: not rancher_desktop_installed.stat.exists
+  register: unmount_result
+  ignore_errors: yes
+
+- name: Clean up downloaded DMG
+  file:
+    path: /tmp/Rancher.Desktop.dmg
+    state: absent
+  when: not rancher_desktop_installed.stat.exists
