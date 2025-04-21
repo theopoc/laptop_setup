@@ -1,5 +1,5 @@
 ---
-- name: Ping Test Playbook
+- name: Bootstrap mac
   hosts: mymac
   connection: local
   gather_facts: true
