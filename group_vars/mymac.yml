@@ -49,7 +49,9 @@ homebrew:
     - cursor
     - libreoffice
     - postman
+    - warp
 
+iterm2_enabled: false
 
 appstore_apps:
   - { id: 441258766, name: "Magnet" }
@@ -105,7 +107,7 @@ cursor_settings:
   "extensions.verifySignature": false
   "editor.bracketPairColorization.enabled": true
   "editor.mouseWheelZoom": true
-  "terminal.external.osxExec": "iTerm.app"
+  "terminal.external.osxExec": "Warp.app"
   "files.autoSave": "afterDelay"
   "gitlab.instanceUrl": "https://gitlab.com"
   "editor.minimap.enabled": false
@@ -215,7 +217,7 @@ display_applications:
   - /Applications/Slack.app
   - /Applications/Cursor.app
   - /Applications/Firefox.app
-  - /Applications/iTerm.app
+  - /Applications/Warp.app
   - /Applications/Google\ Chrome.app
   - /Applications/Spotify.app
   - /Applications/Bitwarden.app
