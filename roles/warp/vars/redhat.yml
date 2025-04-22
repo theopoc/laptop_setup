@@ -1,0 +1,4 @@
+---
+
+warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
+warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"

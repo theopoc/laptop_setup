@@ -1,0 +1,4 @@
+---
+
+warp_workflows_dir: "{{ ansible_env.APPDATA }}/warp/Warp/data/workflows"
+warp_parent_dir: "{{ ansible_env.APPDATA }}/warp/Warp/data"

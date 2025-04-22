@@ -1,0 +1,26 @@
+---
+
+
+
+- name: Install Warp terminal (Debian/Ubuntu)
+  block:
+    - name: Download Warp DEB package
+      get_url:
+        url: "{{ warp_deb_url }}"
+        dest: "/tmp/warp-terminal.deb"
+        mode: '0644'
+      register: deb_download
+
+    - name: Install Warp DEB package
+      apt:
+        deb: "/tmp/warp-terminal.deb"
+        state: "{{ warp_apt_state }}"
+      become: true
+      register: apt_result
+  rescue:
+    - name: Clean up downloaded DEB package
+      file:
+        path: "/tmp/warp-terminal.deb"
+        state: absent
+
+  when: warp_enabled | bool

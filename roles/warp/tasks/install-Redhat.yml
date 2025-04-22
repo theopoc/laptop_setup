@@ -1,0 +1,24 @@
+---
+
+- name: Install Warp terminal (Red Hat/Fedora)
+  block:
+    - name: Download Warp RPM package
+      get_url:
+        url: "{{ warp_rpm_url }}"
+        dest: "/tmp/warp-terminal.rpm"
+        mode: '0644'
+      register: rpm_download
+
+    - name: Install Warp RPM package
+      dnf:
+        name: "/tmp/warp-terminal.rpm"
+        state: "{{ warp_rpm_state }}"
+      become: true
+      register: dnf_result
+  rescue:
+    - name: Clean up downloaded RPM package
+      file:
+        path: "/tmp/warp-terminal.rpm"
+        state: absent
+
+  when: warp_enabled | bool

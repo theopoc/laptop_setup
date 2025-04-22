@@ -40,15 +40,72 @@ warp_user: "{{ ansible_user_id }}"
 warp_group: "{{ ansible_user_id }}"
 ```
 
-You can also define custom workflows to be deployed:
+### OS-Specific Variables
+
+The role includes OS-specific variables from the `vars` directory:
+
+- `darwin.yml` - macOS specific configurations
+- `RedHat.yml`, `Debian.yml` - Linux distribution configurations
+
+Key OS-specific variables:
+
+```yaml
+# macOS
+warp_workflows_dir: "{{ ansible_env.HOME }}/.warp/workflows"
+warp_parent_dir: "{{ ansible_env.HOME }}/.warp"
+
+# Debian/Ubuntu
+warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
+warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+
+# RedHat/Fedora
+warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
+warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+```
+
+### Custom Workflow Configuration
+
+You can define custom workflows to be deployed:
 
 ```yaml
 # In your playbook vars or group_vars/host_vars
 warp_workflows:
-  - src: path/to/your/custom_workflow.yaml.j2
-    dest: my_custom_workflow.yaml  # Optional, defaults to the basename of src
-  - src: path/to/another/workflow.yaml.j2
+  - workflow_name: "Ansible Playbook"
+    workflow_command: !unsafe "ansible-playbook {{playbook}} {{inventory}} {{verbosity}}"
+    workflow_tags:
+      - ansible
+      - automation
+    workflow_description: "Run Ansible playbooks with custom parameters"
+    workflow_arguments:
+      - name: playbook
+        description: "Path to the playbook file"
+        default_value: "playbook.yml"
+      - name: inventory
+        description: "Path to inventory or comma-separated host list"
+        default_value: "-i hosts"
+      - name: verbosity
+        description: "Verbosity level (e.g., -v, -vv, -vvv)"
+        default_value: ""
+    workflow_author: "DevOps Team"
+    workflow_shells:
+      - bash
+      - zsh
+  - workflow_name: "Docker Compose Up"
+    workflow_command: !unsafe "docker compose -f {{compose_file}} up {{detach}}"
+    workflow_tags:
+      - docker
+      - container
+    workflow_description: "Start Docker Compose services"
+    workflow_arguments:
+      - name: compose_file
+        description: "Path to docker-compose.yml"
+        default_value: "docker-compose.yml"
+      - name: detach
+        description: "Run in detached mode"
+        default_value: "-d"
 ```
+
+Each workflow uses the `workflow.yaml.j2` template to generate a proper Warp workflow file.
 
 ## Dependencies
 
@@ -56,21 +113,49 @@ None.
 
 ## Example Playbook
 
+Basic usage:
+
 ```yaml
 - hosts: localhost
   roles:
     - role: warp
 ```
 
-Or with custom workflows:
+With custom workflows:
 
 ```yaml
 - hosts: localhost
   vars:
     warp_workflows:
-      - src: templates/docker_workflow.yaml.j2
-      - src: templates/kubernetes_workflow.yaml.j2
-        dest: k8s_commands.yaml
+      - workflow_name: "Kubernetes Status"
+        workflow_command: !unsafe "kubectl get {{resource}} -n {{namespace}} {{output}}"
+        workflow_tags:
+          - kubernetes
+          - k8s
+        workflow_description: "Get status of Kubernetes resources"
+        workflow_arguments:
+          - name: resource
+            description: "Resource type (pods, deployments, services, etc.)"
+            default_value: "pods"
+          - name: namespace
+            description: "Kubernetes namespace"
+            default_value: "default"
+          - name: output
+            description: "Output format"
+            default_value: "-o wide"
+      - workflow_name: "Git Operations"
+        workflow_command: !unsafe "git {{operation}} {{options}}"
+        workflow_tags:
+          - git
+          - version-control
+        workflow_description: "Common Git operations"
+        workflow_arguments:
+          - name: operation
+            description: "Git operation (pull, push, commit, etc.)"
+            default_value: "status"
+          - name: options
+            description: "Additional options"
+            default_value: ""
   roles:
     - role: warp
 ```
@@ -90,16 +175,8 @@ To disable the role:
 This role sets up the Warp workflows directory and creates example workflows. The location of the workflows directory varies by OS:
 
 - macOS: `~/.warp/workflows/`
-- Windows: `%APPDATA%\warp\Warp\data\workflows\`
 - Linux: `~/.local/share/warp-terminal/workflows/`
-
-### Default Workflows
-
-The role creates these workflows by default:
-
-1. **Ansible Playbook** - Run Ansible playbooks with customizable parameters
-
-You can add more custom workflows using the `warp_workflows` variable.
+- Windows: `%APPDATA%\warp\Warp\data\workflows\` (Not currently supported by this role)
 
 ## YAML Workflows Format
 
@@ -125,10 +202,18 @@ shells:
   - bash
 ```
 
+## Role Implementation
+
+The role follows these steps:
+1. Load OS-specific variables
+2. Install Warp using the appropriate method for the OS
+3. Create necessary directories for Warp configuration
+4. Deploy defined workflows using Jinja2 templates
+
 ## License
 
 MIT
 
 ## Author Information
 
-This role was created as part of an Ansible management playbook. 
+This role was created as part of an Ansible management playbook for developer workstation configuration. 

@@ -1,0 +1,9 @@
+---
+
+- name: Install Warp via Homebrew
+  community.general.homebrew_cask:
+    name: "{{ warp_homebrew_cask_name }}"
+    state: "{{ warp_homebrew_cask_state }}"
+    greedy: "{{ warp_homebrew_cask_greedy }}"
+  register: homebrew_result
+  when: warp_enabled | bool
