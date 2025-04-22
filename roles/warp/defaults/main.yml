@@ -1,0 +1,28 @@
+---
+# Default variables for Warp terminal role
+
+# Enable or disable the role
+warp_enabled: true
+
+# Installation method - can be homebrew, apt, rpm, or other based on OS
+warp_install_method: "homebrew"
+
+# Homebrew specific settings
+warp_homebrew_cask_name: "warp"
+warp_homebrew_cask_greedy: true
+warp_homebrew_cask_state: present
+
+# Debian/Ubuntu specific settings
+warp_deb_url: "https://releases.warp.dev/stable/v0.2024.05.21.14.54.stable_00/warp-terminal_0.2024.05.21.14.54.stable.00_amd64.deb"
+warp_apt_state: present
+
+# Red Hat/Fedora specific settings
+warp_rpm_url: "https://releases.warp.dev/stable/v0.2024.05.21.14.54.stable_00/warp-terminal-0.2024.05.21.14.54.stable.00.x86_64.rpm"
+warp_rpm_state: present
+
+# Workflows directory settings
+warp_workflows_create_dirs: true
+
+# User settings
+warp_user: "{{ ansible_user_id }}"
+warp_group: "{{ ansible_user_id }}" 

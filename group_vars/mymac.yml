@@ -226,3 +226,50 @@ display_applications:
   - /System/Applications/Notes.app
   - "\"/System/Applications/System Settings.app\""
   - /System/Applications/Launchpad.app
+
+# In your playbook vars or group_vars/host_vars
+warp_workflows:
+  - workflow_name: "Multiple terraform state rm"
+    workflow_command: !unsafe '"{{terraform_binary}} state list | grep {{search}} | xargs -I {} {{terraform_binary}} state rm {}"'
+    workflow_tags:
+      - devops
+      - terraform
+    workflow_description: "Multiple terraform state rm"
+    workflow_arguments:
+      - name: search
+        description: "The variable to search for"
+        default_value: "World"
+      - name: terraform_binary
+        description: "The terraform binary to use"
+        default_value: "terraform"
+  - workflow_name: "AWS ECR login"
+    workflow_command: !unsafe '"aws ecr get-login-password --region {{region}} --profile {{aws_profile}} | docker login --username AWS --password-stdin {{aws_account_id}}.dkr.ecr.{{region}}.amazonaws.com"'
+    workflow_tags:
+      - devops
+      - aws
+    workflow_description: "AWS ECR login"
+    workflow_arguments:
+      - name: region
+        description: "The AWS region to use"
+        default_value: "eu-west-3"
+      - name: aws_account_id
+        description: "The AWS account ID"
+        default_value: "0000000000"
+      - name: aws_profile
+        description: "The AWS profile to use"
+        default_value: "default"
+  - workflow_name: "Rename multiple files recursively"
+    workflow_command: !unsafe 'zmv ''(**/){{filename}}'' ''${1}{{new_filename}}'''
+    workflow_tags:
+      - linux
+    workflow_description: "Rename multiple files recursively"
+    workflow_arguments:
+      - name: filename
+        description: "The filename to rename"
+      - name: new_filename
+        description: "The new filename"
+  - workflow_name: "Show all mysql grants for all users"
+    workflow_command: "SELECT CONCAT('SHOW GRANTS FOR ''',user,'''@''',host,''';') FROM mysql.user;"
+    workflow_tags:
+      - mysql
+    workflow_description: "Show all mysql grants for all users"

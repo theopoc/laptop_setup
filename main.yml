@@ -16,6 +16,9 @@
     - role: iterm2
       tags: ['iterm2']
       when: iterm2_enabled | bool
+    - role: warp
+      tags: ['warp']
+      when: warp_enabled | bool
     - role: cursor
       tags: ['cursor']
     - role: mise

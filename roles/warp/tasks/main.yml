@@ -1,0 +1,120 @@
+---
+# Tasks for installing and configuring Warp terminal
+
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
+        - "default.yml"
+      paths: "vars"
+  when: warp_enabled | bool
+
+- name: Set platform variables
+  set_fact:
+    warp_workflows_dir: "{{ ansible_env.HOME }}/.warp/workflows"
+    warp_parent_dir: "{{ ansible_env.HOME }}/.warp"
+  when:
+    - warp_enabled | bool
+    - ansible_os_family == 'Darwin'
+
+- name: Set platform variables (Windows)
+  set_fact:
+    warp_workflows_dir: "{{ ansible_env.APPDATA }}/warp/Warp/data/workflows"
+    warp_parent_dir: "{{ ansible_env.APPDATA }}/warp/Warp/data"
+  when:
+    - warp_enabled | bool
+    - ansible_os_family == 'Windows'
+
+- name: Set platform variables (Linux)
+  set_fact:
+    warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
+    warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+  when:
+    - warp_enabled | bool
+    - ansible_os_family not in ['Darwin', 'Windows']
+
+- name: Install Warp terminal (macOS)
+  block:
+    - name: Install Warp via Homebrew
+      community.general.homebrew_cask:
+        name: "{{ warp_homebrew_cask_name }}"
+        state: "{{ warp_homebrew_cask_state }}"
+        greedy: "{{ warp_homebrew_cask_greedy }}"
+      register: homebrew_result
+  when:
+    - warp_enabled | bool
+    - ansible_os_family == 'Darwin'
+    - warp_install_method == 'homebrew'
+
+- name: Install Warp terminal (Debian/Ubuntu)
+  block:
+    - name: Download Warp DEB package
+      get_url:
+        url: "{{ warp_deb_url }}"
+        dest: "/tmp/warp-terminal.deb"
+        mode: '0644'
+      register: deb_download
+
+    - name: Install Warp DEB package
+      apt:
+        deb: "/tmp/warp-terminal.deb"
+        state: "{{ warp_apt_state }}"
+      become: true
+      register: apt_result
+  when:
+    - warp_enabled | bool
+    - ansible_os_family == 'Debian'
+    - warp_install_method == 'apt'
+
+- name: Install Warp terminal (Red Hat/Fedora)
+  block:
+    - name: Download Warp RPM package
+      get_url:
+        url: "{{ warp_rpm_url }}"
+        dest: "/tmp/warp-terminal.rpm"
+        mode: '0644'
+      register: rpm_download
+
+    - name: Install Warp RPM package
+      dnf:
+        name: "/tmp/warp-terminal.rpm"
+        state: "{{ warp_rpm_state }}"
+      become: true
+      register: dnf_result
+  when:
+    - warp_enabled | bool
+    - ansible_os_family == 'RedHat'
+    - warp_install_method == 'rpm'
+
+- name: Setup Warp workflows directory
+  block:
+    - name: Create Warp directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0750'
+        owner: "{{ warp_user }}"
+      loop_control:
+        label: "{{ item }}"
+      loop:
+        - "{{ warp_parent_dir }}"
+        - "{{ warp_workflows_dir }}"
+
+    - name: Deploy example Ansible workflow
+      template:
+        src: workflow.yaml.j2
+        dest: "{{ warp_workflows_dir }}/workflow{{ ansible_loop.index }}.yaml"
+        mode: '0640'
+        owner: "{{ warp_user }}"
+      diff: true
+      loop: "{{ warp_workflows }}"
+      loop_control:
+        extended: true
+        label: "{{ warp_workflows_dir }}/workflow{{ ansible_loop.index }}.yaml"
+  when:
+    - warp_enabled | bool
+    - warp_workflows_create_dirs | bool

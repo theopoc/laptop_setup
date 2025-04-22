@@ -1,0 +1,14 @@
+---
+# Example Warp workflow template
+name: {{ item.workflow_name }}
+command: {{ item.workflow_command }}
+tags: {{ item.workflow_tags }}
+description: {{ item.workflow_description }}
+arguments:
+{% for arg in item.workflow_arguments | default([]) %}
+  - name: {{ arg.name }}
+    description: {{ arg.description }}
+    default_value: {{ arg.default_value | default('') }}
+{% endfor %}
+author: {{ item.workflow_author | default(ansible_user_id) }}
+shells: {{ item.workflow_shells | default(['bash', 'zsh']) }}

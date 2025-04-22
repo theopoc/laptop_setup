@@ -1,0 +1,8 @@
+---
+# macOS specific variables for Warp Terminal role
+
+# Default installation method for macOS
+warp_install_method: "homebrew"
+
+# Workflow directory path for macOS
+warp_workflows_dir: "{{ ansible_env.HOME }}/.warp/workflows" 
