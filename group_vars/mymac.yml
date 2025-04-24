@@ -97,8 +97,8 @@ mise_tools:
   glab: "latest"
   vault: "latest"
   updatecli: "latest"
-  pipx: "latest"
   granted: "latest"
+  uv: "latest"
 
 username: "{{ ansible_user_id }}"
 
@@ -202,9 +202,6 @@ cursor_keybindings:
   - key: "alt+m"
     command: "editor.action.addSelectionToNextFindMatch"
     when: "editorFocus"
-
-
-pipx_executable: "/Users/{{ ansible_user }}/.local/share/mise/installs/pipx/latest/bin/pipx"
 
 git_enabled: true
 git_username: theo

@@ -2,4 +2,3 @@
 # No default variables needed for this role
 # Future variables could include:
 # copier_version: latest  # To specify a particular version
-# copier_pipx_extra_args: ""  # For any additional pipx install arguments 

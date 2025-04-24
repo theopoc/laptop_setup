@@ -1,9 +1,17 @@
 ---
-- name: Install gita using pipx
-  community.general.pipx:
-    name: gita
-    state: "present"
-    executable: "{{ pipx_executable | default(omit) }}"
+- name: Check if gita is installed
+  ansible.builtin.shell:
+    cmd: "uv tool list | grep -E 'gita$'"
+  register: is_gita_installed
+  changed_when: false
+  failed_when: false
+  tags:
+    - gita
+
+- name: Install gita using uv
+  ansible.builtin.command:
+    cmd: "uv tool install gita"
+  when: is_gita_installed.rc != 0
   tags:
     - gita
 

@@ -1,9 +1,9 @@
 ---
 
-- name: Install uv using pipx
-  community.general.pipx:
-    name: uv
-    state: "present"
-    executable: "{{ pipx_executable | default(omit) }}"
+- name: Update uv shell configuration
+  ansible.builtin.command:
+    cmd: "uv tool update-shell"
+  register: uv_shell_update
+  changed_when: false
   tags:
     - uv

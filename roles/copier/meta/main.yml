@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: copier
   author: tpo
-  description: Installs copier using pipx
+  description: Installs copier using uvx
   license: MIT
   min_ansible_version: "2.10"
   platforms:
@@ -12,9 +12,8 @@ galaxy_info:
 
   galaxy_tags:
     - copier
-    - pipx
     - development
     - tools
 
 dependencies:
-  - role: mise 
+  - role: mise

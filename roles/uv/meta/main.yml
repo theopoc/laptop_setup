@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: uv
   author: tpo
-  description: Installs uv Python package installer using pipx
+  description: Installs uv Python package installer
   license: MIT
   min_ansible_version: "2.10"
   platforms:
@@ -12,7 +12,6 @@ galaxy_info:
 
   galaxy_tags:
     - uv
-    - pipx
     - python
     - package
     - installer
