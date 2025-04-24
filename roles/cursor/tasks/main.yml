@@ -40,6 +40,7 @@
 
 - name: Install Cursor extensions
   ansible.builtin.include_tasks: install-extensions.yml
+  when: cursor_install_extensions | bool
   tags: cursor
 
 - name: Setup MCP configuration

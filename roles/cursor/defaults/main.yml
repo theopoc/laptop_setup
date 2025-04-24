@@ -8,7 +8,7 @@ cursor_extensions:
   - "redhat.ansible"
   - "ms-azuretools.vscode-docker"
   - "github.copilot"
-  # Add more extensions as needed 
+  # Add more extensions as needed
 
 users:
   username: "{{ ansible_user_id }}"
@@ -22,6 +22,7 @@ cursor_settings:
 
 cursor_keybindings: {}
 
+cursor_install_extensions: true
 # MCP Configuration
 cursor_mcp_enabled: false
 cursor_mcp_config_path: "~/.cursor/mcp.json"
