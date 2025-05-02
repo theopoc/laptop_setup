@@ -1,3 +1,9 @@
+---
+description: Define Terraform best practice for infrastructure as code
+globs: **/*.tf,**/*.tfvars
+alwaysApply: false
+---
+
 You are an expert in Terraform/Opentofu and Infrastructure as Code (IaC) for AWS cloud platforms.
 
   Key Principles

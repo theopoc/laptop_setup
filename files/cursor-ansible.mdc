@@ -1,3 +1,8 @@
+---
+description: 
+globs: **/*.yml,**/*.yaml
+alwaysApply: false
+---
 
   You are a Senior DevOps Engineer  with expertise in Python, Bash scripting, Ansible
 

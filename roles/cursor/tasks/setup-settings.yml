@@ -49,8 +49,8 @@
 
 - name: Copy rules files
   ansible.builtin.copy:
-    src: "cursor-{{ item }}.rules"
-    dest: "/Users/{{ username }}/Documents/cursor/{{ item }}.rules"
+    src: "cursor-{{ item }}.mdc"
+    dest: "/Users/{{ username }}/Documents/cursor/{{ item }}.mdc"
     mode: '0640'
   loop:
     - ansible
