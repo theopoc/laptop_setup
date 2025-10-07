@@ -1,45 +1,9 @@
 ---
-- name: Ensure mise is installed via homebrew
-  community.general.homebrew:
-    name: mise
-    state: present
-
-- name: Create mise config directory
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.config/mise"
-    state: directory
-    mode: '0755'
+- name: Include OS-specific installation tasks
+  ansible.builtin.include_tasks: "install-{{ ansible_os_family }}.yml"
 
 - name: Configure mise
-  ansible.builtin.template:
-    src: config.toml.j2
-    dest: "{{ ansible_env.HOME }}/.config/mise/config.toml"
-    mode: '0644'
+  ansible.builtin.include_tasks: configure-mise.yml
 
-- name: Install mise plugins
-  ansible.builtin.command: "mise plugin install {{ item }}"
-  loop: "{{ mise_tools | dict2items | map(attribute='key') | list }}"
-  changed_when: false
-
-- name: Install latest versions
-  ansible.builtin.command: "mise install"
-  changed_when: false
-
-- name: Set global versions for mise plugins
-  ansible.builtin.command: "mise use -g {{ item.key }}@{{ item.value }}"
-  loop: "{{ mise_tools | dict2items }}"
-  changed_when: false
-
-- name: Create .zshrc if it doesn't exist
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    state: touch
-    mode: '0644'
-    modification_time: preserve
-    access_time: preserve
-
-- name: Add mise activation to .zshrc
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'eval "$(mise activate zsh)"'
-    state: present
+- name: Configure shell integration
+  ansible.builtin.include_tasks: configure-shell.yml

@@ -1,0 +1,48 @@
+---
+ansible:
+  cfg:
+    defaults:
+      deprecation_warnings: false
+
+dependency:
+  name: galaxy
+  options:
+    requirements-file: ${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml
+driver:
+  name: podman
+platforms:
+  - name: ubuntu-mise
+    image: geerlingguy/docker-ubuntu2404-ansible:latest
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+
+scenario:
+  test_sequence:
+    - dependency
+    - create
+    - converge
+    - idempotence
+    - verify
+    - destroy
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: converge.yml
+    verify: verify.yml
+    cleanup: cleanup.yml
+    prepare: prepare.yml
+    side_effect: side_effect.yml
+  inventory:
+    host_vars:
+      ubuntu-mise:
+        ansible_user: root
+  env:
+    ANSIBLE_ALLOW_BROKEN_CONDITIONALS: "True"
+    ANSIBLE_ROLES_PATH: ../../../
+verifier:
+  name: ansible

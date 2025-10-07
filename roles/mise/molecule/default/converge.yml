@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    mise_tools:
+      node: "lts"
+      python: "3.11"
+  tasks:
+    - name: Include mise role
+      ansible.builtin.include_role:
+        name: mise

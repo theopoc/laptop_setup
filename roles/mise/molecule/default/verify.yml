@@ -1,0 +1,78 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Check if mise is installed
+      ansible.builtin.command: which mise
+      register: mise_installed
+      changed_when: false
+      failed_when: mise_installed.rc != 0
+
+    - name: Verify mise version
+      ansible.builtin.command: mise --version
+      register: mise_version
+      changed_when: false
+
+    - name: Display mise version
+      ansible.builtin.debug:
+        msg: "mise version: {{ mise_version.stdout }}"
+
+    - name: Check if mise config directory exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.config/mise"
+      register: mise_config_dir
+
+    - name: Verify mise config directory exists
+      ansible.builtin.assert:
+        that:
+          - mise_config_dir.stat.exists
+          - mise_config_dir.stat.isdir
+        fail_msg: "mise config directory does not exist"
+        success_msg: "mise config directory exists"
+
+    - name: Check if mise config file exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.config/mise/config.toml"
+      register: mise_config_file
+
+    - name: Verify mise config file exists
+      ansible.builtin.assert:
+        that:
+          - mise_config_file.stat.exists
+        fail_msg: "mise config.toml does not exist"
+        success_msg: "mise config.toml exists"
+
+    - name: List installed mise tools
+      ansible.builtin.command: mise list
+      register: mise_list
+      changed_when: false
+
+    - name: Display installed mise tools
+      ansible.builtin.debug:
+        msg: "{{ mise_list.stdout_lines }}"
+
+    - name: Verify node is installed
+      ansible.builtin.command: mise which node
+      register: node_path
+      changed_when: false
+      failed_when: node_path.rc != 0
+
+    - name: Verify python is installed
+      ansible.builtin.command: mise which python
+      register: python_path
+      changed_when: false
+      failed_when: python_path.rc != 0
+
+    - name: Check shell configuration (bash)
+      ansible.builtin.shell: grep -q 'mise activate' ~/.bashrc
+      register: bashrc_check
+      changed_when: false
+      failed_when: false
+
+    - name: Verify shell is configured
+      ansible.builtin.assert:
+        that:
+          - bashrc_check.rc == 0
+        fail_msg: "mise not configured in shell rc file"
+        success_msg: "mise configured in shell rc file"

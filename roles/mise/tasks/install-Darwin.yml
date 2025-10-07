@@ -1,0 +1,5 @@
+---
+- name: Ensure mise is installed via homebrew
+  community.general.homebrew:
+    name: mise
+    state: present

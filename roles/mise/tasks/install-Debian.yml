@@ -1,0 +1,44 @@
+---
+- name: Install required dependencies for mise on Ubuntu/Debian
+  ansible.builtin.apt:
+    name:
+      - curl
+      - gpg
+      - gpg-agent
+      - wget
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Create /etc/apt/keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download and add mise GPG key
+  ansible.builtin.shell: |
+    wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | tee /etc/apt/keyrings/mise-archive-keyring.gpg > /dev/null
+  args:
+    creates: /etc/apt/keyrings/mise-archive-keyring.gpg
+  become: yes
+
+- name: Add mise apt repository
+  ansible.builtin.copy:
+    content: "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}] https://mise.jdx.dev/deb stable main"
+    dest: /etc/apt/sources.list.d/mise.list
+    mode: '0644'
+  become: yes
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
+
+- name: Install mise
+  ansible.builtin.apt:
+    name: mise
+    state: present
+    update_cache: yes
+  become: yes
