@@ -1,0 +1,169 @@
+---
+# Pre-commit hooks for Ansible playbook repository
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+# Update hooks: pre-commit autoupdate
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^roles/.*/files/
+      - id: end-of-file-fixer
+        exclude: ^roles/.*/files/
+      - id: check-yaml
+        args: [--allow-multiple-documents, --unsafe]
+        exclude: |
+          (?x)^(
+            roles/.*/templates/.*|
+            .github/labeler.yml
+          )$
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: detect-private-key
+        exclude: ^files/test_keys/
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-c=.yamllint]
+        files: \.(yaml|yml)$
+
+  # Ansible linting - Disabled in pre-commit, use 'make lint' instead
+  # The ansible-lint pre-commit hook has compatibility issues with some Python versions
+  # Run manually: ansible-lint -v
+  # - repo: https://github.com/ansible/ansible-lint
+  #   rev: v6.22.2
+  #   hooks:
+  #     - id: ansible-lint
+
+  # Shell script linting
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: [-x, -e, SC1091]
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        args: [--fix, --config, .markdownlint.json]
+        exclude: ^CHANGELOG.md$
+
+  # Security - Check for secrets
+  # Temporarily disabled due to version incompatibility
+  # Run manually: detect-secrets scan
+  # - repo: https://github.com/Yelp/detect-secrets
+  #   rev: v1.4.0
+  #   hooks:
+  #     - id: detect-secrets
+  #       args: ['--baseline', '.secrets.baseline']
+
+  # Terraform (if you add terraform modules)
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.88.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+        exclude: ^examples/
+
+  # Commit message format
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.1.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
+  # Local custom hooks
+  - repo: local
+    hooks:
+      # Check Ansible syntax
+      - id: ansible-syntax-check
+        name: Ansible Syntax Check
+        entry: bash -c 'ansible-playbook main.yml --syntax-check -i hosts'
+        language: system
+        pass_filenames: false
+        files: \.(yml|yaml)$
+
+      # Check for TODO/FIXME comments
+      - id: check-todos
+        name: Check for TODO/FIXME
+        entry: bash -c 'grep -rn "TODO\|FIXME" --include="*.yml" --include="*.yaml" roles/ || true'
+        language: system
+        pass_filenames: false
+        verbose: true
+
+      # Validate group_vars structure
+      - id: validate-group-vars
+        name: Validate group_vars
+        entry: python3
+        language: system
+        pass_filenames: false
+        files: ^group_vars/.*\.yml$
+        args:
+          - -c
+          - |
+            import yaml
+            import sys
+            try:
+                with open('group_vars/all.yml') as f:
+                    data = yaml.safe_load(f)
+                    # Add custom validation logic here
+                    if not isinstance(data, dict):
+                        print("ERROR: group_vars/all.yml must be a dictionary")
+                        sys.exit(1)
+                    print("✅ group_vars validation passed")
+            except Exception as e:
+                print(f"ERROR: {e}")
+                sys.exit(1)
+
+      # Check role meta dependencies - Disabled (uses ansible-lint)
+      # Use 'make lint' to check role dependencies
+      # - id: check-role-dependencies
+      #   name: Check Role Dependencies
+      #   entry: bash -c 'for role in roles/*/meta/main.yml; do ansible-lint "$role" || exit 1; done'
+      #   language: system
+      #   pass_filenames: false
+      #   files: ^roles/.*/meta/main\.yml$
+
+      # Verify molecule tests exist for roles
+      - id: check-molecule-tests
+        name: Check Molecule Tests Exist
+        entry: python3
+        language: system
+        pass_filenames: false
+        files: ^roles/.*
+        args:
+          - -c
+          - |
+            import os
+            import sys
+            from pathlib import Path
+
+            roles_dir = Path('roles')
+            missing_tests = []
+
+            for role_dir in roles_dir.iterdir():
+                if role_dir.is_dir() and role_dir.name not in ['.DS_Store', '__pycache__']:
+                    molecule_dir = role_dir / 'molecule' / 'default'
+                    if not molecule_dir.exists():
+                        missing_tests.append(role_dir.name)
+
+            if missing_tests:
+                print(f"⚠️  Roles missing Molecule tests: {', '.join(missing_tests)}")
+                print("Consider adding Molecule tests for better coverage")
+                # Don't fail, just warn
+            else:
+                print("✅ All roles have Molecule tests")

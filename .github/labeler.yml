@@ -1,0 +1,102 @@
+---
+# PR Labeler configuration
+# Automatically labels PRs based on changed files
+
+# Role-specific labels
+'role: base-tools':
+  - roles/base-tools/**/*
+
+'role: cursor':
+  - roles/cursor/**/*
+
+'role: git':
+  - roles/git/**/*
+
+'role: mise':
+  - roles/mise/**/*
+
+'role: rancher-desktop':
+  - roles/rancher-desktop/**/*
+
+'role: uv':
+  - roles/uv/**/*
+
+'role: zsh':
+  - roles/zsh/**/*
+
+'role: warp':
+  - roles/warp/**/*
+
+'role: vim':
+  - roles/vim/**/*
+
+'role: gpg':
+  - roles/gpg/**/*
+
+'role: appstore':
+  - roles/appstore/**/*
+
+'role: macos_settings':
+  - roles/macos_settings/**/*
+
+# File type labels
+'type: documentation':
+  - '**/*.md'
+  - 'docs/**/*'
+  - CLAUDE.md
+  - README.md
+  - CHANGELOG.md
+
+'type: configuration':
+  - group_vars/**/*
+  - hosts
+  - ansible.cfg
+  - '**/*.cfg'
+
+'type: workflow':
+  - .github/**/*
+  - .pre-commit-config.yaml
+
+'type: molecule tests':
+  - '**/molecule/**/*'
+
+'type: playbook':
+  - '*.yml'
+  - '*.yaml'
+  - main.yml
+
+'type: scripts':
+  - scripts/**/*
+  - '**/*.sh'
+
+# Platform labels
+'platform: macOS':
+  - '**/Darwin.yml'
+  - '**/install-Darwin.yml'
+  - roles/appstore/**/*
+  - roles/macos_settings/**/*
+
+'platform: Ubuntu':
+  - '**/Debian.yml'
+  - '**/install-Debian.yml'
+
+# Priority labels
+'priority: high':
+  - main.yml
+  - group_vars/all.yml
+  - requirements.yml
+
+# Area labels
+'area: cicd':
+  - .github/workflows/**/*
+  - .pre-commit-config.yaml
+  - .yamllint
+
+'area: testing':
+  - '**/molecule/**/*
+  - '**/verify.yml'
+  - '**/converge.yml'
+
+'area: security':
+  - roles/gpg/**/*
+  - '**/vault/**/*'

@@ -1,0 +1,31 @@
+---
+# Auto-assign configuration for PRs
+# Automatically requests reviews based on changed files
+
+# Add reviewers when someone opens a pull request
+addReviewers: true
+
+# Add assignees when someone opens a pull request
+addAssignees: false
+
+# Number of reviewers to add
+numberOfReviewers: 1
+
+# Reviewers (GitHub usernames)
+reviewers:
+  - saewyn  # Replace with actual team members
+
+# Keywords to skip automatic assignment
+skipKeywords:
+  - wip
+  - WIP
+  - draft
+
+# File patterns and specific reviewers
+# fileReviewers:
+#   '**/*.yml':
+#     - ansible-expert
+#   'roles/*/molecule/**':
+#     - testing-expert
+#   '.github/workflows/**':
+#     - devops-lead

@@ -11,34 +11,42 @@ This is an Ansible playbook repository for automating workstation setup on both 
 ### Running the Playbook
 
 **Full playbook execution:**
+
 ```bash
 ansible-playbook main.yml -i hosts --ask-become-pass
 ```
 
 **Run specific role using tags:**
+
 ```bash
-# Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings
+# Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings, uv
 ansible-playbook main.yml -i hosts --tags <tag_name> --ask-become-pass
 ```
 
 **Examples:**
+
 ```bash
 # Install only Cursor IDE
 ansible-playbook main.yml -i hosts --tags cursor --ask-become-pass
 
 # Configure Git only
 ansible-playbook main.yml -i hosts --tags git --ask-become-pass
+
+# Install Cursor IDE and Git
+ansible-playbook main.yml -i hosts --tags cursor,git --ask-become-pass
 ```
 
 ### Testing with Molecule
 
 **Test a specific role:**
+
 ```bash
 cd roles/<role_name>
 molecule test
 ```
 
 **Test without destroying the container (for debugging):**
+
 ```bash
 molecule converge  # Run playbook
 molecule verify    # Run tests
@@ -47,6 +55,7 @@ molecule destroy   # Clean up when done
 ```
 
 **Roles with Molecule tests:**
+
 - base-tools
 - cursor
 - git
@@ -74,8 +83,10 @@ All roles follow a consistent OS-aware architecture:
 4. **Configuration:** Apply common configuration tasks
 5. **Optimization:**: Avoid redondant tasks, use loop if possible
 6. **Best practices:**: Use shell, command and script as last resort and prefer native module instead
+7. **Installation**: check the official documentation on the internet to see how to install tools properly
 
 **Example structure (cursor role):**
+
 ```
 roles/cursor/
 ├── tasks/
@@ -95,6 +106,7 @@ roles/cursor/
 **Single source of truth:** All user-configurable variables are defined in `group_vars/all.yml`
 
 **Key configuration sections:**
+
 - `homebrew`: Package manager configuration for macOS (taps, formulae, casks)
 - `cursor_*`: IDE extensions, settings, keybindings, MCP configuration
 - `mise_tools`: DevOps tools managed by mise (terraform, kubectl, helm, etc.)
@@ -106,6 +118,7 @@ roles/cursor/
 ### Idempotency and Conditionals
 
 Roles use `when` conditionals for:
+
 - OS-specific execution: `when: ansible_os_family == 'Darwin'`
 - Architecture-specific: `when: ansible_machine == 'arm64'`
 - Feature flags: `when: cursor_mcp_enabled | bool`
@@ -113,6 +126,7 @@ Roles use `when` conditionals for:
 ### Molecule Testing Strategy
 
 Tests validate:
+
 1. **Convergence:** Playbook runs without errors
 2. **Idempotence:** Re-running produces no changes
 3. **Verification:** Installed packages/configurations are correct
@@ -142,16 +156,19 @@ Test configurations disable features incompatible with containers (e.g., `cursor
    - Update `molecule/default/verify.yml` to test new functionality
    - Add or modify host_vars in `molecule.yml` for new variables
 3. **Run Molecule tests** to ensure everything works:
+
    ```bash
    cd roles/<role_name>
    molecule test
    ```
+
 4. **Fix any failures** until tests pass successfully
 5. **Verify idempotence** - the test should show "changed=0" on the second run
 
 **Never skip testing!** All roles with `molecule/` directories must have passing tests before considering your work complete. This ensures that changes work in Ubuntu environments (the Molecule test target).
 
 **Common test failures to watch for:**
+
 - Missing packages or dependencies in containers
 - Incorrect architecture detection (amd64 vs arm64)
 - Features that require GUI/systemd (disable these in test configs)
@@ -160,6 +177,7 @@ Test configurations disable features incompatible with containers (e.g., `cursor
 ### Role Dependencies
 
 Some roles have dependencies managed through `meta/main.yml`:
+
 - Roles depend on `base-tools` for package manager setup
 - Use `ansible.builtin.include_vars` for OS-specific variables
 - Use `ansible.builtin.include_tasks` for OS-specific task files
@@ -175,6 +193,7 @@ Some roles have dependencies managed through `meta/main.yml`:
 ### Initial Setup
 
 Users must:
+
 1. Run `./setup.sh` to install Homebrew and Ansible (macOS only)
 2. Configure `hosts` file with their username
 3. Edit `group_vars/all.yml` with personal settings (Git config, packages, etc.)
@@ -195,6 +214,7 @@ Users must:
 ### Testing Limitations
 
 Molecule tests run in containers, so some features cannot be tested:
+
 - GUI applications (Cursor extensions, App Store apps)
 - System settings modifications (macOS settings, Dock)
 - Features requiring systemd or display servers
@@ -202,6 +222,7 @@ Molecule tests run in containers, so some features cannot be tested:
 ### File Operations
 
 When modifying role tasks:
+
 - Always maintain OS detection logic
 - Keep `main.yml` as orchestrator, not implementation
 - Put installation logic in `install-{{ ansible_os_family }}.yml`

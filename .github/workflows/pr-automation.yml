@@ -1,0 +1,230 @@
+---
+name: PR Automation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    branches: [main, develop]
+
+jobs:
+  # Auto-label PRs based on changed files
+  auto-label:
+    name: Auto Label PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Label based on changed files
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+
+      - name: Add size labels
+        uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: 'size/xs'
+          xs_max_size: 10
+          s_label: 'size/s'
+          s_max_size: 100
+          m_label: 'size/m'
+          m_max_size: 500
+          l_label: 'size/l'
+          l_max_size: 1000
+          xl_label: 'size/xl'
+          fail_if_xl: false
+
+  # Automated PR checks and comments
+  pr-checks:
+    name: PR Checks and Comments
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR title format
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            ci
+          requireScope: false
+
+      - name: Analyze changed roles
+        id: changed-roles
+        run: |
+          echo "Analyzing changed roles..."
+
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          # Extract unique roles
+          ROLES=$(echo "$CHANGED_FILES" | grep "^roles/" | cut -d'/' -f2 | sort -u)
+
+          # Create markdown list
+          if [ -n "$ROLES" ]; then
+            echo "roles<<EOF" >> $GITHUB_OUTPUT
+            echo "### Changed Roles" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            for role in $ROLES; do
+              echo "- \`$role\`" >> $GITHUB_OUTPUT
+            done
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "roles=No roles changed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for molecule tests
+        id: check-molecule
+        run: |
+          echo "Checking for Molecule tests..."
+
+          CHANGED_ROLES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep "^roles/" | cut -d'/' -f2 | sort -u)
+
+          MISSING_TESTS=""
+          for role in $CHANGED_ROLES; do
+            if [ ! -d "roles/$role/molecule" ]; then
+              MISSING_TESTS="$MISSING_TESTS\n- \`$role\`"
+            fi
+          done
+
+          if [ -n "$MISSING_TESTS" ]; then
+            echo "missing<<EOF" >> $GITHUB_OUTPUT
+            echo "### ⚠️ Roles Missing Molecule Tests" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo -e "$MISSING_TESTS" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "Please add Molecule tests for these roles." >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate test checklist
+        id: test-checklist
+        run: |
+          cat > test-checklist.md << 'EOF'
+          ### Testing Checklist
+
+          Please ensure you've completed the following before merging:
+
+          - [ ] All Molecule tests pass for modified roles
+          - [ ] `ansible-lint` passes without errors
+          - [ ] Playbook runs successfully in check mode
+          - [ ] Documentation updated (if applicable)
+          - [ ] `CLAUDE.md` updated (if architecture changes)
+          - [ ] Tested on both macOS and Ubuntu (if applicable)
+          - [ ] Variables added to `group_vars/all.yml` (if new vars)
+          - [ ] Role follows OS-aware architecture pattern
+
+          ### Manual Testing
+
+          ```bash
+          # Test specific role
+          ansible-playbook main.yml -i hosts --tags <role_name> --check
+
+          # Run Molecule tests
+          cd roles/<role_name>
+          molecule test
+          ```
+          EOF
+
+          echo "checklist<<EOF" >> $GITHUB_OUTPUT
+          cat test-checklist.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Build comment body
+            let body = '## 🤖 Automated PR Analysis\n\n';
+
+            // Add changed roles
+            if ('${{ steps.changed-roles.outputs.roles }}') {
+              body += '${{ steps.changed-roles.outputs.roles }}\n\n';
+            }
+
+            // Add missing tests warning
+            if ('${{ steps.check-molecule.outputs.missing }}') {
+              body += '${{ steps.check-molecule.outputs.missing }}\n\n';
+            }
+
+            // Add test checklist
+            body += '${{ steps.test-checklist.outputs.checklist }}\n';
+
+            // Check if comment already exists
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('🤖 Automated PR Analysis')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
+  # Auto-approve dependabot PRs
+  auto-approve-dependabot:
+    name: Auto-approve Dependabot
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Approve PR
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Request reviews based on changed files
+  request-review:
+    name: Request Reviews
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Request review from CODEOWNERS
+        uses: kentaro-m/auto-assign-action@v1.2.5
+        with:
+          configuration-path: .github/auto-assign.yml

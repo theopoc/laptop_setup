@@ -1,0 +1,236 @@
+---
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, 'feat/**']
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  ANSIBLE_FORCE_COLOR: "1"
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  # Linting and validation
+  lint:
+    name: Lint and Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible ansible-lint yamllint jmespath
+
+      - name: Run ansible-lint
+        run: |
+          ansible-lint --version
+          ansible-lint -v
+
+      - name: Run yamllint
+        run: |
+          yamllint --version
+          yamllint -c .yamllint .
+        continue-on-error: true
+
+      - name: Validate Ansible syntax
+        run: |
+          ansible-playbook main.yml --syntax-check -i hosts
+
+      - name: Check for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Test matrix for all roles with Molecule
+  test-roles:
+    name: Test Role - ${{ matrix.role }}
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        role:
+          - base-tools
+          - cursor
+          - git
+          - mise
+          - rancher-desktop
+          - uv
+          - zsh
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+
+      - name: Install Molecule and dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install molecule molecule-plugins[podman] ansible-core jmespath
+          pip install --upgrade requests
+
+      - name: Display versions
+        run: |
+          ansible --version
+          molecule --version
+          podman --version
+
+      - name: Run Molecule tests
+        run: |
+          cd roles/${{ matrix.role }}
+          molecule test
+        env:
+          PY_COLORS: "1"
+          ANSIBLE_FORCE_COLOR: "1"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: molecule-results-${{ matrix.role }}
+          path: |
+            roles/${{ matrix.role }}/molecule/default/*.log
+          retention-days: 7
+
+  # Integration test - full playbook dry run
+  integration-test:
+    name: Integration Test - Full Playbook
+    runs-on: ubuntu-latest
+    needs: test-roles
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install Ansible
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible jmespath
+
+      - name: Install Ansible Galaxy dependencies
+        run: |
+          ansible-galaxy install -r requirements.yml
+
+      - name: Run playbook check mode
+        run: |
+          ansible-playbook main.yml -i hosts --check --diff
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+
+  # Security scanning
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Check for hardcoded credentials
+        run: |
+          echo "Scanning for potential hardcoded credentials..."
+          if grep -r -i -E "(password|passwd|pwd|secret|token|api_key).*=.*['\"][^'\"]{8,}" --include="*.yml" --include="*.yaml" . ; then
+            echo "⚠️ Potential hardcoded credentials found!"
+            exit 1
+          else
+            echo "✅ No hardcoded credentials detected"
+          fi
+        continue-on-error: true
+
+  # Generate documentation
+  documentation:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [integration-test, security]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Generate role documentation
+        run: |
+          pip install ansible ansible-doc-extractor
+
+          # Generate README for each role
+          for role in roles/*/; do
+            if [ -f "$role/meta/main.yml" ]; then
+              echo "Generating docs for $(basename $role)"
+              # Add your documentation generation logic here
+            fi
+          done
+
+      - name: Check documentation is up to date
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Documentation is out of date. Please regenerate."
+            git diff
+            exit 1
+          fi
+
+  # Notify on completion
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    needs: [lint, test-roles, integration-test, security]
+    if: always()
+    steps:
+      - name: Check workflow status
+        id: check
+        run: |
+          if [ "${{ needs.lint.result }}" = "failure" ] || \
+             [ "${{ needs.test-roles.result }}" = "failure" ] || \
+             [ "${{ needs.integration-test.result }}" = "failure" ] || \
+             [ "${{ needs.security.result }}" = "failure" ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create status badge
+        run: |
+          echo "Workflow Status: ${{ steps.check.outputs.status }}"
+          echo "You can add notification steps here (Slack, Discord, etc.)"
