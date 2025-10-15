@@ -50,6 +50,7 @@ homebrew:
     - libreoffice
     - postman
     - warp
+    - session-manager-plugin
 
 iterm2_enabled: false
 
