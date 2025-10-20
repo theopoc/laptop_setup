@@ -228,3 +228,9 @@ When modifying role tasks:
 - Put installation logic in `install-{{ ansible_os_family }}.yml`
 - Put configuration logic in separate task files (e.g., `setup-settings.yml`)
 - Define OS-specific variables in `vars/{{ ansible_os_family }}.yml`
+
+
+### Commit conventions
+- Use conventionnal commit
+- Each commit message is one line
+- Do not take claude as author
