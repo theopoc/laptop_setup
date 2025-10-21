@@ -98,6 +98,7 @@
         url: "https://slack.com/downloads/instructions/linux"
         return_content: true
       register: slack_page
+      check_mode: false
       when:
         - deb_applications.slack is defined
         - deb_applications.slack.enabled | default(true)
@@ -182,6 +183,7 @@
         remote_src: true
         extra_opts: [--strip-components=1]
       become: true
+      check_mode: false
 
     - name: Create Postman symlink
       ansible.builtin.file:
@@ -189,6 +191,8 @@
         dest: "/usr/local/bin/{{ binary_applications.postman.binary_name }}"
         state: link
       become: true
+      check_mode: false
+
 - name: Install additional tools from binaries
   tags: base-tools, additional
 
@@ -220,6 +224,7 @@
             url: https://api.github.com/repos/lsd-rs/lsd/releases/latest
             return_content: true
           register: lsd_release
+          check_mode: false
 
         - name: Download lsd deb package
           ansible.builtin.get_url:
@@ -227,12 +232,14 @@
               }}.deb"
             dest: /tmp/lsd.deb
             mode: "0644"
+          check_mode: false
 
         - name: Install lsd via deb
           ansible.builtin.apt:
             deb: /tmp/lsd.deb
             state: present
           become: true
+          check_mode: false
 
     - name: Install Python CLI tools
       ansible.builtin.pip:
@@ -257,6 +264,7 @@
             url: https://api.github.com/repos/wagoodman/dive/releases/latest
             return_content: true
           register: dive_release
+          check_mode: false
 
         - name: Download dive deb package
           ansible.builtin.get_url:
@@ -285,6 +293,7 @@
             url: https://api.github.com/repos/gopasspw/gopass/releases/latest
             return_content: true
           register: gopass_release
+          check_mode: false
 
         - name: Download gopass deb package
           ansible.builtin.get_url:
@@ -313,6 +322,7 @@
             url: https://api.github.com/repos/peak/s5cmd/releases/latest
             return_content: true
           register: s5cmd_release
+          check_mode: false
 
         - name: Download s5cmd binary
           ansible.builtin.unarchive:
@@ -343,6 +353,7 @@
             url: https://api.github.com/repos/fishi0x01/vsh/releases/latest
             return_content: true
           register: vsh_release
+          check_mode: false
 
         - name: Download vsh binary
           ansible.builtin.get_url:
@@ -365,6 +376,7 @@
             url: https://api.github.com/repos/falcosuessgott/vkv/releases/latest
             return_content: true
           register: vkv_release
+          check_mode: false
 
         - name: Download vkv binary
           ansible.builtin.unarchive:
@@ -400,6 +412,7 @@
             url: https://api.github.com/repos/egen/safe/releases/latest
             return_content: true
           register: safe_release
+          check_mode: false
 
         - name: Download safe binary
           ansible.builtin.get_url:
@@ -422,6 +435,7 @@
             url: https://api.github.com/repos/leg100/pug/releases/latest
             return_content: true
           register: pug_release
+          check_mode: false
 
         - name: Download pug binary
           ansible.builtin.unarchive:
@@ -452,6 +466,7 @@
             url: https://api.github.com/repos/busser/tfautomv/releases/latest
             return_content: true
           register: tfautomv_release
+          check_mode: false
 
         - name: Download tfautomv binary
           ansible.builtin.unarchive:
@@ -482,6 +497,7 @@
             url: https://api.github.com/repos/suzuki-shunsuke/tfmv/releases/latest
             return_content: true
           register: tfmv_release
+          check_mode: false
 
         - name: Download tfmv binary
           ansible.builtin.unarchive:
@@ -511,6 +527,7 @@
             url: https://api.github.com/repos/minamijoyo/hcledit/releases/latest
             return_content: true
           register: hcledit_release
+          check_mode: false
 
         - name: Download hcledit binary
           ansible.builtin.unarchive:

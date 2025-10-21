@@ -5,5 +5,4 @@
   with_items: "{{ cursor_extensions }}"
   register: cursor_result
   changed_when: "'already installed' not in cursor_result.stdout"
-  check_mode: false
   tags: cursor

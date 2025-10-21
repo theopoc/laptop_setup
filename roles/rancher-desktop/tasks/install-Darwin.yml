@@ -20,6 +20,7 @@
     return_content: true
     status_code: 200
   register: latest_release
+  check_mode: false
   when: not rancher_desktop_installed.stat.exists
   retries: 3
   delay: 5
