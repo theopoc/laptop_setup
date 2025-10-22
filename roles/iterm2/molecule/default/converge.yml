@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include iterm2 role
+      ansible.builtin.include_role:
+        name: iterm2
+      when: ansible_os_family == 'Darwin'
+
+    - name: Display skip message for non-macOS
+      ansible.builtin.debug:
+        msg: "iTerm2 role is macOS-only and will be skipped on {{ ansible_os_family }}"
+      when: ansible_os_family != 'Darwin'

@@ -1,0 +1,36 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Get uv path from mise
+      ansible.builtin.command:
+        cmd: "mise which uv"
+      register: uv_path
+      changed_when: false
+
+    - name: Check if copier is installed via uv
+      ansible.builtin.shell:
+        cmd: "{{ uv_path.stdout }} tool list | grep -E 'copier$'"
+      register: copier_check
+      changed_when: false
+      failed_when: false
+
+    - name: Verify copier is installed
+      ansible.builtin.assert:
+        that:
+          - copier_check.rc == 0
+        fail_msg: "copier is not installed via uv"
+        success_msg: "copier is installed via uv"
+
+    - name: Verify copier binary exists
+      ansible.builtin.command:
+        cmd: which copier
+      register: copier_which
+      changed_when: false
+
+    - name: Assert copier binary is accessible
+      ansible.builtin.assert:
+        that:
+          - copier_which.rc == 0
+        fail_msg: "copier binary is not in PATH"
+        success_msg: "copier binary is accessible"

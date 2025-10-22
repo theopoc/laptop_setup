@@ -1,0 +1,41 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check if Warp parent directory exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+      register: warp_parent
+
+    - name: Verify Warp parent directory exists
+      ansible.builtin.assert:
+        that:
+          - warp_parent.stat.exists
+          - warp_parent.stat.isdir
+        fail_msg: "Warp parent directory does not exist"
+        success_msg: "Warp parent directory exists"
+
+    - name: Check if Warp workflows directory exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
+      register: warp_workflows_dir
+
+    - name: Verify Warp workflows directory exists
+      ansible.builtin.assert:
+        that:
+          - warp_workflows_dir.stat.exists
+          - warp_workflows_dir.stat.isdir
+        fail_msg: "Warp workflows directory does not exist"
+        success_msg: "Warp workflows directory exists"
+
+    - name: Check if workflow file exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows/workflow1.yaml"
+      register: workflow_file
+
+    - name: Verify workflow file exists
+      ansible.builtin.assert:
+        that:
+          - workflow_file.stat.exists
+        fail_msg: "Workflow file does not exist"
+        success_msg: "Workflow file exists"

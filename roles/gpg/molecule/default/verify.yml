@@ -1,0 +1,43 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check if GPG config directory exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.gnupg"
+      register: gpg_config_dir
+
+    - name: Verify GPG config directory exists
+      ansible.builtin.assert:
+        that:
+          - gpg_config_dir.stat.exists
+          - gpg_config_dir.stat.isdir
+          - gpg_config_dir.stat.mode == '0700'
+        fail_msg: "GPG config directory does not exist or has incorrect permissions"
+        success_msg: "GPG config directory exists with correct permissions"
+
+    - name: Check if gpg-agent.conf exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.gnupg/gpg-agent.conf"
+      register: gpg_agent_conf
+
+    - name: Verify gpg-agent.conf exists
+      ansible.builtin.assert:
+        that:
+          - gpg_agent_conf.stat.exists
+          - gpg_agent_conf.stat.mode == '0600'
+        fail_msg: "gpg-agent.conf does not exist or has incorrect permissions"
+        success_msg: "gpg-agent.conf exists with correct permissions"
+
+    - name: Read gpg-agent.conf content
+      ansible.builtin.slurp:
+        path: "{{ ansible_env.HOME }}/.gnupg/gpg-agent.conf"
+      register: gpg_agent_conf_content
+
+    - name: Verify gpg-agent.conf contains cache configuration
+      ansible.builtin.assert:
+        that:
+          - "'default-cache-ttl' in (gpg_agent_conf_content.content | b64decode)"
+          - "'max-cache-ttl' in (gpg_agent_conf_content.content | b64decode)"
+        fail_msg: "gpg-agent.conf does not contain expected cache configuration"
+        success_msg: "gpg-agent.conf contains expected cache configuration"

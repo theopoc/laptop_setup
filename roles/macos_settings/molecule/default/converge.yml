@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include macos_settings role
+      ansible.builtin.include_role:
+        name: macos_settings
+      when: ansible_os_family == 'Darwin'
+
+    - name: Display skip message for non-macOS
+      ansible.builtin.debug:
+        msg: "macOS Settings role is macOS-only and will be skipped on {{ ansible_os_family }}"
+      when: ansible_os_family != 'Darwin'

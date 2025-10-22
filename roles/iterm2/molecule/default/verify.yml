@@ -1,0 +1,14 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Verify role converged successfully
+      ansible.builtin.debug:
+        msg: "iTerm2 role test completed. Note: iTerm2 is macOS-only and cannot be tested in Linux containers."
+
+    - name: Verify we are on Linux (expected for container tests)
+      ansible.builtin.assert:
+        that:
+          - ansible_os_family == 'Debian'
+        fail_msg: "Expected Debian-based system for container tests"
+        success_msg: "Running on Debian-based system as expected"

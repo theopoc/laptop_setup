@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include rosetta role
+      ansible.builtin.include_role:
+        name: rosetta
+      when: ansible_os_family == 'Darwin' and ansible_machine == 'arm64'
+
+    - name: Display skip message for non-macOS or non-ARM
+      ansible.builtin.debug:
+        msg: "Rosetta role is macOS ARM64-only and will be skipped on {{ ansible_os_family }} {{ ansible_machine }}"
+      when: ansible_os_family != 'Darwin' or ansible_machine != 'arm64'

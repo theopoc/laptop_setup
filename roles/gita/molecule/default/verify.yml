@@ -1,0 +1,61 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Get uv path from mise
+      ansible.builtin.command:
+        cmd: "mise which uv"
+      register: uv_path
+      changed_when: false
+
+    - name: Check if gita is installed via uv
+      ansible.builtin.shell:
+        cmd: "{{ uv_path.stdout }} tool list | grep -E 'gita$'"
+      register: gita_check
+      changed_when: false
+      failed_when: false
+
+    - name: Verify gita is installed
+      ansible.builtin.assert:
+        that:
+          - gita_check.rc == 0
+        fail_msg: "gita is not installed via uv"
+        success_msg: "gita is installed via uv"
+
+    - name: Verify gita binary exists
+      ansible.builtin.command:
+        cmd: which gita
+      register: gita_which
+      changed_when: false
+
+    - name: Assert gita binary is accessible
+      ansible.builtin.assert:
+        that:
+          - gita_which.rc == 0
+        fail_msg: "gita binary is not in PATH"
+        success_msg: "gita binary is accessible"
+
+    - name: Check if gita config directory exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.config/gita"
+      register: gita_config_dir
+
+    - name: Verify gita config directory exists
+      ansible.builtin.assert:
+        that:
+          - gita_config_dir.stat.exists
+          - gita_config_dir.stat.isdir
+        fail_msg: "gita config directory does not exist"
+        success_msg: "gita config directory exists"
+
+    - name: Check if gita config file exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.config/gita/repo.yml"
+      register: gita_config_file
+
+    - name: Verify gita config file exists
+      ansible.builtin.assert:
+        that:
+          - gita_config_file.stat.exists
+        fail_msg: "gita config file does not exist"
+        success_msg: "gita config file exists"

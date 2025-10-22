@@ -1,0 +1,16 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check if .vimrc exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.vimrc"
+      register: vimrc_file
+
+    - name: Verify .vimrc exists
+      ansible.builtin.assert:
+        that:
+          - vimrc_file.stat.exists
+          - vimrc_file.stat.mode == '0700'
+        fail_msg: ".vimrc does not exist or has incorrect permissions"
+        success_msg: ".vimrc exists with correct permissions"
