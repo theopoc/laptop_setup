@@ -14,10 +14,6 @@
       register: mise_version
       changed_when: false
 
-    - name: Display mise version
-      ansible.builtin.debug:
-        msg: "mise version: {{ mise_version.stdout }}"
-
     - name: Check if mise config directory exists
       ansible.builtin.stat:
         path: "{{ ansible_env.HOME }}/.config/mise"
@@ -43,26 +39,29 @@
         fail_msg: "mise config.toml does not exist"
         success_msg: "mise config.toml exists"
 
-    - name: List installed mise tools
-      ansible.builtin.command: mise list
-      register: mise_list
-      changed_when: false
-
-    - name: Display installed mise tools
-      ansible.builtin.debug:
-        msg: "{{ mise_list.stdout_lines }}"
-
     - name: Verify node is installed
       ansible.builtin.command: mise which node
       register: node_path
       changed_when: false
       failed_when: node_path.rc != 0
 
+    - name: Verify node version
+      ansible.builtin.command: "node --version"
+      register: node_version
+      changed_when: false
+      failed_when: node_version.rc != 0
+
     - name: Verify python is installed
       ansible.builtin.command: mise which python
       register: python_path
       changed_when: false
       failed_when: python_path.rc != 0
+
+    - name: Verify python version
+      ansible.builtin.command: "python --version"
+      register: python_version
+      changed_when: false
+      failed_when: python_version.rc != 0
 
     - name: Check shell configuration (bash)
       ansible.builtin.command: grep -q 'mise activate' ~/.bashrc
