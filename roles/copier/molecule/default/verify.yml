@@ -33,3 +33,13 @@
           - copier_binary.stat.exists
         fail_msg: "copier binary is not installed in uv tools directory"
         success_msg: "copier binary is installed in uv tools directory"
+
+    - name: Verify copier version
+      ansible.builtin.command:
+        cmd: "{{ uv_path.stdout }} tool run copier --version"
+      register: copier_version
+      changed_when: false
+
+    - name: Display copier version
+      ansible.builtin.debug:
+        msg: "copier version: {{ copier_version.stdout }}"
