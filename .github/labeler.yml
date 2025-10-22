@@ -1,102 +1,154 @@
 ---
 # PR Labeler configuration
 # Automatically labels PRs based on changed files
+# Format for actions/labeler@v5
 
 # Role-specific labels
 'role: base-tools':
-  - roles/base-tools/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/base-tools/**/*'
 
 'role: cursor':
-  - roles/cursor/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/cursor/**/*'
 
 'role: git':
-  - roles/git/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/git/**/*'
 
 'role: mise':
-  - roles/mise/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/mise/**/*'
 
 'role: rancher-desktop':
-  - roles/rancher-desktop/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/rancher-desktop/**/*'
 
 'role: uv':
-  - roles/uv/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/uv/**/*'
 
 'role: zsh':
-  - roles/zsh/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/zsh/**/*'
 
 'role: warp':
-  - roles/warp/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/warp/**/*'
 
 'role: vim':
-  - roles/vim/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/vim/**/*'
 
 'role: gpg':
-  - roles/gpg/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/gpg/**/*'
 
 'role: appstore':
-  - roles/appstore/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/appstore/**/*'
 
 'role: macos_settings':
-  - roles/macos_settings/**/*
+  - changed-files:
+    - any-glob-to-any-file: 'roles/macos_settings/**/*'
+
+'role: copier':
+  - changed-files:
+    - any-glob-to-any-file: 'roles/copier/**/*'
+
+'role: gita':
+  - changed-files:
+    - any-glob-to-any-file: 'roles/gita/**/*'
+
+'role: iterm2':
+  - changed-files:
+    - any-glob-to-any-file: 'roles/iterm2/**/*'
+
+'role: rosetta':
+  - changed-files:
+    - any-glob-to-any-file: 'roles/rosetta/**/*'
 
 # File type labels
 'type: documentation':
-  - '**/*.md'
-  - 'docs/**/*'
-  - CLAUDE.md
-  - README.md
-  - CHANGELOG.md
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docs/**/*'
+      - 'CLAUDE.md'
+      - 'README.md'
+      - 'CHANGELOG.md'
 
 'type: configuration':
-  - group_vars/**/*
-  - hosts
-  - ansible.cfg
-  - '**/*.cfg'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'group_vars/**/*'
+      - 'hosts'
+      - 'ansible.cfg'
+      - '**/*.cfg'
 
 'type: workflow':
-  - .github/**/*
-  - .pre-commit-config.yaml
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**/*'
+      - '.pre-commit-config.yaml'
 
 'type: molecule tests':
-  - '**/molecule/**/*'
+  - changed-files:
+    - any-glob-to-any-file: '**/molecule/**/*'
 
 'type: playbook':
-  - '*.yml'
-  - '*.yaml'
-  - main.yml
+  - changed-files:
+    - any-glob-to-any-file:
+      - '*.yml'
+      - '*.yaml'
+      - 'main.yml'
 
 'type: scripts':
-  - scripts/**/*
-  - '**/*.sh'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'scripts/**/*'
+      - '**/*.sh'
 
 # Platform labels
 'platform: macOS':
-  - '**/Darwin.yml'
-  - '**/install-Darwin.yml'
-  - roles/appstore/**/*
-  - roles/macos_settings/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Darwin.yml'
+      - '**/install-Darwin.yml'
+      - 'roles/appstore/**/*'
+      - 'roles/macos_settings/**/*'
 
 'platform: Ubuntu':
-  - '**/Debian.yml'
-  - '**/install-Debian.yml'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Debian.yml'
+      - '**/install-Debian.yml'
 
 # Priority labels
 'priority: high':
-  - main.yml
-  - group_vars/all.yml
-  - requirements.yml
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'main.yml'
+      - 'group_vars/all.yml'
+      - 'requirements.yml'
 
 # Area labels
 'area: cicd':
-  - .github/workflows/**/*
-  - .pre-commit-config.yaml
-  - .yamllint
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**/*'
+      - '.pre-commit-config.yaml'
+      - '.yamllint'
 
 'area: testing':
-  - '**/molecule/**/*'
-  - '**/verify.yml'
-  - '**/converge.yml'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/molecule/**/*'
+      - '**/verify.yml'
+      - '**/converge.yml'
 
 'area: security':
-  - roles/gpg/**/*
-  - '**/vault/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'roles/gpg/**/*'
+      - '**/vault/**/*'
