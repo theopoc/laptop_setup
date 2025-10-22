@@ -108,17 +108,16 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          format: markdown
+          format: html
           disable_web_page_preview: false
           message: |
-            🚀 *New Release Published!*
+            🚀 <b>New Release Published!</b>
 
-            *Repository:* `${{ github.repository }}`
-            *Version:* `${{ github.ref_name }}`
-            *Author:* ${{ github.actor }}
+            <b>Repository:</b> <code>${{ github.repository }}</code>
+            <b>Version:</b> <code>${{ github.ref_name }}</code>
+            <b>Author:</b> ${{ github.actor }}
 
-            [View Release](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }})
-            [View Changelog](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}#changelog)
+            <a href="${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}">View Release</a>
 
   # Tag and release workflow dispatch
   tag-release:
@@ -184,15 +183,15 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          format: markdown
+          format: html
           disable_web_page_preview: true
           message: |
-            🏷️ *New Tag Created*
+            🏷️ <b>New Tag Created</b>
 
-            *Repository:* `${{ github.repository }}`
-            *New Version:* `${{ steps.version.outputs.version }}`
-            *Bump Type:* ${{ github.event.inputs.version_type }}
-            *Author:* ${{ github.actor }}
+            <b>Repository:</b> <code>${{ github.repository }}</code>
+            <b>New Version:</b> <code>${{ steps.version.outputs.version }}</code>
+            <b>Bump Type:</b> ${{ github.event.inputs.version_type }}
+            <b>Author:</b> ${{ github.actor }}
 
             The release workflow will be triggered automatically.
 

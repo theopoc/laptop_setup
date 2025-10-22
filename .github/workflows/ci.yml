@@ -201,21 +201,20 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          format: markdown
+          format: html
           disable_web_page_preview: true
           message: |
-            ${{ steps.check.outputs.status_emoji }} *CI/CD Pipeline ${{ steps.check.outputs.status }}*
+            ${{ steps.check.outputs.status_emoji }} <b>CI/CD Pipeline ${{ steps.check.outputs.status }}</b>
 
-            *Repository:* `${{ github.repository }}`
-            *Branch:* `${{ github.ref_name }}`
-            *Event:* ${{ github.event_name }}
-            *Commit:* [${{ github.sha }}](${{ github.event.head_commit.url }})
-            *Author:* ${{ github.actor }}
-            *Message:* ${{ github.event.head_commit.message }}
+            <b>Repository:</b> <code>${{ github.repository }}</code>
+            <b>Branch:</b> <code>${{ github.ref_name }}</code>
+            <b>Event:</b> ${{ github.event_name }}
+            <b>Commit:</b> <code>${{ github.sha }}</code>
+            <b>Author:</b> ${{ github.actor }}
 
-            *Job Results:*
+            <b>Job Results:</b>
             • Lint: ${{ needs.lint.result == 'success' && '✅' || '❌' }}
             • Test Roles: ${{ needs.test-roles.result == 'success' && '✅' || '❌' }}
             • Integration Test: ${{ needs.integration-test.result == 'success' && '✅' || '❌' }}
 
-            [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a>

@@ -101,7 +101,6 @@ Branch: main
 Event: push
 Commit: abc1234
 Author: username
-Message: feat: add new feature
 
 Job Results:
 • Lint: ✅
@@ -163,13 +162,28 @@ This usually means:
 - For groups, the ID is negative (e.g., `-987654321`)
 - Make sure you're using the correct format
 
+### "Can't parse entities" Error
+
+If you see an error like `Bad Request: can't parse entities`:
+- This means the message format is incorrect
+- The workflows use HTML format (more reliable than markdown)
+- Avoid special characters in dynamic content
+- If customizing messages, use HTML tags: `<b>bold</b>`, `<code>code</code>`, `<a href="url">link</a>`
+
 ## Customizing Notifications
 
 To modify notification content, edit the workflow files:
-- CI/CD notifications: `.github/workflows/ci.yml` (line 198-221)
-- Release notifications: `.github/workflows/release.yml` (line 105-121 and 181-197)
+- CI/CD notifications: `.github/workflows/ci.yml` (line 198-220)
+- Release notifications: `.github/workflows/release.yml` (line 105-120 and 180-196)
 
-The notifications use Telegram's Markdown format. See [Telegram Bot API documentation](https://core.telegram.org/bots/api#formatting-options) for formatting options.
+The notifications use Telegram's HTML format for better reliability. See [Telegram Bot API documentation](https://core.telegram.org/bots/api#html-style) for formatting options.
+
+**HTML formatting tags:**
+- `<b>bold</b>` or `<strong>bold</strong>`
+- `<i>italic</i>` or `<em>italic</em>`
+- `<code>code</code>`
+- `<a href="url">link text</a>`
+- `<pre>preformatted</pre>`
 
 ## Security Notes
 
