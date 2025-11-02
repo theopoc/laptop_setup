@@ -47,7 +47,6 @@ provisioner:
           - curl
           - wget
           - unzip
-          - jq
         debian_apt_repositories: {}
         debian_deb_applications: {}
         debian_binary_applications: {}

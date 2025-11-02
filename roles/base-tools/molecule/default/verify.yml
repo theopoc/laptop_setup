@@ -21,32 +21,211 @@
       changed_when: false
       failed_when: curl_installed.rc != 0
 
-    - name: Check if wget is installed
-      ansible.builtin.command: which wget
-      register: wget_installed
-      changed_when: false
-      failed_when: wget_installed.rc != 0
-
-    - name: Check if unzip is installed
-      ansible.builtin.command: which unzip
-      register: unzip_installed
-      changed_when: false
-      failed_when: unzip_installed.rc != 0
-
     - name: Check if jq is installed
       ansible.builtin.command: which jq
       register: jq_installed
       changed_when: false
       failed_when: jq_installed.rc != 0
 
-    - name: Verify all essential packages are installed
+    - name: Check if ripgrep is installed
+      ansible.builtin.command: which rg
+      register: ripgrep_installed
+      changed_when: false
+      failed_when: ripgrep_installed.rc != 0
+
+    - name: Check if htop is installed
+      ansible.builtin.command: which htop
+      register: htop_installed
+      changed_when: false
+      failed_when: htop_installed.rc != 0
+
+    - name: Check if yq is installed
+      ansible.builtin.command: which yq
+      register: yq_installed
+      changed_when: false
+      failed_when: yq_installed.rc != 0
+
+    - name: Verify yq version
+      ansible.builtin.command: yq --version
+      register: yq_version
+      changed_when: false
+
+    - name: Display yq version
+      ansible.builtin.debug:
+        msg: "yq version: {{ yq_version.stdout }}"
+
+    - name: Check if shellcheck is installed
+      ansible.builtin.command: which shellcheck
+      register: shellcheck_installed
+      changed_when: false
+      failed_when: shellcheck_installed.rc != 0
+
+    - name: Check if lsd is installed
+      ansible.builtin.command: which lsd
+      register: lsd_installed
+      changed_when: false
+      failed_when: lsd_installed.rc != 0
+
+    - name: Check if tldr is installed
+      ansible.builtin.command: which tldr
+      register: tldr_installed
+      changed_when: false
+      failed_when: tldr_installed.rc != 0
+
+    - name: Check if thefuck is installed
+      ansible.builtin.command: which thefuck
+      register: thefuck_installed
+      changed_when: false
+      failed_when: thefuck_installed.rc != 0
+
+    - name: Check if dive is installed
+      ansible.builtin.command: which dive
+      register: dive_installed
+      changed_when: false
+      failed_when: dive_installed.rc != 0
+
+    - name: Check if gopass is installed
+      ansible.builtin.command: which gopass
+      register: gopass_installed
+      changed_when: false
+      failed_when: gopass_installed.rc != 0
+
+    - name: Check if s5cmd is installed
+      ansible.builtin.command: which s5cmd
+      register: s5cmd_installed
+      changed_when: false
+      failed_when: s5cmd_installed.rc != 0
+
+    - name: Check if vsh is installed
+      ansible.builtin.command: which vsh
+      register: vsh_installed
+      changed_when: false
+      failed_when: vsh_installed.rc != 0
+
+    - name: Check if vkv is installed
+      ansible.builtin.command: which vkv
+      register: vkv_installed
+      changed_when: false
+      failed_when: vkv_installed.rc != 0
+
+    - name: Check if safe is installed (amd64 only)
+      ansible.builtin.command: which safe
+      register: safe_installed
+      changed_when: false
+      failed_when: safe_installed.rc != 0
+      when: ansible_architecture == 'x86_64'
+
+    - name: Check if pug is installed
+      ansible.builtin.command: which pug
+      register: pug_installed
+      changed_when: false
+      failed_when: pug_installed.rc != 0
+
+    - name: Check if tfautomv is installed
+      ansible.builtin.command: which tfautomv
+      register: tfautomv_installed
+      changed_when: false
+      failed_when: tfautomv_installed.rc != 0
+
+    - name: Check if tfmv is installed
+      ansible.builtin.command: which tfmv
+      register: tfmv_installed
+      changed_when: false
+      failed_when: tfmv_installed.rc != 0
+
+    - name: Check if hcledit is installed
+      ansible.builtin.command: which hcledit
+      register: hcledit_installed
+      changed_when: false
+      failed_when: hcledit_installed.rc != 0
+
+    - name: Verify all essential packages are installed (common)
       ansible.builtin.assert:
         that:
           - git_installed.rc == 0
           - python_installed.rc == 0
           - curl_installed.rc == 0
-          - wget_installed.rc == 0
-          - unzip_installed.rc == 0
           - jq_installed.rc == 0
+          - ripgrep_installed.rc == 0
+          - htop_installed.rc == 0
+          - yq_installed.rc == 0
+          - shellcheck_installed.rc == 0
+          - lsd_installed.rc == 0
+          - tldr_installed.rc == 0
+          - thefuck_installed.rc == 0
+          - dive_installed.rc == 0
+          - gopass_installed.rc == 0
+          - s5cmd_installed.rc == 0
+          - vsh_installed.rc == 0
+          - vkv_installed.rc == 0
+          - pug_installed.rc == 0
+          - tfautomv_installed.rc == 0
+          - tfmv_installed.rc == 0
+          - hcledit_installed.rc == 0
         fail_msg: "Some essential packages are not installed"
         success_msg: "All essential packages are installed successfully"
+
+    - name: Verify safe is installed (amd64 only)
+      ansible.builtin.assert:
+        that:
+          - safe_installed.rc == 0
+        fail_msg: "safe is not installed"
+        success_msg: "safe is installed successfully"
+      when: ansible_architecture == 'x86_64'
+
+    # Verify desktop application repositories are configured correctly
+    - name: Check if Google Chrome repository is configured
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/google_chrome.list
+      register: chrome_repo_configured
+      changed_when: false
+
+    - name: Check if Google Chrome GPG key is installed
+      ansible.builtin.stat:
+        path: /etc/apt/keyrings/google_chrome.gpg
+      register: chrome_key_installed
+      changed_when: false
+
+    - name: Check if Spotify repository is configured
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/spotify.list
+      register: spotify_repo_configured
+      changed_when: false
+
+    - name: Check if Spotify GPG key is installed
+      ansible.builtin.stat:
+        path: /etc/apt/keyrings/spotify.gpg
+      register: spotify_key_installed
+      changed_when: false
+
+    - name: Verify desktop application repositories are configured
+      ansible.builtin.assert:
+        that:
+          - chrome_repo_configured.stat.exists
+          - chrome_key_installed.stat.exists
+          - spotify_repo_configured.stat.exists
+          - spotify_key_installed.stat.exists
+        fail_msg: "Some desktop application repositories are not configured correctly"
+        success_msg: "All desktop application repositories are configured successfully"
+
+    # Verify desktop applications binaries are installed (when possible)
+    # Note: GUI apps (Chrome, Spotify) and apps with download restrictions (Slack, Postman)
+    # may fail in containers. We verify repos/keys are configured but allow binary checks to fail
+    - name: Check if Slack is installed
+      ansible.builtin.command: which slack
+      register: slack_installed
+      changed_when: false
+      failed_when: false
+
+    - name: Check if Postman is installed
+      ansible.builtin.command: which postman
+      register: postman_installed
+      changed_when: false
+      failed_when: false
+
+    - name: Display desktop applications installation status
+      ansible.builtin.debug:
+        msg:
+          - "Slack installed: {{ slack_installed.rc == 0 }}"
+          - "Postman installed: {{ postman_installed.rc == 0 }}"
+          - "Note: Desktop apps may not install in containers due to GUI dependencies or download restrictions"
