@@ -1,0 +1,11 @@
+---
+
+# Architecture mapping for binary downloads
+architecture_mapping:
+  x86_64: amd64
+  aarch64: arm64
+  armv7l: armhf
+  armv6l: armhf
+
+# Mapped architecture for package downloads
+package_architecture: "{{ architecture_mapping[ansible_architecture] | default('amd64') }}"

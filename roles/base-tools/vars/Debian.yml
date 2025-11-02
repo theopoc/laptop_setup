@@ -3,16 +3,6 @@
 
 package_manager: apt
 
-# Architecture mapping for binary downloads
-architecture_mapping:
-  x86_64: amd64
-  aarch64: arm64
-  armv7l: armhf
-  armv6l: armhf
-
-# Mapped architecture for package downloads
-package_architecture: "{{ architecture_mapping[ansible_architecture] | default('amd64') }}"
-
 apt_packages:
   - git # Version control system
   - python3 # Python 3 interpreter
@@ -38,28 +28,6 @@ apt_packages:
   - lsb-release # LSB version reporting utility
   - unzip # ZIP archive extraction utility
   - firefox # Web browser
-
-# Note: gnupg is not included in apt_packages due to version conflicts in test containers.
-# GPG tools are typically pre-installed in Ubuntu base images. If needed, install manually.
-
-# Additional tools installed via binary downloads in install-Debian.yml:
-# - dive: Docker image explorer (via GitHub releases)
-# - gopass: Password manager with Git integration (via GitHub releases)
-# - s5cmd: Fast S3 CLI tool (via GitHub releases, supports amd64 and arm64)
-# - yq: YAML processor (via GitHub releases)
-# - lsd: Modern ls with colors and icons (via GitHub releases)
-# - tldr: Simplified man pages (via pip)
-# - thefuck: Corrects previous console commands (via pip)
-# - vsh, vkv: HashiCorp Vault tools (via GitHub releases, supports amd64 and arm64)
-# - safe: HashiCorp Vault secrets manager CLI (via GitHub releases, amd64 ONLY)
-# - pug, tfautomv, tfmv, hcledit: Terraform helper tools (via GitHub releases, supports amd64 and arm64)
-#
-# Note: mise has its own dedicated role
-# Note: when (calendar tool) - not available for Ubuntu, macOS only
-
-# Desktop applications to install (alternatives to snap packages)
-# These applications are installed via APT repositories or direct downloads
-# instead of snap to allow testing in containers and avoid snap limitations
 
 # Applications that need APT repositories
 apt_repositories:
