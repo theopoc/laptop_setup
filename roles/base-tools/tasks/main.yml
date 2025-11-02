@@ -2,10 +2,6 @@
 # Main task file for base-tools role
 # Dispatches to OS-specific installation tasks
 
-- name: Include OS-specific variables
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
-  tags: base-tools
-
 - name: Include OS-specific installation tasks
   ansible.builtin.include_tasks: "install-{{ ansible_os_family }}.yml"
   tags: base-tools

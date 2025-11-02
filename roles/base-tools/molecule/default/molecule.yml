@@ -40,6 +40,16 @@ provisioner:
     host_vars:
       ubuntu-base-tools:
         ansible_user: root
+        debian_apt_packages:
+          - git
+          - python3
+          - python3-pip
+          - curl
+          - wget
+          - unzip
+        debian_apt_repositories: {}
+        debian_deb_applications: {}
+        debian_binary_applications: {}
   env:
     ANSIBLE_ALLOW_BROKEN_CONDITIONALS: "True"
     ANSIBLE_ROLES_PATH: ../../../

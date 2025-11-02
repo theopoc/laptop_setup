@@ -3,7 +3,7 @@
 
 - name: Install base packages via apt
   ansible.builtin.apt:
-    name: "{{ apt_packages }}"
+    name: "{{ debian_apt_packages }}"
     state: present
     update_cache: true
     cache_valid_time: 3600
@@ -18,8 +18,8 @@
     mode: "0755"
   become: true
   when:
-    - apt_repositories is defined
-    - apt_repositories | length > 0
+    - debian_apt_repositories is defined
+    - debian_apt_repositories | length > 0
   tags: base-tools, desktop-apps
 
 - name: Download and convert GPG keys for third-party repositories
@@ -29,10 +29,10 @@
   args:
     creates: "/etc/apt/keyrings/{{ item.key }}.gpg"
   become: true
-  loop: "{{ apt_repositories | dict2items }}"
+  loop: "{{ debian_apt_repositories | dict2items }}"
   when:
-    - apt_repositories is defined
-    - apt_repositories | length > 0
+    - debian_apt_repositories is defined
+    - debian_apt_repositories | length > 0
     - item.value.enabled | default(true)
   tags: base-tools, desktop-apps
 
@@ -43,10 +43,10 @@
     filename: "{{ item.key }}"
     update_cache: true
   become: true
-  loop: "{{ apt_repositories | dict2items }}"
+  loop: "{{ debian_apt_repositories | dict2items }}"
   when:
-    - apt_repositories is defined
-    - apt_repositories | length > 0
+    - debian_apt_repositories is defined
+    - debian_apt_repositories | length > 0
     - item.value.enabled | default(true)
   tags: base-tools, desktop-apps
 
@@ -55,10 +55,10 @@
     name: "{{ item.value.package }}"
     state: present
   become: true
-  loop: "{{ apt_repositories | dict2items }}"
+  loop: "{{ debian_apt_repositories | dict2items }}"
   when:
-    - apt_repositories is defined
-    - apt_repositories | length > 0
+    - debian_apt_repositories is defined
+    - debian_apt_repositories | length > 0
     - item.value.enabled | default(true)
   # Allow GUI apps to fail in containers (Chrome, Spotify need X11/Wayland dependencies)
   failed_when: false
@@ -67,8 +67,8 @@
 # Install applications via direct .deb downloads
 - name: Install applications via .deb packages
   when:
-    - deb_applications is defined
-    - deb_applications | length > 0
+    - debian_deb_applications is defined
+    - debian_deb_applications | length > 0
   tags: base-tools, desktop-apps
 
   # Install Postman via tarball
@@ -78,8 +78,8 @@
       ansible.builtin.command: "dpkg -s slack-desktop"
       register: slack_installed
       when:
-        - deb_applications.slack is defined
-        - deb_applications.slack.enabled | default(true)
+        - debian_deb_applications.slack is defined
+        - debian_deb_applications.slack.enabled | default(true)
       failed_when: false
       changed_when: false
       check_mode: false
@@ -89,8 +89,8 @@
         path: "/tmp/slack-desktop.deb"
       register: slack_deb_exists
       when:
-        - deb_applications.slack is defined
-        - deb_applications.slack.enabled | default(true)
+        - debian_deb_applications.slack is defined
+        - debian_deb_applications.slack.enabled | default(true)
 
     # Get latest versions for applications with url_pattern (only if not already installed/downloaded)
     - name: Get latest Slack version
@@ -100,9 +100,9 @@
       register: slack_page
       check_mode: false
       when:
-        - deb_applications.slack is defined
-        - deb_applications.slack.enabled | default(true)
-        - deb_applications.slack.url_pattern is defined
+        - debian_deb_applications.slack is defined
+        - debian_deb_applications.slack.enabled | default(true)
+        - debian_deb_applications.slack.url_pattern is defined
         - slack_installed.rc != 0
         - not slack_deb_exists.stat.exists
 
@@ -115,12 +115,12 @@
 
     - name: Download Slack .deb package
       ansible.builtin.get_url:
-        url: "{{ deb_applications.slack.url_pattern | replace('{version}', slack_version | default('')) }}"
+        url: "{{ debian_deb_applications.slack.url_pattern | replace('{version}', slack_version | default('')) }}"
         dest: "/tmp/slack-desktop.deb"
         mode: "0644"
       when:
-        - deb_applications.slack is defined
-        - deb_applications.slack.enabled | default(true)
+        - debian_deb_applications.slack is defined
+        - debian_deb_applications.slack.enabled | default(true)
         - slack_installed.rc != 0
         - not slack_deb_exists.stat.exists
       # Allow downloads to fail in containers (network restrictions, old URLs, etc.)
@@ -140,21 +140,21 @@
       failed_when: false
 - name: Check if Postman is already installed
   ansible.builtin.stat:
-    path: "{{ binary_applications.postman.install_dir }}"
+    path: "{{ debian_binary_applications.postman.install_dir }}"
   register: postman_installed
   when:
-    - binary_applications is defined
-    - binary_applications | length > 0
-    - binary_applications.postman is defined
-    - binary_applications.postman.enabled | default(true)
+    - debian_binary_applications is defined
+    - debian_binary_applications | length > 0
+    - debian_binary_applications.postman is defined
+    - debian_binary_applications.postman.enabled | default(true)
   tags: base-tools, desktop-apps
 
 - name: Install Postman
   when:
-    - binary_applications is defined
-    - binary_applications | length > 0
-    - binary_applications.postman is defined
-    - binary_applications.postman.enabled | default(true)
+    - debian_binary_applications is defined
+    - debian_binary_applications | length > 0
+    - debian_binary_applications.postman is defined
+    - debian_binary_applications.postman.enabled | default(true)
     - postman_installed is defined
     - not postman_installed.stat.exists
   # Allow Postman installation to fail in containers (GUI dependencies, network issues, etc.)
@@ -165,13 +165,13 @@
   block:
     - name: Download Postman tarball
       ansible.builtin.get_url:
-        url: "{{ binary_applications.postman.url }}"
+        url: "{{ debian_binary_applications.postman.url }}"
         dest: "/tmp/postman.tar.gz"
         mode: "0644"
 
     - name: Create Postman installation directory
       ansible.builtin.file:
-        path: "{{ binary_applications.postman.install_dir }}"
+        path: "{{ debian_binary_applications.postman.install_dir }}"
         state: directory
         mode: "0755"
       become: true
@@ -179,7 +179,7 @@
     - name: Extract Postman
       ansible.builtin.unarchive:
         src: "/tmp/postman.tar.gz"
-        dest: "{{ binary_applications.postman.install_dir }}"
+        dest: "{{ debian_binary_applications.postman.install_dir }}"
         remote_src: true
         extra_opts: [--strip-components=1]
       become: true
@@ -187,8 +187,8 @@
 
     - name: Create Postman symlink
       ansible.builtin.file:
-        src: "{{ binary_applications.postman.install_dir }}/Postman"
-        dest: "/usr/local/bin/{{ binary_applications.postman.binary_name }}"
+        src: "{{ debian_binary_applications.postman.install_dir }}/Postman"
+        dest: "/usr/local/bin/{{ debian_binary_applications.postman.binary_name }}"
         state: link
       become: true
       when: not ansible_check_mode

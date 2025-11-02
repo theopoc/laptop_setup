@@ -9,18 +9,18 @@
 
 - name: Install homebrew taps
   community.general.homebrew_tap:
-    name: "{{ homebrew_taps }}"
+    name: "{{ homebrew.taps }}"
   tags: base-tools, homebrew, taps
 
 - name: Install homebrew formulae
   community.general.homebrew:
-    name: "{{ homebrew_formulae }}"
+    name: "{{ homebrew.formulae }}"
     state: present
   tags: base-tools, homebrew, formulae
 
 - name: Install homebrew casks
   community.general.homebrew_cask:
-    name: "{{ homebrew_casks }}"
+    name: "{{ homebrew.casks }}"
     state: present
   tags: base-tools, homebrew, casks
 
