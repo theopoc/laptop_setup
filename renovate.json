@@ -95,8 +95,8 @@
   },
   "ansible-galaxy": {
     "enabled": true,
-    "fileMatch": [
-      "(^|/)requirements\\.ya?ml$"
+    "managerFilePatterns": [
+      "/(^|/)requirements\\.ya?ml$/"
     ]
   },
   "vulnerabilityAlerts": {
