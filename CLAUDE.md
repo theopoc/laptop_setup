@@ -253,6 +253,7 @@ This repository uses **semantic-release** for fully automated version management
 | `fix:` | Patch (0.1.0 → 0.1.1) | Bug fix |
 | `perf:` | Patch (0.1.0 → 0.1.1) | Performance improvement |
 | `refactor:` | Patch (0.1.0 → 0.1.1) | Code refactoring |
+| `chore(deps):` | Patch (0.1.0 → 0.1.1) | Dependency updates (Renovate) |
 | `BREAKING CHANGE:` | Major (0.1.0 → 1.0.0) | Breaking API changes |
 | `docs:`, `chore:`, `ci:`, `test:`, `style:` | No release | Documentation/maintenance |
 
@@ -296,6 +297,18 @@ This repository uses **Renovate** for automated dependency updates across multip
 3. Minor/patch updates auto-merge if CI passes
 4. Major updates wait for manual review
 5. Security vulnerabilities trigger immediate PRs regardless of schedule
+6. **When a PR is auto-merged**, the commit triggers semantic-release
+7. **A new patch version is created** automatically (e.g., 1.1.0 → 1.1.1)
+8. **CHANGELOG is updated** with the dependency changes
+9. **Git tag and GitHub release** are created automatically
+
+**Integration with semantic-release:**
+
+- Renovate commits use the format `chore(deps): update <package_type>`
+- This format triggers a **patch release** thanks to the `.releaserc.json` configuration
+- Every auto-merged dependency update results in a new version
+- Releases are created automatically without manual intervention
+- Example: If Renovate updates npm packages on Monday, version bumps from 1.1.0 to 1.1.1
 
 **Configuration files:**
 
