@@ -1,0 +1,31 @@
+{
+  "name": "ansible-mgmt-laptop",
+  "version": "1.0.0",
+  "description": "Ansible playbook for automating workstation setup on macOS and Ubuntu",
+  "private": true,
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheoPoc/ansible-mgmt-laptop.git"
+  },
+  "keywords": [
+    "ansible",
+    "automation",
+    "devops",
+    "macos",
+    "ubuntu"
+  ],
+  "author": "TheoPoc",
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^14.0.1",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "semantic-release": "^25.0.1"
+  }
+}

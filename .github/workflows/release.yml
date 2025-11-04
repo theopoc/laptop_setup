@@ -5,105 +5,43 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
-  workflow_dispatch:
-    inputs:
-      version_type:
-        description: "Version bump type"
-        required: true
-        type: choice
-        options:
-          - patch
-          - minor
-          - major
 
+# Set default permissions to read-only (security best practice)
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
-  # Create release
-  create-release:
-    name: Create Release
+  release:
+    name: Semantic Release
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    # Grant specific permissions only to this job (principle of least privilege)
+    permissions:
+      contents: write      # Required: create tags, releases, and commit CHANGELOG
+      issues: write        # Optional: comment on released issues
+      pull-requests: write # Optional: comment on released PRs
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Generate changelog
-        id: changelog
-        run: |
-          # Get previous tag
-          PREV_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
-
-          if [ -z "$PREV_TAG" ]; then
-            # First release
-            COMMITS=$(git log --pretty=format:"- %s (%h)" --no-merges)
-          else
-            # Generate changelog since last tag
-            COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
-          fi
-
-          # Categorize commits
-          FEATURES=$(echo "$COMMITS" | grep -i "^- feat" || true)
-          FIXES=$(echo "$COMMITS" | grep -i "^- fix" || true)
-          DOCS=$(echo "$COMMITS" | grep -i "^- docs" || true)
-          CHORES=$(echo "$COMMITS" | grep -i "^- chore\|^- ci\|^- refactor" || true)
-
-          # Build changelog
-          CHANGELOG="## What's Changed\n\n"
-
-          if [ -n "$FEATURES" ]; then
-            CHANGELOG="${CHANGELOG}### ✨ Features\n${FEATURES}\n\n"
-          fi
-
-          if [ -n "$FIXES" ]; then
-            CHANGELOG="${CHANGELOG}### 🐛 Bug Fixes\n${FIXES}\n\n"
-          fi
-
-          if [ -n "$DOCS" ]; then
-            CHANGELOG="${CHANGELOG}### 📚 Documentation\n${DOCS}\n\n"
-          fi
-
-          if [ -n "$CHORES" ]; then
-            CHANGELOG="${CHANGELOG}### 🔧 Maintenance\n${CHORES}\n\n"
-          fi
-
-          CHANGELOG="${CHANGELOG}**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${GITHUB_REF#refs/tags/}"
-
-          # Save to file
-          echo -e "$CHANGELOG" > CHANGELOG.md
-
-          # Export for GitHub Release
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo -e "$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          body: ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-          files: |
-            CHANGELOG.md
-            README.md
-            LICENSE.txt
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run semantic-release
 
-      - name: Notify release
-        run: |
-          echo "✅ Released ${{ github.ref_name }}"
-          echo "🔗 https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
-
-      - name: Send Telegram notification
-        if: always()
+      - name: Send Telegram notification on success
+        if: success()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -114,164 +52,24 @@ jobs:
             🚀 <b>New Release Published!</b>
 
             <b>Repository:</b> <code>${{ github.repository }}</code>
-            <b>Version:</b> <code>${{ github.ref_name }}</code>
+            <b>Branch:</b> <code>${{ github.ref_name }}</code>
+            <b>Commit:</b> <code>${{ github.sha }}</code>
             <b>Author:</b> ${{ github.actor }}
 
-            <a href="${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}">View Release</a>
+            <a href="${{ github.server_url }}/${{ github.repository }}/releases">View Releases</a>
 
-  # Tag and release workflow dispatch
-  tag-release:
-    name: Tag New Release
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Determine version
-        id: version
-        run: |
-          # Get latest tag
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "Current version: $LATEST_TAG"
-
-          # Parse version
-          VERSION=${LATEST_TAG#v}
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-
-          # Bump version based on input
-          case "${{ github.event.inputs.version_type }}" in
-            major)
-              MAJOR=$((MAJOR + 1))
-              MINOR=0
-              PATCH=0
-              ;;
-            minor)
-              MINOR=$((MINOR + 1))
-              PATCH=0
-              ;;
-            patch)
-              PATCH=$((PATCH + 1))
-              ;;
-          esac
-
-          NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
-          echo "New version: $NEW_VERSION"
-          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-      - name: Create and push tag
-        run: |
-          git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
-          git push origin ${{ steps.version.outputs.version }}
-
-      - name: Trigger release workflow
-        run: |
-          echo "Tag ${{ steps.version.outputs.version }} created and pushed"
-          echo "Release workflow will be triggered automatically"
-
-      - name: Send Telegram notification
-        if: always()
+      - name: Send Telegram notification on failure
+        if: failure()
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           format: html
-          disable_web_page_preview: true
           message: |
-            🏷️ <b>New Tag Created</b>
+            ❌ <b>Release Failed</b>
 
             <b>Repository:</b> <code>${{ github.repository }}</code>
-            <b>New Version:</b> <code>${{ steps.version.outputs.version }}</code>
-            <b>Bump Type:</b> ${{ github.event.inputs.version_type }}
+            <b>Branch:</b> <code>${{ github.ref_name }}</code>
             <b>Author:</b> ${{ github.actor }}
 
-            The release workflow will be triggered automatically.
-
-  # Automated changelog maintenance
-  update-changelog:
-    name: Update CHANGELOG
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate full changelog
-        run: |
-          cat > CHANGELOG.md << 'EOF'
-          # Changelog
-
-          All notable changes to this project will be documented in this file.
-
-          The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-          and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-          EOF
-
-          # Get all tags
-          TAGS=$(git tag -l "v*" --sort=-version:refname)
-
-          for TAG in $TAGS; do
-            # Get tag date
-            TAG_DATE=$(git log -1 --format=%ai $TAG | cut -d' ' -f1)
-
-            echo "## [$TAG] - $TAG_DATE" >> CHANGELOG.md
-            echo "" >> CHANGELOG.md
-
-            # Get commits since previous tag
-            PREV_TAG=$(git describe --tags --abbrev=0 ${TAG}^ 2>/dev/null || echo "")
-
-            if [ -z "$PREV_TAG" ]; then
-              COMMITS=$(git log $TAG --pretty=format:"- %s" --no-merges)
-            else
-              COMMITS=$(git log ${PREV_TAG}..${TAG} --pretty=format:"- %s" --no-merges)
-            fi
-
-            # Categorize commits
-            FEATURES=$(echo "$COMMITS" | grep -i "^- feat" || true)
-            FIXES=$(echo "$COMMITS" | grep -i "^- fix" || true)
-            DOCS=$(echo "$COMMITS" | grep -i "^- docs" || true)
-
-            if [ -n "$FEATURES" ]; then
-              echo "### Added" >> CHANGELOG.md
-              echo "$FEATURES" >> CHANGELOG.md
-              echo "" >> CHANGELOG.md
-            fi
-
-            if [ -n "$FIXES" ]; then
-              echo "### Fixed" >> CHANGELOG.md
-              echo "$FIXES" >> CHANGELOG.md
-              echo "" >> CHANGELOG.md
-            fi
-
-            if [ -n "$DOCS" ]; then
-              echo "### Documentation" >> CHANGELOG.md
-              echo "$DOCS" >> CHANGELOG.md
-              echo "" >> CHANGELOG.md
-            fi
-
-            echo "" >> CHANGELOG.md
-          done
-
-      - name: Commit changelog
-        run: |
-          if [ -n "$(git status --porcelain CHANGELOG.md)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add CHANGELOG.md
-            git commit -m "docs: update CHANGELOG [skip ci]"
-            git push
-          else
-            echo "No changes to CHANGELOG.md"
-          fi
+            <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a>

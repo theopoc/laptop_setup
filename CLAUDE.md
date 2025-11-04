@@ -230,7 +230,47 @@ When modifying role tasks:
 - Define OS-specific variables in `vars/{{ ansible_os_family }}.yml`
 
 
+### Release Management
+
+This repository uses **semantic-release** for fully automated version management and package publishing.
+
+**How it works:**
+
+- Every push to `main` branch triggers the semantic-release workflow
+- semantic-release analyzes commit messages to determine the version bump
+- If a release is warranted, it automatically:
+  1. Determines the new version number based on commit types
+  2. Generates/updates CHANGELOG.md with categorized changes
+  3. Creates a git tag
+  4. Creates a GitHub release with release notes
+  5. Sends Telegram notification
+
+**Version Bumping Rules:**
+
+| Commit Type | Version Bump | Example |
+|-------------|--------------|---------|
+| `feat:` | Minor (0.1.0 → 0.2.0) | New feature added |
+| `fix:` | Patch (0.1.0 → 0.1.1) | Bug fix |
+| `perf:` | Patch (0.1.0 → 0.1.1) | Performance improvement |
+| `refactor:` | Patch (0.1.0 → 0.1.1) | Code refactoring |
+| `BREAKING CHANGE:` | Major (0.1.0 → 1.0.0) | Breaking API changes |
+| `docs:`, `chore:`, `ci:`, `test:`, `style:` | No release | Documentation/maintenance |
+
+**Configuration:**
+
+- `.releaserc.json` - semantic-release configuration
+- `.github/workflows/release.yml` - GitHub Actions workflow
+
+**Important:**
+
+- Releases are 100% automatic - no manual tagging needed
+- Follow conventional commit format strictly
+- Commits without release-triggering types won't create releases
+- The workflow uses `[skip ci]` to avoid infinite loops when committing CHANGELOG
+
 ### Commit conventions
-- Use conventionnal commit
+- Use conventionnal commit format: `type(scope): subject`
 - Each commit message is one line
 - Do not take claude as author
+- Valid types: feat, fix, docs, style, refactor, perf, test, chore, ci, revert
+- Use `BREAKING CHANGE:` in commit footer for major version bumps
