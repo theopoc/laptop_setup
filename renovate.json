@@ -19,6 +19,8 @@
   "commitMessagePrefix": "chore(deps):",
   "prConcurrentLimit": 3,
   "branchConcurrentLimit": 5,
+  "platformAutomerge": true,
+  "ignoreTests": false,
   "packageRules": [
     {
       "description": "Group all npm dependencies updates in a single PR",

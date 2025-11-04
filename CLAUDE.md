@@ -323,13 +323,44 @@ This repository uses **Renovate** for automated dependency updates across multip
 - You can trigger updates manually using dashboard checkboxes
 - Pin GitHub Actions digests for better security
 
+**Auto-merge Safety:**
+
+Renovate is configured to auto-merge only when **ALL** CI checks pass:
+- Uses GitHub's native auto-merge (`platformAutomerge: true`)
+- Waits for required status checks before merging
+- Respects branch protection rules automatically
+
+**Required CI checks:**
+- `lint` - Ansible linting and validation
+- `test-roles` - Molecule tests for all roles
+- `integration-test` - Full playbook integration test
+- `pr-checks` - PR automation checks
+
 **Setup:**
 
 To enable Renovate on this repository:
-1. Install the [Renovate GitHub App](https://github.com/apps/renovate) on your repository
-2. Grant it access to this repository
-3. Renovate will automatically detect the `renovate.json` configuration
-4. The first onboarding PR will be created for review
+
+1. **Install Renovate**
+   - Install the [Renovate GitHub App](https://github.com/apps/renovate)
+   - Grant it access to this repository
+   - Renovate will automatically detect the `renovate.json` configuration
+   - Review and merge the first onboarding PR
+
+2. **Configure Branch Protection (CRITICAL for auto-merge)**
+   - Go to: Settings → Branches → Add rule for `main`
+   - Enable: "Require status checks to pass before merging"
+   - Select required checks:
+     - ✅ `lint`
+     - ✅ `test-roles` (or individual role tests)
+     - ✅ `integration-test`
+     - ✅ `pr-checks`
+   - Enable: "Require branches to be up to date before merging"
+   - **Without branch protection, auto-merge will happen without waiting for CI!**
+
+3. **Enable Auto-merge on Repository**
+   - Go to: Settings → General → Pull Requests
+   - Enable: "Allow auto-merge"
+   - This allows Renovate to use GitHub's native auto-merge feature
 
 ### Commit conventions
 - Use conventionnal commit format: `type(scope): subject`
