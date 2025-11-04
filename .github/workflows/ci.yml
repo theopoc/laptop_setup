@@ -27,14 +27,7 @@ jobs:
       - name: Check if CI should run
         id: check
         run: |
-          # Always run CI for pull requests
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "should_run=true" >> $GITHUB_OUTPUT
-            echo "✅ Running CI for pull request"
-            exit 0
-          fi
-
-          # For push events, check commit message
+          # Check commit message for both push and pull_request events
           COMMIT_MSG=$(git log -1 --pretty=%B)
           echo "Commit message: $COMMIT_MSG"
 
