@@ -10,13 +10,7 @@ on:
       - 'fix/**'
       - 'refactor/**'
       - 'perf/**'
-      - 'renovate/**'
-      - 'dependabot/**'
       - 'chore(deps)**'
-  pull_request:
-    branches:
-      - main
-      - develop
   workflow_dispatch:
 env:
   ANSIBLE_FORCE_COLOR: "1"
