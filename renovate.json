@@ -65,7 +65,7 @@
       "schedule": [
         "before 6am on monday"
       ],
-      "pinDigests": true
+      "pinDigests": false
     },
     {
       "description": "Auto-merge minor and patch updates for non-major versions",
