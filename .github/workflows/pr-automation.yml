@@ -216,16 +216,3 @@ jobs:
                 body: body
               });
             }
-
-  # Auto-approve dependabot PRs
-  auto-approve-dependabot:
-    name: Auto-approve Dependabot
-    runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
-    permissions:
-      pull-requests: write
-    steps:
-      - name: Approve PR
-        uses: hmarr/auto-approve-action@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
