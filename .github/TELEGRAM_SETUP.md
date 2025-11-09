@@ -96,7 +96,7 @@ When a CI/CD workflow runs, you'll receive a message like:
 ```
 ✅ CI/CD Pipeline success
 
-Repository: username/ansible-mgmt-laptop
+Repository: username/laptop_setup
 Branch: main
 Event: push
 Commit: abc1234
@@ -117,7 +117,7 @@ When a new release is published:
 ```
 🚀 New Release Published!
 
-Repository: username/ansible-mgmt-laptop
+Repository: username/laptop_setup
 Version: v1.2.3
 Author: username
 
@@ -132,7 +132,7 @@ When a new version tag is created:
 ```
 🏷️ New Tag Created
 
-Repository: username/ansible-mgmt-laptop
+Repository: username/laptop_setup
 New Version: v1.2.3
 Bump Type: minor
 Author: username

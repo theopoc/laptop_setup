@@ -1,6 +1,6 @@
 {
   "branches": ["main"],
-  "repositoryUrl": "https://github.com/TheoPoc/ansible-mgmt-laptop",
+  "repositoryUrl": "https://github.com/TheoPoc/laptop_setup",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",

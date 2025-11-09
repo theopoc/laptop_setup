@@ -1,5 +1,5 @@
 {
-  "name": "ansible-mgmt-laptop",
+  "name": "laptop_setup",
   "version": "1.0.0",
   "description": "Ansible playbook for automating workstation setup on macOS and Ubuntu",
   "private": true,
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheoPoc/ansible-mgmt-laptop.git"
+    "url": "https://github.com/TheoPoc/laptop_setup.git"
   },
   "keywords": [
     "ansible",

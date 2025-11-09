@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: gita
-  author: ansible-mgmt-laptop
+  author: TheoPoc
   namespace: local
   description: Installs gita tool using uv
   license: MIT
