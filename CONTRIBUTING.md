@@ -28,8 +28,8 @@ Thank you for considering contributing to this Ansible playbook repository! This
 2. Clone your fork:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/ansible-mgmt-laptop.git
-   cd ansible-mgmt-laptop
+   git clone https://github.com/YOUR_USERNAME/laptop_setup.git
+   cd laptop_setup
    ```
 
 3. Set up development environment:

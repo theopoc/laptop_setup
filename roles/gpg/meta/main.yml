@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: gpg
-  author: ansible-mgmt-laptop
+  author: TheoPoc
   namespace: local
   description: Configures GPG agent settings
   license: MIT

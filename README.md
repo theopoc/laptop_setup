@@ -1,6 +1,6 @@
 # Ansible Playbook for macOS and Ubuntu
 
-[![CI/CD Pipeline](https://github.com/TheoPoc/ansible-mgmt-laptop/actions/workflows/ci.yml/badge.svg)](https://github.com/TheoPoc/ansible-mgmt-laptop/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/TheoPoc/laptop_setup/actions/workflows/ci.yml/badge.svg)](https://github.com/TheoPoc/laptop_setup/actions/workflows/ci.yml)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Ansible Lint](https://img.shields.io/badge/ansible--lint-passing-success)](https://github.com/ansible/ansible-lint)
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
@@ -50,8 +50,8 @@ This repository contains an Ansible playbook for automating workstation setup on
 1. Clone the repository and run the setup script:
 
    ```bash
-   git clone https://github.com/TheoPoc/ansible-mgmt-laptop.git
-   cd ansible-mgmt-laptop
+   git clone https://github.com/TheoPoc/laptop_setup.git
+   cd laptop_setup
    ./setup.sh
    ```
 
