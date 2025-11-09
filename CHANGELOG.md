@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/TheoPoc/laptop_setup/compare/v1.2.3...v1.3.0) (2025-11-09)
+
+### ✨ Features
+
+* **playbook:** enable appstore role for Mac App Store applications ([dfce0e7](https://github.com/TheoPoc/laptop_setup/commit/dfce0e702f1b8655b2992004a473871d077478b4))
+
+### 🔧 Chores
+
+* **deps:** pin community.general to version >=12.0.0 ([c2a2f27](https://github.com/TheoPoc/laptop_setup/commit/c2a2f27cc371167cd39174e4d544a21ec7c5ce05))
+* **deps:** remove unused Ansible dependencies ([2074a93](https://github.com/TheoPoc/laptop_setup/commit/2074a93acf7f0aacc4fbcfa6d47cb6770bb7155d))
+
 ## [1.2.3](https://github.com/TheoPoc/laptop_setup/compare/v1.2.2...v1.2.3) (2025-11-09)
 
 ### 🐛 Bug Fixes
