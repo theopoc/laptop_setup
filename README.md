@@ -47,17 +47,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 ### Common Setup Steps
 
-1. Generate an SSH key (if you don't have one):
-
-   ```bash
-   ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)" -f ~/.ssh/id_rsa -N ""
-   eval "$(ssh-agent -s)"
-   ssh-add ~/.ssh/id_rsa
-   ```
-
-2. Add the SSH key to your Git provider
-
-3. Clone the repository and run the setup script:
+1. Clone the repository and run the setup script:
 
    ```bash
    git clone https://github.com/TheoPoc/ansible-mgmt-laptop.git
@@ -65,7 +55,7 @@ This repository contains an Ansible playbook for automating workstation setup on
    ./setup.sh
    ```
 
-4. **IMPORTANT: Configure your personal settings**
+2. **IMPORTANT: Configure your personal settings**
 
    Edit [group_vars/all.yml](group_vars/all.yml) and update the following:
 
