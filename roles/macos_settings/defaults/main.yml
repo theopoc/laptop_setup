@@ -112,7 +112,7 @@ finder:
     - { name: Don't open a new windows for removable disk, key: OpenWindowForNewRemovableDisk, type: bool, value: false }
     - { name: Enable the warning before emptying the Trash, key: WarnOnEmptyTrash, type: bool, value: true }
     - { name: Define new window location, key: NewWindowTarget, type: string, value: PfHm }
-    - { name: Define path for new window, key: NewWindowTargetPath, type: string, value: "file:///Users/{{ username }}/" }
+    - { name: Define path for new window, key: NewWindowTargetPath, type: string, value: "file:///Users/{{ ansible_user_id }}/" }
 
   # Unhide folders
   show_folders:

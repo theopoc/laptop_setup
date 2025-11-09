@@ -10,9 +10,7 @@ cursor_extensions:
   - "github.copilot"
   # Add more extensions as needed
 
-users:
-  username: "{{ ansible_user_id }}"
-  # visual_studio_code_settings: "{{ cursor_settings }}"
+# visual_studio_code_settings: "{{ cursor_settings }}"
 
 cursor_settings_overwrite: true
 cursor_keybindings_overwrite: true

@@ -47,17 +47,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 ### Common Setup Steps
 
-1. Generate an SSH key (if you don't have one):
-
-   ```bash
-   ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)" -f ~/.ssh/id_rsa -N ""
-   eval "$(ssh-agent -s)"
-   ssh-add ~/.ssh/id_rsa
-   ```
-
-2. Add the SSH key to your Git provider
-
-3. Clone the repository and run the setup script:
+1. Clone the repository and run the setup script:
 
    ```bash
    git clone https://github.com/TheoPoc/ansible-mgmt-laptop.git
@@ -65,33 +55,24 @@ This repository contains an Ansible playbook for automating workstation setup on
    ./setup.sh
    ```
 
-4. Configure your username in the Ansible inventory:
-   - Open the `hosts` file in your favorite text editor
-   - For macOS, modify the `[mymac]` section:
+2. **IMPORTANT: Configure your personal settings**
 
-     ```ini
-     [mymac]
-     127.0.0.1 ansible_user=your_username
-     ```
+   Edit [group_vars/all.yml](group_vars/all.yml) and update the following:
 
-   - For Ubuntu, uncomment and modify the `[myubuntu]` section:
+   **Git Configuration (Required):**
 
-     ```ini
-     [myubuntu]
-     127.0.0.1 ansible_user=your_username
-     ```
+   ```yaml
+   git_username: "Your Name"  # Replace with your full name
+   git_email: "your.email@example.com"  # Replace with your actual email address
+   ```
 
-5. Configure settings:
-   - Edit [group_vars/all.yml](group_vars/all.yml)
-   - Update your Git configuration:
+   > **Note:** These values will be used to configure your global Git identity. Make sure to use your real name and email address.
+   > If you don't want to configure Git, set `git_enabled: false`
 
-     ```yaml
-     git_username: "Your Name"  # Replace with your full name
-     git_email: "your.email@example.com"  # Replace with your email
-     ```
-
-   - Customize packages, tools, and applications for your needs
-   - If you don't want to configure Git, set `git_enabled: false`
+   **Optional Customizations:**
+   - Customize packages, tools, and applications in the same file
+   - Review and modify the list of Homebrew packages (macOS) or APT packages (Ubuntu)
+   - Adjust IDE extensions, terminal workflows, and other preferences
 
 ## Execution
 

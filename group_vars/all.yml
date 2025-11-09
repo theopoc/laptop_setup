@@ -156,8 +156,6 @@ mise_tools:
   granted: "latest"
   uv: "latest"
 
-username: "{{ ansible_user_id }}"
-
 # Enable Cursor MCP configuration
 cursor_mcp_enabled: true
 
@@ -264,8 +262,8 @@ cursor_keybindings:
     when: "editorFocus"
 
 git_enabled: true
-git_username: theo
-git_email: theo.poccard@gmail.com
+git_username: "Your Name"  # Replace with your full name
+git_email: "your.email@example.com"  # Replace with your email address
 
 # Set applications in Dock
 display_applications:
@@ -310,7 +308,7 @@ warp_workflows:
         default_value: "eu-west-3"
       - name: aws_account_id
         description: "The AWS account ID"
-        default_value: "0000000000"
+        default_value: "123456789012"  # Replace with your AWS account ID
       - name: aws_profile
         description: "The AWS profile to use"
         default_value: "default"

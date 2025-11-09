@@ -14,5 +14,3 @@ zsh_powerlevel10k:
   theme:
     url: https://github.com/romkatv/powerlevel10k.git
     version: master
-
-zsh_username: "{{ ansible_user }}"

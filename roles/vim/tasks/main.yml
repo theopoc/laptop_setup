@@ -7,7 +7,7 @@
   ansible.builtin.copy:
     src: ".vimrc"
     dest: "{{ ansible_env.HOME }}/.vimrc"
-    owner: "{{ username }}"
+    owner: "{{ ansible_user_id }}"
     group: "{{ vim_group }}"
     mode: "0700"
   tags: vim
