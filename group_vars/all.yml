@@ -156,8 +156,6 @@ mise_tools:
   granted: "latest"
   uv: "latest"
 
-username: "{{ ansible_user_id }}"
-
 # Enable Cursor MCP configuration
 cursor_mcp_enabled: true
 

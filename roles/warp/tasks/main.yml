@@ -22,7 +22,7 @@
         path: "{{ item }}"
         state: directory
         mode: "0750"
-        owner: "{{ warp_user }}"
+        owner: "{{ ansible_user_id }}"
       loop_control:
         label: "{{ item }}"
       loop:
@@ -34,7 +34,7 @@
         src: workflow.yaml.j2
         dest: "{{ warp_workflows_dir }}/workflow{{ ansible_loop.index }}.yaml"
         mode: "0640"
-        owner: "{{ warp_user }}"
+        owner: "{{ ansible_user_id }}"
       diff: true
       loop: "{{ warp_workflows }}"
       loop_control:

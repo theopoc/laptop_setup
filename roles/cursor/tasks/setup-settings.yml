@@ -1,7 +1,7 @@
 ---
 - name: Create config directories for users
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ ansible_user_id }}"
   ansible.builtin.file:
     path: "{{ cursor_config_dir }}"
     state: directory
@@ -10,7 +10,7 @@
 
 - name: Create settings directory
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ ansible_user_id }}"
   ansible.builtin.file:
     path: "{{ cursor_user_dir }}"
     state: directory
@@ -19,7 +19,7 @@
 
 - name: Write settings
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ ansible_user_id }}"
   ansible.builtin.template:
     src: settings.json.j2
     dest: "{{ cursor_user_dir }}/settings.json"
@@ -30,7 +30,7 @@
 
 - name: Write keybindings
   become: true
-  become_user: "{{ username }}"
+  become_user: "{{ ansible_user_id }}"
   ansible.builtin.template:
     src: keybindings.json.j2
     dest: "{{ cursor_user_dir }}/keybindings.json"
