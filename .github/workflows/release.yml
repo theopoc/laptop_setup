@@ -40,6 +40,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run semantic-release
 
+      - name: Get release tag and commit message
+        if: success()
+        id: release_info
+        run: |
+          # Get the latest tag created by semantic-release
+          RELEASE_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "No tag found")
+          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+
+          # Get the commit message (first line only for cleaner display)
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')
+          echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+
       - name: Send Telegram notification on success
         if: success()
         uses: appleboy/telegram-action@master
@@ -52,11 +64,12 @@ jobs:
             🚀 <b>New Release Published!</b>
 
             <b>Repository:</b> <code>${{ github.repository }}</code>
+            <b>Release Tag:</b> <code>${{ steps.release_info.outputs.tag }}</code>
             <b>Branch:</b> <code>${{ github.ref_name }}</code>
-            <b>Commit:</b> <code>${{ github.sha }}</code>
+            <b>Commit Message:</b> <i>${{ steps.release_info.outputs.commit_message }}</i>
             <b>Author:</b> ${{ github.actor }}
 
-            <a href="${{ github.server_url }}/${{ github.repository }}/releases">View Releases</a>
+            <a href="${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.release_info.outputs.tag }}">View Release</a>
 
       - name: Send Telegram notification on failure
         if: failure()
