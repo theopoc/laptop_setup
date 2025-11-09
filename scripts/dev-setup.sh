@@ -182,8 +182,12 @@ setup_configs() {
     # Create hosts file if it doesn't exist
     if [ ! -f hosts ]; then
         cat > hosts << EOF
-[local]
-localhost ansible_connection=local ansible_user=$(whoami)
+# Ansible Inventory File
+# This playbook runs locally on your machine (connection: local)
+# No need to specify ansible_user - it automatically uses your current user
+
+[all]
+127.0.0.1
 EOF
         log_success "Created hosts file"
     fi

@@ -1,9 +1,6 @@
 # Ansible Inventory File
-# Replace 'your_username' with your actual system username
+# This playbook runs locally on your machine (connection: local)
+# No need to specify ansible_user - it automatically uses your current user
 
 [all]
-127.0.0.1 ansible_user=your_username
-
-# Examples:
-# For macOS user 'john': 127.0.0.1 ansible_user=john
-# For Ubuntu user 'jane': 127.0.0.1 ansible_user=jane
+127.0.0.1

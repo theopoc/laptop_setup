@@ -65,23 +65,7 @@ This repository contains an Ansible playbook for automating workstation setup on
    ./setup.sh
    ```
 
-4. Configure your username in the Ansible inventory:
-   - Open the `hosts` file in your favorite text editor
-   - For macOS, modify the `[mymac]` section:
-
-     ```ini
-     [mymac]
-     127.0.0.1 ansible_user=your_username
-     ```
-
-   - For Ubuntu, uncomment and modify the `[myubuntu]` section:
-
-     ```ini
-     [myubuntu]
-     127.0.0.1 ansible_user=your_username
-     ```
-
-5. Configure settings:
+4. Configure settings:
    - Edit [group_vars/all.yml](group_vars/all.yml)
    - Update your Git configuration:
 
