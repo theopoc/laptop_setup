@@ -75,9 +75,9 @@ jobs:
 
       - name: Run Molecule tests
         uses: robertdebock/molecule-action@6.0.0
+        working-directory: roles/${{ matrix.role }}
         with:
           command: test
-        working-directory: roles/${{ matrix.role }}
 
 
   # Integration test - full playbook execution
