@@ -25,20 +25,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@v24
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install dependencies
+      - name: Install Ansible and yamllint
         run: |
           python -m pip install --upgrade pip
-          pip install ansible ansible-lint yamllint jmespath
-
-      - name: Run ansible-lint
-        run: |
-          ansible-lint --version
-          ansible-lint -v
+          pip install ansible yamllint jmespath
 
       - name: Run yamllint
         run: |
@@ -77,44 +75,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Podman
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y podman
-
-      - name: Install Molecule and dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install molecule molecule-plugins[podman] ansible-core jmespath
-          pip install --upgrade requests
-
-      - name: Display versions
-        run: |
-          ansible --version
-          molecule --version
-          podman --version
-
       - name: Run Molecule tests
-        run: |
-          cd roles/${{ matrix.role }}
-          molecule test
-        env:
-          PY_COLORS: "1"
-          ANSIBLE_FORCE_COLOR: "1"
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v5
+        uses: robertdebock/molecule-action@6.0.0
         with:
-          name: molecule-results-${{ matrix.role }}
-          path: |
-            roles/${{ matrix.role }}/molecule/default/*.log
-          retention-days: 7
+          command: test
+          directory: roles/${{ matrix.role }}
+
 
   # Integration test - full playbook execution
   integration-test:
