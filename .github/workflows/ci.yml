@@ -78,7 +78,7 @@ jobs:
         with:
           command: test
         env:
-          MOLECULE_ROLE_PATH: roles/${{ matrix.role }}
+          ANSIBLE_ROLES_PATH: roles/${{ matrix.role }}
 
 
   # Integration test - full playbook execution
