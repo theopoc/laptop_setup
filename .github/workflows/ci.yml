@@ -20,33 +20,31 @@ jobs:
   # Linting and validation
   lint:
     name: Lint and Validate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint@v24
-
-      - name: Run yamllint
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          config_file: .yamllint
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Install Ansible and linting tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible ansible-lint jmespath
+
+      - name: Run ansible-lint
+        run: ansible-lint -v
+
+      - name: Run yamllint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint
 
       - name: Validate Ansible syntax
-        uses: dawidd6/action-ansible-playbook@v5
-        with:
-          playbook: main.yml
-          directory: ./
-          options: |
-           -i hosts
-           --syntax-check
+        run: ansible-playbook main.yml --syntax-check -i hosts
 
   # Test matrix for all roles with Molecule
   test-roles:
