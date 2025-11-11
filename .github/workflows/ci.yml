@@ -78,7 +78,7 @@ jobs:
       - name: Run Molecule tests
         uses: robertdebock/molecule-action@6.0.0
         with:
-          command: --debug test
+          command: --debug
           image: ubuntu
           tag: "24.04"
         env:
