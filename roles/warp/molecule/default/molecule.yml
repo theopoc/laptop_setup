@@ -1,9 +1,4 @@
 ---
-ansible:
-  cfg:
-    defaults:
-      deprecation_warnings: false
-
 dependency:
   name: galaxy
 
