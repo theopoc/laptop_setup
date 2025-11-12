@@ -1,14 +1,9 @@
 ---
-ansible:
-  cfg:
-    defaults:
-      deprecation_warnings: false
-
 dependency:
   name: galaxy
 
 driver:
-  name: podman
+  name: docker
 
 platforms:
   - name: instance

@@ -20,40 +20,35 @@ jobs:
   # Linting and validation
   lint:
     name: Lint and Validate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible ansible-lint yamllint jmespath
-
       - name: Run ansible-lint
-        run: |
-          ansible-lint --version
-          ansible-lint -v
+        uses: ansible/ansible-lint@v25.11.0
+        with:
+          requirements_file: requirements.yml
 
       - name: Run yamllint
-        run: |
-          yamllint --version
-          yamllint -c .yamllint .
-        continue-on-error: true
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint
 
       - name: Validate Ansible syntax
-        run: |
-          ansible-playbook main.yml --syntax-check -i hosts
+        uses: dawidd6/action-ansible-playbook@v5
+        with:
+          playbook: main.yml
+          directory: ./
+          requirements: requirements.yml
+          options: |
+            -i hosts
+            --syntax-check
 
   # Test matrix for all roles with Molecule
   test-roles:
     name: Test Role - ${{ matrix.role }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: lint
     strategy:
       fail-fast: false
@@ -76,45 +71,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Podman
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y podman
-
-      - name: Install Molecule and dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install molecule molecule-plugins[podman] ansible-core jmespath
-          pip install --upgrade requests
-
-      - name: Display versions
-        run: |
-          ansible --version
-          molecule --version
-          podman --version
+          path: "${{ github.repository }}"
 
       - name: Run Molecule tests
-        run: |
-          cd roles/${{ matrix.role }}
-          molecule test
-        env:
-          PY_COLORS: "1"
-          ANSIBLE_FORCE_COLOR: "1"
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v5
+        uses: gofrolist/molecule-action@v2
         with:
-          name: molecule-results-${{ matrix.role }}
-          path: |
-            roles/${{ matrix.role }}/molecule/default/*.log
-          retention-days: 7
+          molecule_options: --debug
+          molecule_command: test
+          molecule_working_dir: "${{ github.repository }}/roles/${{ matrix.role }}"
+
 
   # Integration test - full playbook execution
   integration-test:
@@ -125,25 +91,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Ansible
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible jmespath
-
-      - name: Install Ansible Galaxy dependencies
-        run: |
-          ansible-galaxy install -r requirements.yml
-
       - name: Run playbook integration test
-        run: |
-          ansible-playbook main.yml -i hosts --diff
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: "False"
+        uses: dawidd6/action-ansible-playbook@v5
+        with:
+          playbook: main.yml
+          directory: ./
+          requirements: requirements.yml
+          options: |
+            -i hosts
+            --diff
 
   # Generate documentation
   documentation:

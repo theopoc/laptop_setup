@@ -53,6 +53,7 @@ homebrew:
     - tfmv
 
 iterm2_enabled: false
+warp_enabled: true
 
 # Debian/Ubuntu-specific package lists
 debian_apt_packages:
