@@ -107,7 +107,15 @@ jobs:
     name: Test Role - ${{ matrix.role }}
     runs-on: ubuntu-24.04
     needs: [lint, discover-roles, detect-changes]
-    if: always() && needs.lint.result == 'success' && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped')
+    if: |
+      always() &&
+      needs.lint.result == 'success' &&
+      needs.discover-roles.result == 'success' &&
+      (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') &&
+      (
+        (github.ref == 'refs/heads/main' && needs.discover-roles.outputs.roles != '[]') ||
+        (github.ref != 'refs/heads/main' && needs.detect-changes.outputs.roles != '[]')
+      )
     strategy:
       fail-fast: false
       matrix:
