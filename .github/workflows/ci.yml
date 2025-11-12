@@ -45,29 +45,65 @@ jobs:
             -i hosts
             --syntax-check
 
-  # Test matrix for all roles with Molecule
+  # Discover all available roles dynamically
+  discover-roles:
+    name: Discover Available Roles
+    runs-on: ubuntu-24.04
+    needs: lint
+    outputs:
+      roles: ${{ steps.get-roles.outputs.roles }}
+      filters: ${{ steps.generate-filters.outputs.filters }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Get list of roles
+        id: get-roles
+        run: |
+          roles=$(ls -1 roles/ | jq -R -s -c 'split("\n")[:-1]')
+          echo "roles=$roles" >> $GITHUB_OUTPUT
+          echo "Found roles: $roles"
+
+      - name: Generate path filters dynamically
+        id: generate-filters
+        run: |
+          filters=""
+          for role in roles/*/; do
+            role_name=$(basename "$role")
+            filters="${filters}${role_name}:\n  - 'roles/${role_name}/**'\n"
+          done
+          echo "filters<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$filters" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  # Detect changed roles to optimize testing (only on feature branches)
+  detect-changes:
+    name: Detect Changed Roles
+    runs-on: ubuntu-24.04
+    needs: [lint, discover-roles]
+    if: github.ref != 'refs/heads/main'
+    outputs:
+      roles: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Detect changed roles
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: ${{ needs.discover-roles.outputs.filters }}
+
+  # Test matrix for changed roles only with Molecule (or all roles on main branch)
   test-roles:
     name: Test Role - ${{ matrix.role }}
     runs-on: ubuntu-24.04
-    needs: lint
+    needs: [lint, discover-roles, detect-changes]
+    if: always() && needs.lint.result == 'success' && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped')
     strategy:
       fail-fast: false
       matrix:
-        role:
-          - appstore
-          - base-tools
-          - copier
-          - cursor
-          - git
-          - gita
-          - gpg
-          - iterm2
-          - mise
-          - rancher-desktop
-          - uv
-          - vim
-          - warp
-          - zsh
+        role: ${{ github.ref == 'refs/heads/main' && fromJSON(needs.discover-roles.outputs.roles) || fromJSON(needs.detect-changes.outputs.roles) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -86,7 +122,8 @@ jobs:
   integration-test:
     name: Integration Test - Full Playbook
     runs-on: ubuntu-latest
-    needs: test-roles
+    needs: [discover-roles, detect-changes, test-roles]
+    if: always() && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') && (needs.test-roles.result == 'success' || needs.test-roles.result == 'skipped')
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -140,13 +177,15 @@ jobs:
   notify:
     name: Notify Results
     runs-on: ubuntu-latest
-    needs: [lint, test-roles, integration-test]
+    needs: [lint, discover-roles, detect-changes, test-roles, integration-test]
     if: always()
     steps:
       - name: Check workflow status
         id: check
         run: |
           if [ "${{ needs.lint.result }}" = "failure" ] || \
+             [ "${{ needs.discover-roles.result }}" = "failure" ] || \
+             [ "${{ needs.detect-changes.result }}" = "failure" ] || \
              [ "${{ needs.test-roles.result }}" = "failure" ] || \
              [ "${{ needs.integration-test.result }}" = "failure" ]; then
             echo "status=failure" >> $GITHUB_OUTPUT
@@ -175,7 +214,12 @@ jobs:
 
             <b>Job Results:</b>
             • Lint: ${{ needs.lint.result == 'success' && '✅' || '❌' }}
-            • Test Roles: ${{ needs.test-roles.result == 'success' && '✅' || '❌' }}
+            • Discover Roles: ${{ needs.discover-roles.result == 'success' && '✅' || '❌' }}
+            • Detect Changes: ${{ needs.detect-changes.result == 'success' && '✅' || needs.detect-changes.result == 'skipped' && '⏭️' || '❌' }}
+            • Test Roles: ${{ needs.test-roles.result == 'success' && '✅' || needs.test-roles.result == 'skipped' && '⏭️' || '❌' }}
             • Integration Test: ${{ needs.integration-test.result == 'success' && '✅' || '❌' }}
+
+            <b>Discovered Roles:</b> ${{ needs.discover-roles.outputs.roles }}
+            <b>Tested Roles:</b> ${{ github.ref == 'refs/heads/main' && 'All roles (main branch)' || (needs.detect-changes.outputs.roles != '[]' && needs.detect-changes.outputs.roles || 'None (no changes detected)') }}
 
             <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a>
