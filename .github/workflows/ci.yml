@@ -52,7 +52,7 @@ jobs:
     needs: lint
     outputs:
       roles: ${{ steps.get-roles.outputs.roles }}
-      filters: ${{ steps.generate-filters.outputs.filters }}
+      filters: ${{ steps.get-roles.outputs.filters }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
