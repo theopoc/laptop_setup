@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0](https://github.com/TheoPoc/laptop_setup/compare/v1.4.0...v1.5.0) (2025-11-12)
+
+### ✨ Features
+
+* **ci:** configure molecule-action to use ubuntu 24.04 container image ([23aff64](https://github.com/TheoPoc/laptop_setup/commit/23aff6451acf78309ec4da01166019da42dc1a9e))
+* **ci:** migrate to gofrolist/molecule-action for better molecule testing ([0baf2c0](https://github.com/TheoPoc/laptop_setup/commit/0baf2c093bb4b9fd17c3912bd4b9c86fb4ac9c0e))
+
+### 🐛 Bug Fixes
+
+* **ci:** add missing warp_enabled variable to group_vars ([5bd588e](https://github.com/TheoPoc/laptop_setup/commit/5bd588e8b74881d59bcb548733c77c506ab5c171))
+* **ci:** checkout to github.repository path for molecule-action compatibility ([ce21892](https://github.com/TheoPoc/laptop_setup/commit/ce2189221b5c507eb92e239e5189f813f8b7b094))
+* **ci:** correct working-directory indentation in molecule-action step ([4d099f4](https://github.com/TheoPoc/laptop_setup/commit/4d099f4663d8732bc9d9b941264b497403fdcdfe))
+* **ci:** revert to manual ansible-lint installation to fix compatibility issues ([1873238](https://github.com/TheoPoc/laptop_setup/commit/187323882d20842d720584d35cbff9216ced8d4a))
+* **ci:** use ANSIBLE_ROLES_PATH instead of MOLECULE_ROLE_PATH ([bf981aa](https://github.com/TheoPoc/laptop_setup/commit/bf981aad86c36e6346b4700c63c3e2745b797618))
+* **ci:** use correct molecule command syntax --debug test ([be32988](https://github.com/TheoPoc/laptop_setup/commit/be3298857eebc288f96b2efa82ef24236ff68e8c))
+* **ci:** use only --debug flag for molecule command ([c959006](https://github.com/TheoPoc/laptop_setup/commit/c959006fe1e4162a116ace65d4dda7415766c164))
+* **ci:** use working-directory instead of directory parameter for molecule-action ([40aa4cf](https://github.com/TheoPoc/laptop_setup/commit/40aa4cf45b34b0dc70d08b3f99080849d5687947))
+* **test:** change molecule driver from podman to docker ([9b3ea39](https://github.com/TheoPoc/laptop_setup/commit/9b3ea390dccbe895ec1a4b700e71bff4f4dbe463))
+* **test:** remove deprecated ansible property from molecule.yml files ([075bc19](https://github.com/TheoPoc/laptop_setup/commit/075bc19f8452dd65da1eed9e6b27672c1beba51e))
+
+### ⚡ Performance Improvements
+
+* **ci:** replace manual ansible-lint with official GitHub Action ([c32f469](https://github.com/TheoPoc/laptop_setup/commit/c32f4699740c58b2c2ba3b3dbf6366dcfad0e00e))
+* **ci:** streamline ansible syntax validation with GitHub Action ([6c5a692](https://github.com/TheoPoc/laptop_setup/commit/6c5a692d2c3fa7c7ef4a5a34e0f70a199bd4c150))
+* **ci:** use ansible-playbook action for integration test ([dcd23b4](https://github.com/TheoPoc/laptop_setup/commit/dcd23b4b75b35a7296eda7f7c128a9ab706c47b3))
+
+### ✅ Tests
+
+* **ci:** try MOLECULE_ROLE_PATH env var to specify role directory ([3b67f67](https://github.com/TheoPoc/laptop_setup/commit/3b67f67a49da56248f1d1916a7169f7f242d65b1))
+
+### 👷 CI/CD
+
+* **pipeline:** enforce yamllint failures by removing continue-on-error ([ad85ed5](https://github.com/TheoPoc/laptop_setup/commit/ad85ed5739f7f32a2eac69f37ca09daaf07b97ff))
+* **pipeline:** optimize CI with molecule-action and ansible-lint action ([49f73ba](https://github.com/TheoPoc/laptop_setup/commit/49f73ba117c2b9c1fa6ae14ef88895761eba0905))
+* **pipeline:** replace manual yamllint with ibiqlik/action-yamllint action ([4fcf75a](https://github.com/TheoPoc/laptop_setup/commit/4fcf75afeb0a80a919407ae972536d1e232c030e))
+* **pipeline:** use action-ansible-playbook for syntax validation ([d1c9025](https://github.com/TheoPoc/laptop_setup/commit/d1c90250ace3afdf2c897fc3908238a5c6dd9cb7))
+* **test:** enable debug mode for molecule tests in CI pipeline ([19a582c](https://github.com/TheoPoc/laptop_setup/commit/19a582c8b3c07d9705e9610a30462acd6cbdedac))
+
+### 🔧 Chores
+
+* **deps:** Update npm dependencies ([#24](https://github.com/TheoPoc/laptop_setup/issues/24)) ([05f650a](https://github.com/TheoPoc/laptop_setup/commit/05f650a66600ee6208f464a2eb67ce34c56a5858))
+
 ## [1.4.0](https://github.com/TheoPoc/laptop_setup/compare/v1.3.0...v1.4.0) (2025-11-09)
 
 ### ✨ Features
