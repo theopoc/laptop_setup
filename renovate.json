@@ -6,7 +6,7 @@
   ],
   "timezone": "Europe/Paris",
   "schedule": [
-    "before 6am on monday"
+    "at 2pm on saturday"
   ],
   "labels": [
     "dependencies",
@@ -30,7 +30,7 @@
       "groupName": "npm dependencies",
       "commitMessageTopic": "npm dependencies",
       "schedule": [
-        "before 6am on monday"
+        "at 2pm on saturday"
       ]
     },
     {
@@ -41,7 +41,7 @@
       "groupName": "Ansible collections",
       "commitMessageTopic": "Ansible collections",
       "schedule": [
-        "before 6am on monday"
+        "at 2pm on saturday"
       ]
     },
     {
@@ -52,7 +52,7 @@
       "groupName": "Ansible roles",
       "commitMessageTopic": "Ansible roles",
       "schedule": [
-        "before 6am on monday"
+        "at 2pm on saturday"
       ]
     },
     {
@@ -63,7 +63,7 @@
       "groupName": "GitHub Actions",
       "commitMessageTopic": "GitHub Actions",
       "schedule": [
-        "before 6am on monday"
+        "at 2pm on saturday"
       ],
       "pinDigests": false
     },
