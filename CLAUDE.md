@@ -56,14 +56,27 @@ molecule destroy   # Clean up when done
 
 **Roles with Molecule tests:**
 
+- appstore
 - base-tools
+- copier
 - cursor
 - git
+- gita
+- gpg
+- iterm2
 - mise
 - rancher-desktop
+- uv
+- vim
+- warp
 - zsh
 
-**Important:** Molecule uses Podman as the driver. Tests run in Ubuntu 24.04 containers (geerlingguy/docker-ubuntu2404-ansible).
+**Roles without Molecule tests (macOS-only):**
+
+- rosetta - Rosetta 2 installation for Apple Silicon Macs (requires macOS)
+- macos_settings - macOS system settings configuration (requires macOS)
+
+**Important:** Molecule uses Podman as the driver. Tests run in Ubuntu 24.04 containers (geerlingguy/docker-ubuntu2404-ansible). macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
 
 ### Linting
 
