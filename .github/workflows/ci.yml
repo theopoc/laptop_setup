@@ -91,25 +91,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Ansible
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible jmespath
-
-      - name: Install Ansible Galaxy dependencies
-        run: |
-          ansible-galaxy install -r requirements.yml
-
       - name: Run playbook integration test
-        run: |
-          ansible-playbook main.yml -i hosts --diff
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: "False"
+        uses: dawidd6/action-ansible-playbook@v5
+        with:
+          playbook: main.yml
+          directory: ./
+          requirements: requirements.yml
+          options: |
+            -i hosts
+            --diff
 
   # Generate documentation
   documentation:
