@@ -45,11 +45,12 @@ jobs:
             -i hosts
             --syntax-check
 
-  # Detect changed roles to optimize testing
+  # Detect changed roles to optimize testing (only on feature branches)
   detect-changes:
     name: Detect Changed Roles
     runs-on: ubuntu-24.04
     needs: lint
+    if: github.ref != 'refs/heads/main'
     outputs:
       roles: ${{ steps.filter.outputs.changes }}
       appstore: ${{ steps.filter.outputs.appstore }}
@@ -104,16 +105,16 @@ jobs:
             zsh:
               - 'roles/zsh/**'
 
-  # Test matrix for changed roles only with Molecule
+  # Test matrix for changed roles only with Molecule (or all roles on main branch)
   test-roles:
     name: Test Role - ${{ matrix.role }}
     runs-on: ubuntu-24.04
-    needs: detect-changes
-    if: needs.detect-changes.outputs.roles != '[]'
+    needs: [lint, detect-changes]
+    if: always() && needs.lint.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped')
     strategy:
       fail-fast: false
       matrix:
-        role: ${{ fromJSON(needs.detect-changes.outputs.roles) }}
+        role: ${{ github.ref == 'refs/heads/main' && fromJSON('["appstore","base-tools","copier","cursor","git","gita","gpg","iterm2","mise","rancher-desktop","uv","vim","warp","zsh"]') || fromJSON(needs.detect-changes.outputs.roles) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -223,10 +224,10 @@ jobs:
 
             <b>Job Results:</b>
             • Lint: ${{ needs.lint.result == 'success' && '✅' || '❌' }}
-            • Detect Changes: ${{ needs.detect-changes.result == 'success' && '✅' || '❌' }}
+            • Detect Changes: ${{ needs.detect-changes.result == 'success' && '✅' || needs.detect-changes.result == 'skipped' && '⏭️' || '❌' }}
             • Test Roles: ${{ needs.test-roles.result == 'success' && '✅' || needs.test-roles.result == 'skipped' && '⏭️' || '❌' }}
             • Integration Test: ${{ needs.integration-test.result == 'success' && '✅' || '❌' }}
 
-            <b>Tested Roles:</b> ${{ needs.detect-changes.outputs.roles != '[]' && needs.detect-changes.outputs.roles || 'None (no changes detected)' }}
+            <b>Tested Roles:</b> ${{ github.ref == 'refs/heads/main' && 'All roles (main branch)' || (needs.detect-changes.outputs.roles != '[]' && needs.detect-changes.outputs.roles || 'None (no changes detected)') }}
 
             <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a>
