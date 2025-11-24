@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0](https://github.com/TheoPoc/laptop_setup/compare/v1.5.2...v1.6.0) (2025-11-24)
+
+### ✨ Features
+
+* **config:** replace Arc browser with Dia browser ([5ae587a](https://github.com/TheoPoc/laptop_setup/commit/5ae587a48230cbcf00addc591c5aded5dac7c799))
+
+### 📚 Documentation
+
+* **claude:** add GitHub MCP workflow investigation guidance ([769912e](https://github.com/TheoPoc/laptop_setup/commit/769912e9f275fbb5fbb32a5fb5f7312780583bfc))
+* **claude:** update molecule tests role list and document macOS-only roles ([09577d5](https://github.com/TheoPoc/laptop_setup/commit/09577d57af3bf2f9de1e519d48c448bde8d993ee))
+
+### 👷 CI/CD
+
+* **workflow:** add scheduled execution every Saturday at 3pm Paris time ([7e2a003](https://github.com/TheoPoc/laptop_setup/commit/7e2a00330898f5766a0d8c88c7435debf47e8764))
+
 ## [1.5.2](https://github.com/TheoPoc/laptop_setup/compare/v1.5.1...v1.5.2) (2025-11-13)
 
 ### 🐛 Bug Fixes
