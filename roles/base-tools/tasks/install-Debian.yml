@@ -64,14 +64,8 @@
   failed_when: false
   tags: base-tools, desktop-apps
 
-# Install applications via direct .deb downloads
-- name: Install applications via .deb packages
-  when:
-    - debian_deb_applications is defined
-    - debian_deb_applications | length > 0
-  tags: base-tools, desktop-apps
 
-  # Install Postman via tarball
+  # Install Slack via tarball
   block:
     # Check if Slack package is already installed or attempted
     - name: Check if Slack is already installed or .deb file exists
@@ -138,6 +132,7 @@
         - slack_download.changed
       # Allow installation to fail in containers (missing dependencies, etc.)
       failed_when: false
+
 - name: Check if Postman is already installed
   ansible.builtin.stat:
     path: "{{ debian_binary_applications.postman.install_dir }}"
@@ -150,18 +145,6 @@
   tags: base-tools, desktop-apps
 
 - name: Install Postman
-  when:
-    - debian_binary_applications is defined
-    - debian_binary_applications | length > 0
-    - debian_binary_applications.postman is defined
-    - debian_binary_applications.postman.enabled | default(true)
-    - postman_installed is defined
-    - not postman_installed.stat.exists
-  # Allow Postman installation to fail in containers (GUI dependencies, network issues, etc.)
-  ignore_errors: true
-  tags: base-tools, desktop-apps
-
-  # Additional tools that need manual installation
   block:
     - name: Download Postman tarball
       ansible.builtin.get_url:
@@ -195,8 +178,6 @@
 
 - name: Install additional tools from binaries
   tags: base-tools, additional
-
-  # Cleanup temporary files from all installations
   block:
     - name: Check if yq is already installed
       ansible.builtin.stat:
