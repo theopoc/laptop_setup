@@ -1,4 +1,4 @@
-# Ansible Playbook for macOS and Ubuntu
+# Ansible Playbook for macOS, Ubuntu, and Debian
 
 [![CI/CD Pipeline](https://github.com/TheoPoc/laptop_setup/actions/workflows/ci.yml/badge.svg)](https://github.com/TheoPoc/laptop_setup/actions/workflows/ci.yml)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
@@ -6,7 +6,7 @@
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot&logoColor=white)](https://renovatebot.com/)
 
-This repository contains an Ansible playbook for automating workstation setup on both macOS and Ubuntu. It installs essential development tools, configures your development environment, and manages applications.
+This repository contains an Ansible playbook for automating workstation setup on macOS, Ubuntu, and Debian. It installs essential development tools, configures your development environment, and manages applications.
 
 **NEW:** Comprehensive workflow automation with CI/CD, pre-commit hooks, and automated testing! See [AUTOMATION.md](AUTOMATION.md) for details.
 
@@ -14,6 +14,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 - **macOS** (Intel and Apple Silicon)
 - **Ubuntu** 20.04 LTS and later
+- **Debian** 12 (Bookworm) and later
 
 ## Installation
 
@@ -31,7 +32,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 **Note:** The setup script will automatically check for Terminal Full Disk Access and guide you through granting it if needed.
 
-#### Ubuntu
+#### Ubuntu / Debian
 
 1. Update your system:
 
@@ -71,7 +72,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 
    **Optional Customizations:**
    - Customize packages, tools, and applications in the same file
-   - Review and modify the list of Homebrew packages (macOS) or APT packages (Ubuntu)
+   - Review and modify the list of Homebrew packages (macOS) or APT packages (Ubuntu/Debian)
    - Adjust IDE extensions, terminal workflows, and other preferences
 
 ## Execution
@@ -84,7 +85,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 ansible-playbook main.yml -i hosts --ask-become-pass
 ```
 
-**Ubuntu:**
+**Ubuntu / Debian:**
 
 ```bash
 ansible-playbook main.yml -i hosts --ask-become-pass
@@ -167,7 +168,7 @@ See [AUTOMATION.md](AUTOMATION.md) for comprehensive automation documentation.
 - **System settings**: Dock, Finder, Safari configurations
 - **Rosetta 2**: For Apple Silicon Macs
 
-### Ubuntu-Specific
+### Ubuntu / Debian-Specific
 
 - **Package manager**: APT + Snap
 - **Applications**: Installed via snap or direct downloads
@@ -177,12 +178,12 @@ See [AUTOMATION.md](AUTOMATION.md) for comprehensive automation documentation.
 
 The playbook is organized into modular roles:
 
-- **base-tools**: OS-agnostic package installation (Homebrew for macOS, APT for Ubuntu)
+- **base-tools**: OS-agnostic package installation (Homebrew for macOS, APT for Ubuntu/Debian)
 - **cursor**: Cross-platform IDE with OS-specific configurations
 - **zsh**: Shell configuration with framework
 - **mise**: Development tools version manager
 - **git**: Git configuration with OS-specific credential helpers
-- **warp**: Modern terminal (supports both macOS and Ubuntu)
+- **warp**: Modern terminal (supports macOS, Ubuntu, and Debian)
 - **rancher-desktop**: Container runtime
 - **vim**, **gpg**, **gita**, **copier**, **uv**: Cross-platform tools
 
@@ -206,7 +207,7 @@ Edit the unified configuration file [group_vars/all.yml](group_vars/all.yml) to 
 - **Dock applications** (macOS): Apps to display in the Dock
 - And much more!
 
-**Note**: The configuration automatically adapts to your OS (macOS or Ubuntu) using OS-specific detection in the roles.
+**Note**: The configuration automatically adapts to your OS (macOS, Ubuntu, or Debian) using OS-specific detection in the roles.
 
 ## macOS: Create a Rosetta iTerm2
 

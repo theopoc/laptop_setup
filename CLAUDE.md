@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is an Ansible playbook repository for automating workstation setup on both macOS and Ubuntu. It provides a modular, idempotent approach to provisioning development environments with OS-specific adaptations.
+This is an Ansible playbook repository for automating workstation setup on macOS, Ubuntu, and Debian. It provides a modular, idempotent approach to provisioning development environments with OS-specific adaptations.
 
 ## Common Commands
 
@@ -76,7 +76,7 @@ molecule destroy   # Clean up when done
 - rosetta - Rosetta 2 installation for Apple Silicon Macs (requires macOS)
 - macos_settings - macOS system settings configuration (requires macOS)
 
-**Important:** Molecule uses Podman as the driver. Tests run in Ubuntu 24.04 containers (geerlingguy/docker-ubuntu2404-ansible). macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
+**Important:** Molecule uses Podman as the driver. Tests run in both Ubuntu 24.04 (geerlingguy/docker-ubuntu2404-ansible) and Debian 12 (geerlingguy/docker-debian12-ansible) containers. macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
 
 ### Linting
 
@@ -90,13 +90,15 @@ ansible-lint
 
 All roles follow a consistent OS-aware architecture:
 
-1. **OS Detection:** Roles use `ansible_os_family` fact to detect Darwin (macOS) or Debian (Ubuntu)
+1. **OS Detection:** Roles use `ansible_os_family` fact to detect Darwin (macOS) or Debian (Ubuntu/Debian)
 2. **Variable Loading:** Include OS-specific variables from `vars/{{ ansible_os_family }}.yml`
 3. **Task Execution:** Include OS-specific tasks from `tasks/install-{{ ansible_os_family }}.yml`
 4. **Configuration:** Apply common configuration tasks
 5. **Optimization:**: Avoid redondant tasks, use loop if possible
 6. **Best practices:**: Use shell, command and script as last resort and prefer native module instead
 7. **Installation**: check the official documentation on the internet to see how to install tools properly
+
+**Note:** Both Ubuntu and Debian are part of the `Debian` OS family in Ansible, so they share the same task files and variables by default.
 
 **Example structure (cursor role):**
 
@@ -105,12 +107,12 @@ roles/cursor/
 ├── tasks/
 │   ├── main.yml              # Entry point, includes OS-specific tasks
 │   ├── install-Darwin.yml    # macOS-specific installation
-│   ├── install-Debian.yml    # Ubuntu-specific installation
+│   ├── install-Debian.yml    # Ubuntu/Debian-specific installation
 │   ├── setup-settings.yml    # Common configuration
 │   └── install-extensions.yml
 ├── vars/
 │   ├── Darwin.yml            # macOS variables
-│   └── Debian.yml            # Ubuntu variables
+│   └── Debian.yml            # Ubuntu/Debian variables
 └── molecule/                 # Testing infrastructure
 ```
 
@@ -178,7 +180,7 @@ Test configurations disable features incompatible with containers (e.g., `cursor
 4. **Fix any failures** until tests pass successfully
 5. **Verify idempotence** - the test should show "changed=0" on the second run
 
-**Never skip testing!** All roles with `molecule/` directories must have passing tests before considering your work complete. This ensures that changes work in Ubuntu environments (the Molecule test target).
+**Never skip testing!** All roles with `molecule/` directories must have passing tests before considering your work complete. This ensures that changes work in both Ubuntu and Debian environments (the Molecule test targets).
 
 **Common test failures to watch for:**
 
@@ -224,19 +226,38 @@ When investigating CI/CD pipeline issues, use the GitHub MCP tools to gather inf
 5. **Fix the issue** in the workflow or code
 6. **Create a PR** with the fix using `mcp__github__create_pull_request`
 
-**Example:**
+**Example - After pushing a commit:**
 ```
-1. mcp__github__list_workflow_runs(owner="TheoPoc", repo="laptop_setup", workflow_id="ci.yml")
-2. mcp__github__get_job_logs(owner="TheoPoc", repo="laptop_setup", run_id=123456, failed_only=true)
-3. Analyze logs, fix issue
-4. mcp__github__create_pull_request(owner="TheoPoc", repo="laptop_setup", title="fix(ci): ...", head="fix/branch", base="main")
+# STEP 1: Check if your branch's workflow run succeeded
+1. mcp__github__list_workflow_runs(owner="TheoPoc", repo="laptop_setup", workflow_id="ci.yml", branch="feat/your-branch")
+
+# STEP 2: If workflow failed, get the failed job logs
+2. mcp__github__get_job_logs(owner="TheoPoc", repo="laptop_setup", run_id=<run_id_from_step_1>, failed_only=true)
+
+# STEP 3: Analyze logs, fix issue, commit, and push again
+
+# STEP 4: Verify the new workflow run succeeded before creating PR
+4. mcp__github__list_workflow_runs(owner="TheoPoc", repo="laptop_setup", workflow_id="ci.yml", branch="feat/your-branch")
+
+# STEP 5: Once ALL checks pass, create the PR
+5. mcp__github__create_pull_request(owner="TheoPoc", repo="laptop_setup", title="feat(scope): description", head="feat/your-branch", base="main", body="...")
 ```
+
+**CRITICAL:** Do NOT create a PR until ALL workflow runs on your branch show status="completed" and conclusion="success".
 
 ### Git Workflow
 
 **IMPORTANT: All features must go through Pull Requests**
 
-This repository follows a strict PR-based workflow for all code changes:
+This repository follows a strict PR-based workflow for **ALL** code changes:
+
+**MANDATORY WORKFLOW:**
+- ❌ **NEVER** commit directly to `main` branch
+- ✅ **ALWAYS** create a feature branch for any change (even small fixes)
+- ✅ **ALWAYS** push to a feature branch first
+- ✅ **ALWAYS** verify CI pipeline success using GitHub MCP tools before creating PR
+- ✅ **ALWAYS** create a Pull Request for review
+- ✅ **ALWAYS** wait for all CI checks to pass before merging
 
 **Branch Workflow:**
 
@@ -266,6 +287,16 @@ This repository follows a strict PR-based workflow for all code changes:
    # Then create PR using mcp__github__create_pull_request
    ```
 
+6. **Verify CI Pipeline Success (CRITICAL):**
+   After pushing your branch, you MUST verify that the CI pipeline passes:
+   ```
+   # Use GitHub MCP to check workflow status
+   mcp__github__list_workflow_runs(owner="TheoPoc", repo="laptop_setup", branch="<your-branch>")
+   ```
+   - Check that all jobs (lint, test-roles, integration-test, pr-checks) are successful
+   - If any job fails, use `mcp__github__get_job_logs` to investigate and fix issues
+   - Do NOT create or merge the PR until ALL CI checks pass
+
 **Pull Request Requirements:**
 
 - ✅ Must have a descriptive title using conventional commit format
@@ -276,10 +307,12 @@ This repository follows a strict PR-based workflow for all code changes:
 
 **What NOT to do:**
 
-- ❌ Never commit directly to `main` branch for features
-- ❌ Never skip CI checks or tests
-- ❌ Never merge without passing CI
-- ❌ Never use `git push --force` on `main`
+- ❌ **NEVER** commit directly to `main` branch (for ANY change, even small fixes)
+- ❌ **NEVER** skip CI checks or tests
+- ❌ **NEVER** create a PR before verifying CI pipeline success on your branch
+- ❌ **NEVER** merge without passing ALL CI checks
+- ❌ **NEVER** use `git push --force` on `main`
+- ❌ **NEVER** bypass the PR workflow "to save time" - automation exists for a reason
 
 **Automated PR Checks:**
 
@@ -315,11 +348,12 @@ Users must:
 - Apple ID login required for App Store installations
 - Rosetta 2 automatically installed on Apple Silicon Macs
 
-### Ubuntu-Specific Requirements
+### Ubuntu/Debian-Specific Requirements
 
 - System must be updated first
 - Git, Python3, and pip must be pre-installed
-- Uses snap for some application installations
+- Uses snap for some application installations (Ubuntu)
+- Debian 12 (Bookworm) or later recommended for full compatibility
 
 ### Testing Limitations
 
