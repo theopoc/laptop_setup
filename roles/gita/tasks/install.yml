@@ -7,21 +7,21 @@
   changed_when: false
   check_mode: false
   tags:
-    - copier
+    - gita
 
-- name: Check if copier is installed
+- name: Check if gita is installed
   ansible.builtin.shell:
-    cmd: "{{ uv_path.stdout }} tool list | grep -E 'copier$'"
-  register: is_copier_installed
+    cmd: "{{ uv_path.stdout }} tool list | grep -E 'gita$'"
+  register: is_gita_installed
   changed_when: false
   failed_when: false
   check_mode: false
   tags:
-    - copier
+    - gita
 
-- name: Install copier using uv
+- name: Install gita using uv
   ansible.builtin.command:
-    cmd: "{{ uv_path.stdout }} tool install copier"
-  when: is_copier_installed.rc != 0
+    cmd: "{{ uv_path.stdout }} tool install gita"
+  when: is_gita_installed.rc != 0
   tags:
-    - copier
+    - gita

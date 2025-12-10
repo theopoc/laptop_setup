@@ -6,8 +6,16 @@ driver:
   name: docker
 
 platforms:
-  - name: instance
+  - name: ubuntu-24-04
     image: geerlingguy/docker-ubuntu2404-ansible:latest
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
+  - name: debian-12
+    image: geerlingguy/docker-debian12-ansible:latest
     command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
@@ -31,7 +39,10 @@ provisioner:
     verify: verify.yml
   inventory:
     host_vars:
-      instance:
+      ubuntu-gpg:
+        ansible_user: root
+        gpg_enabled: true
+      debian-gpg:
         ansible_user: root
         gpg_enabled: true
   env:

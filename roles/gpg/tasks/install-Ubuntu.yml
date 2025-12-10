@@ -1,0 +1,13 @@
+---
+# Debian/Ubuntu-specific installation for gpg
+
+- name: Install GPG and dependencies via apt
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - gpg-agent
+      - pinentry-curses
+    state: present
+    update_cache: true
+  become: true
+  tags: gpg

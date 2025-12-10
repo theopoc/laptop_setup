@@ -1,0 +1,7 @@
+---
+# Debian/Ubuntu-specific variables for gpg role
+
+gpg_packages:
+  - gnupg
+  - gpg-agent
+  - pinentry-curses

@@ -48,9 +48,9 @@
     - name: Verify git credential helper is configured
       ansible.builtin.assert:
         that:
-          - git_credential_helper.stdout == "libsecret"
-        fail_msg: "Git credential helper is not configured correctly for Ubuntu"
-        success_msg: "Git credential helper is configured correctly for Ubuntu"
+          - git_credential_helper.stdout == "cache --timeout=3600"
+        fail_msg: "Git credential helper is not configured correctly for {{ ansible_distribution }}: expected 'cache --timeout=3600', got '{{ git_credential_helper.stdout }}'"
+        success_msg: "Git credential helper is configured correctly for {{ ansible_distribution }}"
 
     - name: Check if .gitconfig file exists
       ansible.builtin.stat:

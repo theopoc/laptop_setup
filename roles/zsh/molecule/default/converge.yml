@@ -3,6 +3,13 @@
   hosts: all
   become: true
   gather_facts: true
+  vars:
+    ansible_user: root
+    zsh_username: root
+    zsh_powerlevel10k:
+      theme:
+        url: "https://github.com/romkatv/powerlevel10k.git"
+        version: "master"
   tasks:
     - name: Include zsh role
       ansible.builtin.include_role:

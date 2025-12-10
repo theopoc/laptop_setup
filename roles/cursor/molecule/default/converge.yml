@@ -9,6 +9,12 @@
       "editor.tabSize": 2
     cursor_keybindings: []
     cursor_extensions: []
+    ansible_user: root
+    username: root
+    cursor_install_extensions: false
+    cursor_mcp_enabled: false
+    cursor_settings_overwrite: true
+    cursor_keybindings_overwrite: false
   tasks:
     - name: Include cursor role
       ansible.builtin.include_role:

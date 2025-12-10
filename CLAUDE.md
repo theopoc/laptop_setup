@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is an Ansible playbook repository for automating workstation setup on both macOS and Ubuntu. It provides a modular, idempotent approach to provisioning development environments with OS-specific adaptations.
+This is an Ansible playbook repository for automating workstation setup on macOS, Ubuntu, and Debian. It provides a modular, idempotent approach to provisioning development environments with OS-specific adaptations.
 
 ## Common Commands
 
@@ -76,7 +76,7 @@ molecule destroy   # Clean up when done
 - rosetta - Rosetta 2 installation for Apple Silicon Macs (requires macOS)
 - macos_settings - macOS system settings configuration (requires macOS)
 
-**Important:** Molecule uses Podman as the driver. Tests run in Ubuntu 24.04 containers (geerlingguy/docker-ubuntu2404-ansible). macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
+**Important:** Molecule uses Podman as the driver. Tests run in Ubuntu 24.04 (geerlingguy/docker-ubuntu2404-ansible) and Debian 12 (geerlingguy/docker-debian12-ansible) containers. macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
 
 ### Linting
 
@@ -90,13 +90,15 @@ ansible-lint
 
 All roles follow a consistent OS-aware architecture:
 
-1. **OS Detection:** Roles use `ansible_os_family` fact to detect Darwin (macOS) or Debian (Ubuntu)
+1. **OS Detection:** Roles use `ansible_os_family` fact to detect Darwin (macOS) or Debian (Ubuntu/Debian)
 2. **Variable Loading:** Include OS-specific variables from `vars/{{ ansible_os_family }}.yml`
 3. **Task Execution:** Include OS-specific tasks from `tasks/install-{{ ansible_os_family }}.yml`
 4. **Configuration:** Apply common configuration tasks
-5. **Optimization:**: Avoid redondant tasks, use loop if possible
-6. **Best practices:**: Use shell, command and script as last resort and prefer native module instead
-7. **Installation**: check the official documentation on the internet to see how to install tools properly
+5. **Optimization:** Avoid redundant tasks, use loop if possible
+6. **Best practices:** Use shell, command and script as last resort and prefer native module instead
+7. **Installation:** check the official documentation on the internet to see how to install tools properly
+
+**Note:** `ansible_os_family` returns "Debian" for both Ubuntu and Debian distributions, so install-Debian.yml and Debian.yml files are shared between them.
 
 **Example structure (cursor role):**
 
@@ -105,12 +107,12 @@ roles/cursor/
 ├── tasks/
 │   ├── main.yml              # Entry point, includes OS-specific tasks
 │   ├── install-Darwin.yml    # macOS-specific installation
-│   ├── install-Debian.yml    # Ubuntu-specific installation
+│   ├── install-Debian.yml    # Ubuntu/Debian-specific installation
 │   ├── setup-settings.yml    # Common configuration
 │   └── install-extensions.yml
 ├── vars/
 │   ├── Darwin.yml            # macOS variables
-│   └── Debian.yml            # Ubuntu variables
+│   └── Debian.yml            # Ubuntu/Debian variables
 └── molecule/                 # Testing infrastructure
 ```
 

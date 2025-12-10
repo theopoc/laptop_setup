@@ -3,6 +3,20 @@
   hosts: all
   become: true
   gather_facts: true
+  vars:
+    ansible_user: root
+    debian_apt_packages:
+      - git
+      - python3
+      - python3-pip
+      - curl
+      - wget
+      - unzip
+      - jq
+      - ripgrep
+      - htop
+      - yq
+      - shellcheck 
   tasks:
     - name: Include base-tools role
       ansible.builtin.include_role:

@@ -107,6 +107,8 @@ jobs:
           filters: ${{ needs.discover-roles.outputs.filters }}
 
   # Test matrix for changed roles only with Molecule (or all roles on main branch)
+  # Note: Molecule tests run against multiple platforms (Ubuntu 24.04, Debian 12)
+  # as configured in each role's molecule/default/molecule.yml file
   test-roles:
     name: Test Role - ${{ matrix.role }}
     runs-on: ubuntu-24.04
@@ -130,7 +132,7 @@ jobs:
         with:
           path: "${{ github.repository }}"
 
-      - name: Run Molecule tests
+      - name: Run Molecule tests (Ubuntu 24.04 + Debian 12)
         uses: gofrolist/molecule-action@v2
         with:
           molecule_options: --debug

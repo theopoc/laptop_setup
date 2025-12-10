@@ -1,11 +1,25 @@
 ---
 - name: Verify
   hosts: all
+  gather_facts: true
   tasks:
+    - name: Check if vim is installed
+      ansible.builtin.command: which vim
+      register: vim_installed
+      changed_when: false
+      failed_when: vim_installed.rc != 0
+
     - name: Check if .vimrc exists
       ansible.builtin.stat:
         path: "{{ ansible_env.HOME }}/.vimrc"
       register: vimrc_file
+
+    - name: Verify vim is installed
+      ansible.builtin.assert:
+        that:
+          - vim_installed.rc == 0
+        fail_msg: "vim is not installed"
+        success_msg: "vim is installed"
 
     - name: Verify .vimrc exists
       ansible.builtin.assert:

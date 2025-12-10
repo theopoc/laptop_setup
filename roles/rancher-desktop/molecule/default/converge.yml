@@ -3,6 +3,11 @@
   hosts: all
   become: true
   gather_facts: true
+  vars:
+    ansible_user: root
+    rancher_desktop:
+      repo: "rancher-sandbox/rancher-desktop"
+      version: "1"
   tasks:
     - name: Include rancher-desktop role
       ansible.builtin.include_role:

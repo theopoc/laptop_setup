@@ -1,4 +1,4 @@
-# Ansible Playbook for macOS and Ubuntu
+# Ansible Playbook for macOS, Ubuntu, and Debian
 
 [![CI/CD Pipeline](https://github.com/TheoPoc/laptop_setup/actions/workflows/ci.yml/badge.svg)](https://github.com/TheoPoc/laptop_setup/actions/workflows/ci.yml)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
@@ -6,7 +6,7 @@
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot&logoColor=white)](https://renovatebot.com/)
 
-This repository contains an Ansible playbook for automating workstation setup on both macOS and Ubuntu. It installs essential development tools, configures your development environment, and manages applications.
+This repository contains an Ansible playbook for automating workstation setup on macOS, Ubuntu, and Debian. It installs essential development tools, configures your development environment, and manages applications.
 
 **NEW:** Comprehensive workflow automation with CI/CD, pre-commit hooks, and automated testing! See [AUTOMATION.md](AUTOMATION.md) for details.
 
@@ -14,6 +14,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 - **macOS** (Intel and Apple Silicon)
 - **Ubuntu** 20.04 LTS and later
+- **Debian** 12 (Bookworm) and later
 
 ## Installation
 
@@ -44,6 +45,22 @@ This repository contains an Ansible playbook for automating workstation setup on
    ```bash
    sudo apt install -y git python3 python3-pip
    ```
+
+#### Debian
+
+1. Update your system:
+
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
+
+2. Install required packages:
+
+   ```bash
+   sudo apt install -y git python3 python3-pip
+   ```
+
+**Note:** Debian setup is identical to Ubuntu as both are Debian-based distributions using the APT package manager.
 
 ### Common Setup Steps
 
@@ -84,7 +101,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 ansible-playbook main.yml -i hosts --ask-become-pass
 ```
 
-**Ubuntu:**
+**Ubuntu / Debian:**
 
 ```bash
 ansible-playbook main.yml -i hosts --ask-become-pass

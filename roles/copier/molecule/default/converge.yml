@@ -1,6 +1,12 @@
 ---
 - name: Converge
   hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    ansible_user: root
+    mise_tools:
+      uv: latest
   tasks:
     - name: Include copier role
       ansible.builtin.include_role:

@@ -1,7 +1,28 @@
 ---
 - name: Verify
   hosts: all
+  gather_facts: true
   tasks:
+    - name: Check if gnupg is installed
+      ansible.builtin.command: which gpg
+      register: gpg_installed
+      changed_when: false
+      failed_when: gpg_installed.rc != 0
+
+    - name: Check if gpg-agent is installed
+      ansible.builtin.command: which gpg-agent
+      register: gpg_agent_installed
+      changed_when: false
+      failed_when: gpg_agent_installed.rc != 0
+
+    - name: Verify GPG packages are installed
+      ansible.builtin.assert:
+        that:
+          - gpg_installed.rc == 0
+          - gpg_agent_installed.rc == 0
+        fail_msg: "GPG packages are not installed"
+        success_msg: "GPG packages are installed"
+
     - name: Check if GPG config directory exists
       ansible.builtin.stat:
         path: "{{ ansible_env.HOME }}/.gnupg"

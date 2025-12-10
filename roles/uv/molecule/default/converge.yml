@@ -7,6 +7,10 @@
     mise_tools:
       uv: "latest"
   tasks:
+    - name: Include mise role
+      ansible.builtin.include_role:
+        name: mise
+
     - name: Include uv role
       ansible.builtin.include_role:
         name: uv

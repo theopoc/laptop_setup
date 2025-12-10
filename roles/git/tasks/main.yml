@@ -6,6 +6,10 @@
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
   tags: git
 
+- name: Include OS-specific installation tasks
+  ansible.builtin.include_tasks: "install-{{ ansible_os_family }}.yml"
+  tags: git
+
 - name: Configure Git settings
   when: git_enabled | bool
   block:

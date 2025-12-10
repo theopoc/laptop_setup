@@ -6,7 +6,7 @@ driver:
   name: docker
 
 platforms:
-  - name: instance
+  - name: ubuntu-24-04
     image: geerlingguy/docker-ubuntu2404-ansible:latest
     command: ""
     volumes:
@@ -14,7 +14,14 @@ platforms:
     cgroupns_mode: host
     privileged: true
     pre_build_image: true
-
+  - name: debian-12
+    image: geerlingguy/docker-debian12-ansible:latest
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
+    privileged: true
+    pre_build_image: true
 scenario:
   test_sequence:
     - dependency
@@ -29,20 +36,6 @@ provisioner:
   playbooks:
     converge: converge.yml
     verify: verify.yml
-  inventory:
-    host_vars:
-      instance:
-        ansible_user: root
-        warp_enabled: true
-        warp_install_method: "skip"
-        warp_workflows_create_dirs: true
-        warp_workflows:
-          - workflow_name: "Test Workflow"
-            workflow_command: "echo test"
-            workflow_tags:
-              - test
-            workflow_description: "Test workflow for molecule testing"
-            workflow_arguments: []
   env:
     ANSIBLE_ALLOW_BROKEN_CONDITIONALS: "True"
     ANSIBLE_ROLES_PATH: ../../../

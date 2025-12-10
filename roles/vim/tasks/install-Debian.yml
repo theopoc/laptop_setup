@@ -1,0 +1,10 @@
+---
+# Debian/Ubuntu-specific installation for vim
+
+- name: Install vim via apt
+  ansible.builtin.apt:
+    name: vim
+    state: present
+    update_cache: true
+  become: true
+  tags: vim

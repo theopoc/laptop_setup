@@ -1,5 +1,5 @@
 password.txt
 .ansible/
-
+.claude/
 # Node.js dependencies
 node_modules/

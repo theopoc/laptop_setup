@@ -262,9 +262,9 @@ cursor_keybindings:
     command: "editor.action.addSelectionToNextFindMatch"
     when: "editorFocus"
 
-git_enabled: true
-git_username: "Your Name"  # Replace with your full name
-git_email: "your.email@example.com"  # Replace with your email address
+git_enabled: false
+git_username: "TheoPoc"  # Replace with your full name
+git_email: "theo.poccard@gmail.com"  # Replace with your email address
 
 # Set applications in Dock
 display_applications:

@@ -3,6 +3,11 @@
   hosts: all
   become: true
   gather_facts: true
+  vars:
+    ansible_user: root
+    git_enabled: true
+    git_username: "Test User"
+    git_email: "test@example.com"
   pre_tasks:
     - name: Ensure git is installed
       ansible.builtin.apt:

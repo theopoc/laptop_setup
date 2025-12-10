@@ -4,6 +4,7 @@
   become: true
   gather_facts: true
   vars:
+    ansible_user: root
     mise_tools:
       node: "lts"
       python: "3.11"
