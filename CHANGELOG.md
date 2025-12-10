@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0](https://github.com/TheoPoc/laptop_setup/compare/v1.6.0...v1.7.0) (2025-12-10)
+
+### ✨ Features
+
+* **roles:** add Debian 12 compatibility for all non-macOS roles ([3aa0f4c](https://github.com/TheoPoc/laptop_setup/commit/3aa0f4c308f6e25f0ce0ee38b8894d31e17e74fb))
+* update roles to reflect Ubuntu 24.04 and Debian 12 compatibility ([5cac6d8](https://github.com/TheoPoc/laptop_setup/commit/5cac6d844841940b716ec52fff8cd98fe78a7c0a))
+
+### 🔧 Chores
+
+* disable Git configuration by default ([4876f89](https://github.com/TheoPoc/laptop_setup/commit/4876f89a46faa461b0ed64042e64de9bd8778fca))
+
 ## [1.6.0](https://github.com/TheoPoc/laptop_setup/compare/v1.5.2...v1.6.0) (2025-11-24)
 
 ### ✨ Features
