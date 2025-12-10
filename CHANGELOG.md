@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1](https://github.com/TheoPoc/laptop_setup/compare/v1.7.0...v1.7.1) (2025-12-10)
+
+### 🐛 Bug Fixes
+
+* mysql client package name for debian ([496d9b4](https://github.com/TheoPoc/laptop_setup/commit/496d9b4661ff32a66946d573e202b29518972256))
+
 ## [1.7.0](https://github.com/TheoPoc/laptop_setup/compare/v1.6.0...v1.7.0) (2025-12-10)
 
 ### ✨ Features
