@@ -77,10 +77,9 @@ debian_apt_packages:
   - vim # Vi IMproved editor
   - build-essential # Build tools (gcc, make, etc.)
   - software-properties-common # Manage repositories
-  - apt-transport-https # HTTPS support for apt
   - lsb-release # LSB version reporting utility
   - unzip # ZIP archive extraction utility
-  - firefox # Web browser
+  - firefox-esr # Firefox Extended Support Release (Debian standard)
 
 debian_apt_repositories:
   google_chrome:
