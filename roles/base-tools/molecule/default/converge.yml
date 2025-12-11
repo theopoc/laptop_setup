@@ -17,6 +17,21 @@
       - htop
       - yq
       - shellcheck 
+    ubuntu_apt_packages:
+      - git
+      - python3
+      - python3-pip
+      - curl
+      - wget
+      - unzip
+      - jq
+      - ripgrep
+      - htop
+      - yq
+      - shellcheck
+      - snapd
+    mise_tools:
+      uv: latest
   tasks:
     - name: Include base-tools role
       ansible.builtin.include_role:

@@ -3,5 +3,5 @@
 # Dispatches to OS-specific installation tasks
 
 - name: Include OS-specific installation tasks
-  ansible.builtin.include_tasks: "install-{{ ansible_os_family }}.yml"
+  ansible.builtin.include_tasks: "install-{{ ansible_facts.distribution }}.yml"
   tags: base-tools

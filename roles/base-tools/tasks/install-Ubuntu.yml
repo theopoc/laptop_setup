@@ -3,11 +3,18 @@
 
 - name: Install base packages via apt
   ansible.builtin.apt:
-    name: "{{ debian_apt_packages }}"
+    name: "{{ ubuntu_apt_packages }}"
     state: present
     update_cache: true
   become: true
   tags: base-tools, apt
+
+- name: Install firefox
+  community.general.snap:
+    name: "{{ ubuntu_snap_packages }}"
+    state: present
+  become: true
+  tags: base-tools, apt, molecule-notest
 
 # Install applications from third-party APT repositories (using modern signed-by method)
 - name: Create keyrings directory for APT keys

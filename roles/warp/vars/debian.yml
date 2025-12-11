@@ -17,4 +17,4 @@ warp_package_name: warp-terminal
 warp_download_url: "https://app.warp.dev/get_warp?package=deb"
 warp_apt_state: present
 warp_apt_key_id: 0913165C78D5B7A41B42AC657FF7AB39D60F803F
-warp_gpg_key_url : "https://releases.warp.dev/linux/keys/warp.asc"
+warp_gpg_key_url: "https://releases.warp.dev/linux/keys/warp.asc"

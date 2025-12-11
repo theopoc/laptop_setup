@@ -13,6 +13,7 @@
     id: "{{ warp_apt_key_id }}"
     url: "{{ warp_gpg_key_url }}"
     keyring: /etc/apt/keyrings/warpdotdev.gpg
+  become: true
   tags: warp
 
 - name: Add Warp apt repository

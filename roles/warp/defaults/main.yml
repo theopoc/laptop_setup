@@ -12,9 +12,5 @@ warp_homebrew_cask_name: "warp"
 warp_homebrew_cask_greedy: true
 warp_homebrew_cask_state: present
 
-
-
 # Workflows directory settings
 warp_workflows_create_dirs: true
-
-# User settings

@@ -22,4 +22,6 @@ galaxy_info:
     - tools
     - packages
 
-dependencies: []
+dependencies:
+  - role: mise
+  - role: uv

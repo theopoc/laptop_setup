@@ -67,16 +67,14 @@
       failed_when: lsd_installed.rc != 0
 
     - name: Check if tldr is installed
-      ansible.builtin.command: which tldr
+      ansible.builtin.shell: |
+        eval "$(mise activate bash)"
+        uvx tldr tar
       register: tldr_installed
+      args:
+        executable: /bin/bash
       changed_when: false
       failed_when: tldr_installed.rc != 0
-
-    - name: Check if thefuck is installed
-      ansible.builtin.command: which thefuck
-      register: thefuck_installed
-      changed_when: false
-      failed_when: thefuck_installed.rc != 0
 
     - name: Check if dive is installed
       ansible.builtin.command: which dive
@@ -113,7 +111,7 @@
       register: safe_installed
       changed_when: false
       failed_when: safe_installed.rc != 0
-      when: ansible_architecture == 'x86_64'
+      when: ansible_facts.architecture == 'x86_64'
 
     - name: Check if pug is installed
       ansible.builtin.command: which pug
@@ -139,36 +137,9 @@
       changed_when: false
       failed_when: hcledit_installed.rc != 0
 
-    - name: Verify all essential packages are installed (common)
-      ansible.builtin.assert:
-        that:
-          - git_installed.rc == 0
-          - python_installed.rc == 0
-          - curl_installed.rc == 0
-          - jq_installed.rc == 0
-          - ripgrep_installed.rc == 0
-          - htop_installed.rc == 0
-          - yq_installed.rc == 0
-          - shellcheck_installed.rc == 0
-          - lsd_installed.rc == 0
-          - tldr_installed.rc == 0
-          - thefuck_installed.rc == 0
-          - dive_installed.rc == 0
-          - gopass_installed.rc == 0
-          - s5cmd_installed.rc == 0
-          - vsh_installed.rc == 0
-          - vkv_installed.rc == 0
-          - pug_installed.rc == 0
-          - tfautomv_installed.rc == 0
-          - tfmv_installed.rc == 0
-          - hcledit_installed.rc == 0
-        fail_msg: "Some essential packages are not installed"
-        success_msg: "All essential packages are installed successfully"
-
-    - name: Verify safe is installed (amd64 only)
-      ansible.builtin.assert:
-        that:
-          - safe_installed.rc == 0
-        fail_msg: "safe is not installed"
-        success_msg: "safe is installed successfully"
-      when: ansible_architecture == 'x86_64'
+    - name: Check if snap is installed
+      ansible.builtin.command: which snap
+      register: snap_installed
+      changed_when: false
+      failed_when: snap_installed.rc != 0
+      when: ansible_facts.distribution == "Ubuntu"

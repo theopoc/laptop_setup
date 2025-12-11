@@ -81,6 +81,35 @@ debian_apt_packages:
   - unzip # ZIP archive extraction utility
   - firefox-esr # Firefox Extended Support Release (Debian standard)
 
+# Debian/Ubuntu-specific package lists
+ubuntu_apt_packages:
+  - git # Version control system
+  - python3 # Python 3 interpreter
+  - python3-pip # Python package installer
+  - nmap # Network exploration tool
+  - openssl # SSL/TLS toolkit
+  - wget # Network downloader
+  - curl # Transfer data with URLs
+  - jq # JSON processor
+  - htop # Interactive process viewer
+  - direnv # Environment variable manager
+  - autojump # Fast directory navigation
+  - ca-certificates # Common CA certificates
+  - ripgrep # Fast grep alternative
+  - default-mysql-client # MySQL client
+  - shellcheck # Shell script static analysis
+  - ipcalc # IP address calculator
+  - zsh # Z shell
+  - vim # Vi IMproved editor
+  - build-essential # Build tools (gcc, make, etc.)
+  - software-properties-common # Manage repositories
+  - lsb-release # LSB version reporting utility
+  - unzip # ZIP archive extraction utility
+  - snapd # snap
+
+ubuntu_snap_packages:
+  - firefox
+
 debian_apt_repositories:
   google_chrome:
     enabled: true
