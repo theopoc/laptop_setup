@@ -20,7 +20,7 @@
 
     - name: Check if mise config directory exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/mise"
+        path: "{{ ansible_facts.env.HOME }}/.config/mise"
       register: mise_config_dir
 
     - name: Verify mise config directory exists
@@ -33,7 +33,7 @@
 
     - name: Check if mise config file exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/mise/config.toml"
+        path: "{{ ansible_facts.env.HOME }}/.config/mise/config.toml"
       register: mise_config_file
 
     - name: Verify mise config file exists

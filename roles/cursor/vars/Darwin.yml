@@ -1,7 +1,7 @@
 ---
 # macOS-specific variables for Cursor
 
-cursor_config_dir: "{{ ansible_env.HOME }}/Library/Application Support/Cursor"
-cursor_user_dir: "{{ ansible_env.HOME }}/Library/Application Support/Cursor/User"
+cursor_config_dir: "{{ ansible_facts.env.HOME }}/Library/Application Support/Cursor"
+cursor_user_dir: "{{ ansible_facts.env.HOME }}/Library/Application Support/Cursor/User"
 cursor_cli_path: "/opt/homebrew/bin/cursor"
-cursor_rules_dir: "{{ ansible_env.HOME }}/Documents/cursor"
+cursor_rules_dir: "{{ ansible_facts.env.HOME }}/Documents/cursor"

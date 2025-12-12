@@ -3,7 +3,7 @@
   community.general.homebrew:
     name: mas
     state: present
-  tags: ["mas"]
+  tags: ["appstore"]
 
 - name: Check if user is signed into Mac App Store
   ansible.builtin.command: mas account
@@ -11,19 +11,23 @@
   failed_when: false
   changed_when: false
   check_mode: false
+  tags: ["appstore"]
 
 - name: Check if user is signed into Mac App Store
   ansible.builtin.assert:
     that: appstore_mas_account.rc == 0
     fail_msg: "Please sign into the Mac App Store first!"
   failed_when: false
+  tags: ["appstore"]
 
 - name: Install Mac App Store Applications
   community.general.mas:
     id: "{{ item.id }}"
     state: present
   loop: "{{ appstore_apps }}"
+  tags: ["appstore"]
 
 - name: Upgrade all Mac App Store Applications
   community.general.mas:
     upgrade_all: true
+  tags: ["appstore"]

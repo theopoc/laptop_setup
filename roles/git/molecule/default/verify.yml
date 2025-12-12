@@ -49,12 +49,12 @@
       ansible.builtin.assert:
         that:
           - git_credential_helper.stdout == "cache --timeout=3600"
-        fail_msg: "Git credential helper is not configured correctly for {{ ansible_distribution }}: expected 'cache --timeout=3600', got '{{ git_credential_helper.stdout }}'"
-        success_msg: "Git credential helper is configured correctly for {{ ansible_distribution }}"
+        fail_msg: "Git credential helper is not configured correctly for {{ ansible_facts.distribution }}: expected 'cache --timeout=3600', got '{{ git_credential_helper.stdout }}'"
+        success_msg: "Git credential helper is configured correctly for {{ ansible_facts.distribution }}"
 
     - name: Check if .gitconfig file exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.gitconfig"
+        path: "{{ ansible_facts.env.HOME }}/.gitconfig"
       register: gitconfig_file
 
     - name: Verify .gitconfig exists

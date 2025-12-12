@@ -25,7 +25,7 @@
 
 - name: Add mise apt repository
   ansible.builtin.copy:
-    content: "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}] https://mise.jdx.dev/deb
+    content: "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch={{ 'amd64' if ansible_facts.architecture == 'x86_64' else 'arm64' }}] https://mise.jdx.dev/deb
       stable main"
     dest: /etc/apt/sources.list.d/mise.list
     mode: "0644"

@@ -24,7 +24,7 @@
 
     - name: Verify copier binary exists in uv tool directory
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.local/share/uv/tools/copier/bin/copier"
+        path: "{{ ansible_facts.env.HOME }}/.local/share/uv/tools/copier/bin/copier"
       register: copier_binary
 
     - name: Assert copier binary is installed

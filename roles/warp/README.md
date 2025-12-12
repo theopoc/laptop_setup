@@ -36,8 +36,8 @@ warp_rpm_state: present
 warp_workflows_create_dirs: true
 
 # User settings
-warp_user: "{{ ansible_user_id }}"
-warp_group: "{{ ansible_user_id }}"
+warp_user: "{{ ansible_facts.user_id }}"
+warp_group: "{{ ansible_facts.user_id }}"
 ```
 
 ### OS-Specific Variables
@@ -51,16 +51,16 @@ Key OS-specific variables:
 
 ```yaml
 # macOS
-warp_workflows_dir: "{{ ansible_env.HOME }}/.warp/workflows"
-warp_parent_dir: "{{ ansible_env.HOME }}/.warp"
+warp_workflows_dir: "{{ ansible_facts.env.HOME }}/.warp/workflows"
+warp_parent_dir: "{{ ansible_facts.env.HOME }}/.warp"
 
 # Debian/Ubuntu
-warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
-warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+warp_workflows_dir: "{{ ansible_facts.env.HOME }}/.local/share/warp-terminal/workflows"
+warp_parent_dir: "{{ ansible_facts.env.HOME }}/.local/share/warp-terminal"
 
 # RedHat/Fedora
-warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
-warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+warp_workflows_dir: "{{ ansible_facts.env.HOME }}/.local/share/warp-terminal/workflows"
+warp_parent_dir: "{{ ansible_facts.env.HOME }}/.local/share/warp-terminal"
 ```
 
 ### Custom Workflow Configuration

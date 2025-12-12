@@ -18,7 +18,7 @@
 
     - name: Check if Cursor config directory exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/Cursor"
+        path: "{{ ansible_facts.env.HOME }}/.config/Cursor"
       register: cursor_config_dir
 
     - name: Verify Cursor config directory exists
@@ -31,7 +31,7 @@
 
     - name: Check if Cursor User directory exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/Cursor/User"
+        path: "{{ ansible_facts.env.HOME }}/.config/Cursor/User"
       register: cursor_user_dir
 
     - name: Verify Cursor User directory exists
@@ -44,7 +44,7 @@
 
     - name: Check if Cursor settings file exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/Cursor/User/settings.json"
+        path: "{{ ansible_facts.env.HOME }}/.config/Cursor/User/settings.json"
       register: cursor_settings_file
 
     - name: Verify Cursor settings file exists
@@ -55,7 +55,7 @@
         success_msg: "Cursor settings.json exists"
 
     - name: Verify Cursor settings content
-      ansible.builtin.command: cat {{ ansible_env.HOME }}/.config/Cursor/User/settings.json
+      ansible.builtin.command: cat {{ ansible_facts.env.HOME }}/.config/Cursor/User/settings.json
       register: cursor_settings_content
       changed_when: false
 

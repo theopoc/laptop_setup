@@ -5,6 +5,6 @@
 gpg_enabled: true
 
 # GPG configuration variables
-gpg_config_dir: "{{ ansible_env.HOME }}/.gnupg"
+gpg_config_dir: "{{ ansible_facts.env.HOME }}/.gnupg"
 gpg_cache_ttl: 28800 # 8 hours in seconds
 gpg_max_cache_ttl: 28800 # 8 hours in seconds

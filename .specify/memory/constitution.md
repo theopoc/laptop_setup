@@ -147,7 +147,7 @@ roles/<role_name>/
 
 All roles MUST be tagged to enable selective execution:
 - Tags match role names (e.g., `cursor`, `git`, `zsh`)
-- Users run specific roles: `ansible-playbook main.yml -i hosts --tags cursor --ask-become-pass`
+- Users run specific roles: `ansible-playbook main.yml --tags cursor`
 - Multiple tags: `--tags cursor,git,warp`
 - Available tags documented in README.md
 

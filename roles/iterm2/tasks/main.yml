@@ -27,7 +27,7 @@
 - name: Copy fonts
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "/Users/{{ ansible_user_id }}/Library/Fonts/{{ item }}"
+    dest: "/Users/{{ ansible_facts.user_id }}/Library/Fonts/{{ item }}"
     mode: "0700"
   with_items: "{{ iterm2_fonts_to_install }}"
   tags: iterm2, fonts
@@ -72,7 +72,7 @@
   block:
     - name: Create iterm2 directory
       ansible.builtin.file:
-        path: "/Users/{{ ansible_user_id }}/iterm2"
+        path: "/Users/{{ ansible_facts.user_id }}/iterm2"
         state: directory
         mode: "0700"
       tags: iterm2, schemes
@@ -80,13 +80,13 @@
     - name: Clone iTerm Color Schemes repository
       ansible.builtin.git:
         repo: "{{ iterm2_color_schemes.git_repository }}"
-        dest: "/Users/{{ ansible_user_id }}/iterm2/iterm2-color-schemes"
+        dest: "/Users/{{ ansible_facts.user_id }}/iterm2/iterm2-color-schemes"
         version: "{{ iterm2_color_schemes.branch }}"
       tags: iterm2, schemes
 
     - name: Import scheme
       ansible.builtin.shell: |
-        cd /Users/{{ ansible_user_id }}/iterm2/iterm2-color-schemes
+        cd /Users/{{ ansible_facts.user_id }}/iterm2/iterm2-color-schemes
         tools/import-scheme.sh 'schemes/{{ iterm2_color_schemes.selected_theme }}.itermcolors'
       changed_when: true
       tags: iterm2, schemes

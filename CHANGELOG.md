@@ -152,8 +152,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ♻️ Code Refactoring
 
 * remove unnecessary ansible_user from inventory ([08d324c](https://github.com/TheoPoc/laptop_setup/commit/08d324ce0ef1f8f476d8ad851c7246ed41bffcbc))
-* use ansible_user_id directly instead of intermediate variables ([132d0a4](https://github.com/TheoPoc/laptop_setup/commit/132d0a4b900ea09386c0b680abad1eaad71c2792))
-* **zsh:** use ansible_user_id instead of ansible_user ([690c259](https://github.com/TheoPoc/laptop_setup/commit/690c259851b6d4b2cfe663efef10ec9791652472))
+* use ansible_facts.user_id directly instead of intermediate variables ([132d0a4](https://github.com/TheoPoc/laptop_setup/commit/132d0a4b900ea09386c0b680abad1eaad71c2792))
+* **zsh:** use ansible_facts.user_id instead of ansible_user ([690c259](https://github.com/TheoPoc/laptop_setup/commit/690c259851b6d4b2cfe663efef10ec9791652472))
 
 ### 👷 CI/CD
 

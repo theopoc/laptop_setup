@@ -13,27 +13,27 @@ This is an Ansible playbook repository for automating workstation setup on macOS
 **Full playbook execution:**
 
 ```bash
-ansible-playbook main.yml -i hosts --ask-become-pass
+ansible-playbook main.yml
 ```
 
 **Run specific role using tags:**
 
 ```bash
 # Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings, uv
-ansible-playbook main.yml -i hosts --tags <tag_name> --ask-become-pass
+ansible-playbook main.yml --tags <tag_name>
 ```
 
 **Examples:**
 
 ```bash
 # Install only Cursor IDE
-ansible-playbook main.yml -i hosts --tags cursor --ask-become-pass
+ansible-playbook main.yml --tags cursor
 
 # Configure Git only
-ansible-playbook main.yml -i hosts --tags git --ask-become-pass
+ansible-playbook main.yml --tags git
 
 # Install Cursor IDE and Git
-ansible-playbook main.yml -i hosts --tags cursor,git --ask-become-pass
+ansible-playbook main.yml --tags cursor,git
 ```
 
 ### Testing with Molecule
@@ -201,7 +201,7 @@ Some roles have dependencies managed through `meta/main.yml`:
 
 - Role-specific variables prefixed with role name (e.g., `cursor_extensions`, `git_username`)
 - Boolean flags use `_enabled` suffix (e.g., `cursor_mcp_enabled`, `git_enabled`)
-- Use `ansible_user_id` directly in roles for user-specific paths (no intermediate variables)
+- Use `ansible_facts.user_id` directly in roles for user-specific paths (no intermediate variables)
 
 ### GitHub CI/CD Workflow Investigation
 
@@ -306,7 +306,9 @@ When you create a PR, automated checks will:
 
 Users must:
 
-1. Run `./setup.sh` to install Homebrew and Ansible (macOS only)
+1. Run `./setup.sh` to install dependencies and Ansible (supports macOS, Ubuntu, and Debian)
+   - macOS: Installs Homebrew and Ansible
+   - Ubuntu/Debian: Installs Python 3, pip, and Ansible
 2. Configure `hosts` file with their username
 3. Edit `group_vars/all.yml` with personal settings (Git config, packages, etc.)
 
@@ -317,11 +319,13 @@ Users must:
 - Apple ID login required for App Store installations
 - Rosetta 2 automatically installed on Apple Silicon Macs
 
-### Ubuntu-Specific Requirements
+### Ubuntu/Debian-Specific Requirements
 
 - System must be updated first
-- Git, Python3, and pip must be pre-installed
-- Uses snap for some application installations
+- Git must be pre-installed (to clone the repository)
+- Python3 and pip are automatically installed by `setup.sh`
+- Uses snap for some application installations (Ubuntu)
+- Uses direct downloads for some applications (Debian)
 
 ### Testing Limitations
 

@@ -3,3 +3,5 @@ password.txt
 .claude/
 # Node.js dependencies
 node_modules/
+# Log directories
+logs/

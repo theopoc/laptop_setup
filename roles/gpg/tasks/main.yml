@@ -6,7 +6,7 @@
   vars:
     params:
       files:
-        - "{{ ansible_os_family }}.yml"
+        - "{{ ansible_facts.os_family }}.yml"
         - "main.yml"
       paths:
         - "vars"
@@ -17,7 +17,7 @@
   vars:
     params:
       files:
-        - "install-{{ ansible_os_family }}.yml"
+        - "install-{{ ansible_facts.os_family }}.yml"
         - "install.yml"
       paths:
         - "tasks"
@@ -28,7 +28,7 @@
   vars:
     params:
       files:
-        - "setup-{{ ansible_os_family }}.yml"
+        - "setup-{{ ansible_facts.os_family }}.yml"
         - "setup.yml"
       paths:
         - "tasks"

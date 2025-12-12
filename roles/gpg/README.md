@@ -11,7 +11,7 @@ This role configures GPG agent settings to control how long GPG keys are cached 
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `gpg_enabled` | Enable or disable the GPG configuration | `true` |
-| `gpg_config_dir` | Directory for GPG configuration | `{{ ansible_env.HOME }}/.gnupg` |
+| `gpg_config_dir` | Directory for GPG configuration | `{{ ansible_facts.env.HOME }}/.gnupg` |
 | `gpg_cache_ttl` | Default cache TTL in seconds | `28800` (8 hours) |
 | `gpg_max_cache_ttl` | Maximum cache TTL in seconds | `28800` (8 hours) |
 

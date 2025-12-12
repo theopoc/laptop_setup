@@ -24,7 +24,7 @@
 
     - name: Verify gita binary exists in uv tool directory
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.local/share/uv/tools/gita/bin/gita"
+        path: "{{ ansible_facts.env.HOME }}/.local/share/uv/tools/gita/bin/gita"
       register: gita_binary
 
     - name: Assert gita binary is installed
@@ -36,7 +36,7 @@
 
     - name: Check if gita config directory exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/gita"
+        path: "{{ ansible_facts.env.HOME }}/.config/gita"
       register: gita_config_dir
 
     - name: Verify gita config directory exists
@@ -49,7 +49,7 @@
 
     - name: Check if gita config file exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/gita/repo.yml"
+        path: "{{ ansible_facts.env.HOME }}/.config/gita/repo.yml"
       register: gita_config_file
 
     - name: Verify gita config file exists

@@ -5,9 +5,9 @@
     - name: Include appstore role
       ansible.builtin.include_role:
         name: appstore
-      when: ansible_os_family == 'Darwin'
+      when: ansible_facts.os_family == 'Darwin'
 
     - name: Display skip message for non-macOS
       ansible.builtin.debug:
-        msg: "App Store role is macOS-only and will be skipped on {{ ansible_os_family }}"
-      when: ansible_os_family != 'Darwin'
+        msg: "App Store role is macOS-only and will be skipped on {{ ansible_facts.os_family }}"
+      when: ansible_facts.os_family != 'Darwin'

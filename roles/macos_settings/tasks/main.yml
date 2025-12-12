@@ -1,43 +1,43 @@
 ---
 - name: Setup Settings
   ansible.builtin.include_tasks: configure_settings.yml
-  tags: settings
+  tags: [macos_settings, settings]
 
 - name: Setup System UI Server
   ansible.builtin.include_tasks: configure_systemuiserver.yml
-  tags: systemuiserver
+  tags: [macos_settings, systemuiserver]
 
 - name: Setup Clock
   ansible.builtin.include_tasks: configure_clock.yml
-  tags: clock
+  tags: [macos_settings, clock]
 
 - name: Setup Dock
   ansible.builtin.include_tasks: configure_dock.yml
-  tags: dock
+  tags: [macos_settings, dock]
 
 - name: Setup Finder
   ansible.builtin.include_tasks: configure_finder.yml
-  tags: finder
+  tags: [macos_settings, finder]
 
 - name: Setup Safari
   ansible.builtin.include_tasks: configure_safari.yml
-  tags: safari
+  tags: [macos_settings, safari]
 
 - name: Setup TextEdit
   ansible.builtin.include_tasks: configure_textedit.yml
-  tags: textedit
+  tags: [macos_settings, textedit]
 
 - name: Setup Network
   ansible.builtin.include_tasks: configure_network.yml
-  tags: network
+  tags: [macos_settings, network]
 
 - name: Setup Arc Browser
   ansible.builtin.include_tasks: configure_arc.yml
-  tags: arc
+  tags: [macos_settings, arc]
 
 - name: Setup others
   ansible.builtin.include_tasks: configure_others.yml
-  tags: others
+  tags: [macos_settings, others]
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers

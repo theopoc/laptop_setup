@@ -7,7 +7,7 @@ additional_cursor_extensions: []
 visual_studio_code_config_dirname: "{{ (visual_studio_code_build == 'insiders') | ternary('Code - Insiders', 'Cursor') }}"
 
 # Directory under $HOME where where VS Code config is stored
-visual_studio_code_config_path: "{{ (ansible_distribution == 'MacOSX') | ternary('Library/Application Support', '.config') }}/{{ visual_studio_code_config_dirname
+visual_studio_code_config_path: "{{ (ansible_facts.distribution == 'MacOSX') | ternary('Library/Application Support', '.config') }}/{{ visual_studio_code_config_dirname
   }}"
 
 # The package name to install
@@ -24,4 +24,4 @@ visual_studio_code_deb_architecture_mapping:
 
 # The architecture of the deb to install
 visual_studio_code_deb_architecture: >-
-  {{ visual_studio_code_deb_architecture_mapping[ansible_architecture | lower] | default('amd64') }}
+  {{ visual_studio_code_deb_architecture_mapping[ansible_facts.architecture | lower] | default('amd64') }}

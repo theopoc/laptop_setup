@@ -8,15 +8,15 @@
       tags: ["base-tools"]
     - role: appstore
       tags: ["appstore"]
-      when: ansible_os_family == 'Darwin'
+      when: ansible_facts.os_family == 'Darwin'
     - role: rosetta
-      when: ansible_os_family == 'Darwin' and ansible_machine == 'arm64'
+      when: ansible_facts.os_family == 'Darwin' and ansible_facts.machine == 'arm64'
       tags: ["rosetta"]
     - role: vim
       tags: ["vim"]
     - role: iterm2
       tags: ["iterm2"]
-      when: ansible_os_family == 'Darwin' and iterm2_enabled | bool
+      when: ansible_facts.os_family == 'Darwin' and iterm2_enabled | bool
     - role: warp
       tags: ["warp"]
       when: warp_enabled | bool
@@ -34,7 +34,7 @@
       tags: ["zsh"]
     - role: macos_settings
       tags: ["macos_settings"]
-      when: ansible_os_family == 'Darwin'
+      when: ansible_facts.os_family == 'Darwin'
     - role: git
       tags: ["git"]
     - role: rancher-desktop

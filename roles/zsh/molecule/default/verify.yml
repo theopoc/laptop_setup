@@ -19,7 +19,7 @@
         msg: "zsh version: {{ zsh_version.stdout }}"
 
     - name: Get current user shell
-      ansible.builtin.command: grep "^{{ ansible_user_id }}:" /etc/passwd
+      ansible.builtin.command: grep "^{{ ansible_facts.user_id }}:" /etc/passwd
       register: user_shell
       changed_when: false
 
@@ -32,7 +32,7 @@
 
     - name: Check if oh-my-zsh is installed
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+        path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
       register: ohmyzsh_dir
 
     - name: Verify oh-my-zsh is installed
@@ -45,7 +45,7 @@
 
     - name: Check if powerlevel10k theme is installed
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/powerlevel10k"
+        path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh/custom/themes/powerlevel10k"
       register: p10k_theme
 
     - name: Verify powerlevel10k theme is installed
@@ -58,7 +58,7 @@
 
     - name: Check if .zshrc exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.zshrc"
+        path: "{{ ansible_facts.env.HOME }}/.zshrc"
       register: zshrc_file
 
     - name: Verify .zshrc exists
@@ -70,7 +70,7 @@
 
     - name: Check if .p10k.zsh exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.p10k.zsh"
+        path: "{{ ansible_facts.env.HOME }}/.p10k.zsh"
       register: p10k_config
 
     - name: Verify .p10k.zsh exists

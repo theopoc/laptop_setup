@@ -25,7 +25,7 @@
 
     - name: Check if GPG config directory exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.gnupg"
+        path: "{{ ansible_facts.env.HOME }}/.gnupg"
       register: gpg_config_dir
 
     - name: Verify GPG config directory exists
@@ -39,7 +39,7 @@
 
     - name: Check if gpg-agent.conf exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.gnupg/gpg-agent.conf"
+        path: "{{ ansible_facts.env.HOME }}/.gnupg/gpg-agent.conf"
       register: gpg_agent_conf
 
     - name: Verify gpg-agent.conf exists
@@ -52,7 +52,7 @@
 
     - name: Read gpg-agent.conf content
       ansible.builtin.slurp:
-        path: "{{ ansible_env.HOME }}/.gnupg/gpg-agent.conf"
+        path: "{{ ansible_facts.env.HOME }}/.gnupg/gpg-agent.conf"
       register: gpg_agent_conf_content
 
     - name: Verify gpg-agent.conf contains cache configuration

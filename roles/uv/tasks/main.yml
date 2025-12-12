@@ -4,7 +4,7 @@
   vars:
     params:
       files:
-        - "{{ ansible_os_family }}.yml"
+        - "{{ ansible_facts.os_family }}.yml"
         - "main.yml"
       paths:
         - "vars"

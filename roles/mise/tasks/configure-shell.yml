@@ -1,7 +1,7 @@
 ---
 - name: Set default shell
   ansible.builtin.set_fact:
-    default_shell: "{{ ansible_user_shell | basename }}"
+    default_shell: "{{ ansible_facts.user_shell | basename }}"
 
 - name: Display default shell
   ansible.builtin.debug:
@@ -9,7 +9,7 @@
 
 - name: Create .zshrc if it doesn't exist
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     state: touch
     mode: "0644"
     modification_time: preserve
@@ -18,14 +18,14 @@
 
 - name: Add mise activation to .zshrc
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: 'eval "$(mise activate zsh)"'
     state: present
   when: default_shell == 'zsh'
 
 - name: Create .bashrc if it doesn't exist
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_facts.env.HOME }}/.bashrc"
     state: touch
     mode: "0644"
     modification_time: preserve
@@ -34,7 +34,7 @@
 
 - name: Add mise activation to .bashrc
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_facts.env.HOME }}/.bashrc"
     line: 'eval "$(mise activate bash)"'
     state: present
   when: default_shell == 'bash'

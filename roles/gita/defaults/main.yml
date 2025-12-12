@@ -1,2 +1,2 @@
 ---
-gita_config_dir: "{{ ansible_env.HOME }}/.config/gita"
+gita_config_dir: "{{ ansible_facts.env.HOME }}/.config/gita"

@@ -1,8 +1,8 @@
 ---
 # Red Hat/Fedora specific settings
 
-warp_workflows_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal/workflows"
-warp_parent_dir: "{{ ansible_env.HOME }}/.local/share/warp-terminal"
+warp_workflows_dir: "{{ ansible_facts.env.HOME }}/.local/share/warp-terminal/workflows"
+warp_parent_dir: "{{ ansible_facts.env.HOME }}/.local/share/warp-terminal"
 
 warp_download_url: "https://releases.warp.dev/stable/v0.2024.05.21.14.54.stable_00/warp-terminal-0.2024.05.21.14.54.stable.00.x86_64.rpm"
 warp_rpm_state: present

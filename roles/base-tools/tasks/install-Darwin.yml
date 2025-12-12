@@ -38,7 +38,7 @@
     mode: "0644"
   when:
     - not session_manager_installed.stat.exists
-    - ansible_machine == 'arm64'
+    - ansible_facts.machine == 'arm64'
   tags: base-tools, session-manager
 
 - name: Download AWS Session Manager Plugin package (Intel)
@@ -48,7 +48,7 @@
     mode: "0644"
   when:
     - not session_manager_installed.stat.exists
-    - ansible_machine != 'arm64'
+    - ansible_facts.machine != 'arm64'
   tags: base-tools, session-manager
 
 - name: Unzip AWS Session Manager Plugin package

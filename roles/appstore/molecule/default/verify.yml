@@ -9,6 +9,6 @@
     - name: Verify we are on Linux (expected for container tests)
       ansible.builtin.assert:
         that:
-          - ansible_os_family == 'Debian'
+          - ansible_facts.os_family == 'Debian'
         fail_msg: "Expected Debian-based system for container tests"
         success_msg: "Running on Debian-based system as expected"

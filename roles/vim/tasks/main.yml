@@ -1,17 +1,17 @@
 ---
 - name: Include OS-specific variables
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts.os_family }}.yml"
   tags: vim
 
 - name: Include OS-specific installation tasks
-  ansible.builtin.include_tasks: "install-{{ ansible_os_family }}.yml"
+  ansible.builtin.include_tasks: "install-{{ ansible_facts.os_family }}.yml"
   tags: vim
 
 - name: Copy vim settings
   ansible.builtin.copy:
     src: ".vimrc"
-    dest: "{{ ansible_env.HOME }}/.vimrc"
-    owner: "{{ ansible_user_id }}"
+    dest: "{{ ansible_facts.env.HOME }}/.vimrc"
+    owner: "{{ ansible_facts.user_id }}"
     group: "{{ vim_group }}"
     mode: "0700"
   tags: vim

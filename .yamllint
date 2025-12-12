@@ -5,7 +5,7 @@ extends: default
 rules:
   # Line length - be more lenient for Ansible
   line-length:
-    max: 160
+    max: 170
     level: warning
 
   # Indentation - Ansible uses 2 spaces
