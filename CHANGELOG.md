@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0](https://github.com/TheoPoc/laptop_setup/compare/v1.8.0...v2.0.0) (2025-12-12)
+
+### ⚠ BREAKING CHANGES
+
+* **setup:** Script now requires bash instead of zsh
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
+### ✨ Features
+
+* **setup:** add Debian and Ubuntu support to setup.sh ([2cd3f35](https://github.com/TheoPoc/laptop_setup/commit/2cd3f35ff63054dc424ece98040cbecf972ff053))
+
+### 🐛 Bug Fixes
+
+* **ansible:** add missing tags to role tasks ([3acd84a](https://github.com/TheoPoc/laptop_setup/commit/3acd84a994f0d0d131e80d1b7619eedc4bd805e4))
+* **ansible:** disable interactive password prompt in ansible.cfg ([6eafc44](https://github.com/TheoPoc/laptop_setup/commit/6eafc44b0a1d78b1c3131bd6a9fde7342d7e27a3))
+
+### ⚡ Performance Improvements
+
+* **ansible:** enable smart gathering and profiling callbacks ([4e3d3e3](https://github.com/TheoPoc/laptop_setup/commit/4e3d3e36d7ad0cce1219731949b5a6b6dcc61386))
+
+### 📚 Documentation
+
+* **ansible:** simplify commands by removing redundant parameters ([c389542](https://github.com/TheoPoc/laptop_setup/commit/c3895422d92c786efac66d58ac9670904e0528aa))
+
+### 💎 Styles
+
+* **yamllint:** fix comment spacing in SPDX headers ([704ee30](https://github.com/TheoPoc/laptop_setup/commit/704ee30ad1e4a4018670be7c398a938db880d3b4))
+
+### ♻️ Code Refactoring
+
+* **ansible:** migrate to modern ansible_facts syntax ([e4b45bb](https://github.com/TheoPoc/laptop_setup/commit/e4b45bb9b3bbe662c9a200ed4622d6659e23b21b))
+
+### 🔧 Chores
+
+* **git:** ignore logs directories ([63b1e77](https://github.com/TheoPoc/laptop_setup/commit/63b1e778b9f25e51c71d46b72647449a506d4ae7))
+
 ## [1.8.0](https://github.com/TheoPoc/laptop_setup/compare/v1.7.2...v1.8.0) (2025-12-12)
 
 ### ✨ Features
