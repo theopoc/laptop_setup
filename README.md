@@ -89,13 +89,13 @@ This repository contains an Ansible playbook for automating workstation setup on
 **macOS:**
 
 ```bash
-ansible-playbook main.yml -i hosts --ask-become-pass
+ansible-playbook main.yml
 ```
 
 **Ubuntu / Debian:**
 
 ```bash
-ansible-playbook main.yml -i hosts --ask-become-pass
+ansible-playbook main.yml
 ```
 
 ### Run specific roles with tags
@@ -103,19 +103,19 @@ ansible-playbook main.yml -i hosts --ask-become-pass
 Install only base tools (Homebrew/APT packages):
 
 ```bash
-ansible-playbook main.yml -i hosts --tags base-tools --ask-become-pass
+ansible-playbook main.yml --tags base-tools
 ```
 
 Install only Cursor IDE:
 
 ```bash
-ansible-playbook main.yml -i hosts --tags cursor --ask-become-pass
+ansible-playbook main.yml --tags cursor
 ```
 
 Configure only Git:
 
 ```bash
-ansible-playbook main.yml -i hosts --tags git --ask-become-pass
+ansible-playbook main.yml --tags git
 ```
 
 Available tags: `base-tools`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore` (macOS only), `macos_settings` (macOS only)

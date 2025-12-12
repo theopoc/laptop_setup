@@ -79,19 +79,19 @@ pre-commit:
 ## syntax-check: Check playbook syntax
 syntax-check:
 	@echo "$(BLUE)Checking playbook syntax...$(NC)"
-	ansible-playbook main.yml --syntax-check -i hosts
+	ansible-playbook main.yml --syntax-check
 	@echo "$(GREEN)Syntax check passed!$(NC)"
 
 ## check: Run playbook in check mode
 check: syntax-check
 	@echo "$(BLUE)Running playbook in check mode...$(NC)"
-	ansible-playbook main.yml -i hosts --check --diff
+	ansible-playbook main.yml --check --diff
 
 ## run: Run full playbook
 run: syntax-check
 	@echo "$(BLUE)Running playbook...$(NC)"
 	@echo "$(YELLOW)You will be prompted for become password$(NC)"
-	ansible-playbook main.yml -i hosts --ask-become-pass
+	ansible-playbook main.yml
 
 ## run-tag: Run specific role by tag
 run-tag:
@@ -100,7 +100,7 @@ ifndef TAG
 	@exit 1
 endif
 	@echo "$(BLUE)Running role: $(TAG)$(NC)"
-	ansible-playbook main.yml -i hosts --tags $(TAG) --ask-become-pass
+	ansible-playbook main.yml --tags $(TAG)
 
 ## ansible-lint: Run ansible-lint
 ansible-lint:

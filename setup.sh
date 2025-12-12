@@ -156,10 +156,10 @@ ${BLUE}Next Steps:${NC}
    - Update ${BLUE}hosts${NC} file if needed
 
 2. ${YELLOW}Run the playbook${NC}
-   ${BLUE}ansible-playbook main.yml -i hosts --ask-become-pass${NC}
+   ${BLUE}ansible-playbook main.yml${NC}
 
 3. ${YELLOW}Run specific roles using tags${NC}
-   ${BLUE}ansible-playbook main.yml -i hosts --tags <tag_name> --ask-become-pass${NC}
+   ${BLUE}ansible-playbook main.yml --tags <tag_name>${NC}
 
 ${GREEN}Available tags:${NC} base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings, uv
 
