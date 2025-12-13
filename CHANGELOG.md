@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.1](https://github.com/TheoPoc/laptop_setup/compare/v2.3.0...v2.3.1) (2025-12-13)
+
+### 🐛 Bug Fixes
+
+* **mise:** add -y flag to make mise commands non-interactive ([ca3390f](https://github.com/TheoPoc/laptop_setup/commit/ca3390f14458233a07414b3daae5606f873644d2))
+
+### 📚 Documentation
+
+* add --ask-become-pass flag to commands and update Ubuntu version ([5a9fc74](https://github.com/TheoPoc/laptop_setup/commit/5a9fc7414fcb9d649c477b3b182d0ea7de13b00b))
+* add version badge to display latest release ([7ff2722](https://github.com/TheoPoc/laptop_setup/commit/7ff2722700c8f2c103f7d1258a87bf48c5f51028))
+* remove AUTOMATION.md and all references ([ec59321](https://github.com/TheoPoc/laptop_setup/commit/ec5932140abf5315af2be9e8749fdee74245b7df))
+* simplify documentation by reducing verbosity ([10ba4f1](https://github.com/TheoPoc/laptop_setup/commit/10ba4f1fde9b291671ecb09a3a56424af1fe1c3c))
+
+### 👷 CI/CD
+
+* remove automated PR analysis job from workflow ([d21ff3d](https://github.com/TheoPoc/laptop_setup/commit/d21ff3d538bd3f00e4a48a251846c04d24b1d586))
+
 ## [2.3.0](https://github.com/TheoPoc/laptop_setup/compare/v2.2.0...v2.3.0) (2025-12-13)
 
 ### ✨ Features
