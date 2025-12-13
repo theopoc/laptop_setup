@@ -10,6 +10,9 @@
       theme:
         url: "https://github.com/romkatv/powerlevel10k.git"
         version: "master"
+    mise_tools:
+      uv: latest
+      direnv: latest
   tasks:
     - name: Include zsh role
       ansible.builtin.include_role:
