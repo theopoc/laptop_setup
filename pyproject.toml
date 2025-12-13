@@ -1,0 +1,13 @@
+[project]
+name = "laptop-setup"
+version = "0.1.0"
+description = "Ansible playbook to bootstrap laptop"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ansible>=13.1.0",
+    "ansible-core>=2.20.1",
+    "molecule>=25.12.0",
+    "molecule-plugins[docker]>=25.8.12",
+    "pre-commit>=4.5.0",
+]
