@@ -11,7 +11,7 @@ autoload zmv
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-{% if ansible_os_family == 'Darwin' %}
+{% if ansible_facts.os_family == 'Darwin' %}
 export ZSH=/Users/{{ ansible_facts.user_id }}/.oh-my-zsh
 {% else %}
 export ZSH=/home/{{ ansible_facts.user_id }}/.oh-my-zsh
@@ -115,7 +115,7 @@ export LANG=fr_FR.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-{% if ansible_os_family == 'Darwin' %}
+{% if ansible_facts.os_family == 'Darwin' %}
 # brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
