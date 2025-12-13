@@ -283,16 +283,6 @@ This repository follows a strict PR-based workflow for all code changes:
 - ❌ Never merge without passing CI
 - ❌ Never use `git push --force` on `main`
 
-**Automated PR Checks:**
-
-When you create a PR, automated checks will:
-- Validate PR title format (conventional commits)
-- Add size labels (xs, s, m, l, xl)
-- Add labels based on changed files
-- Check for missing Molecule tests
-- Run full CI pipeline (lint, test, integration)
-- Generate testing checklist
-
 **Merging:**
 
 - PRs can be merged once all CI checks pass

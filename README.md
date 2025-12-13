@@ -20,37 +20,17 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 ### Prerequisites
 
-#### macOS
+**macOS:**
+- Install Command Line Tools: `xcode-select --install`
+- Log in to your Apple ID (for App Store installations)
 
-1. Install Command Line Tools:
+**Ubuntu/Debian:**
+- Update system: `sudo apt update && sudo apt upgrade -y`
+- Install Git: `sudo apt install -y git`
 
-   ```bash
-   xcode-select --install
-   ```
+### Setup
 
-2. Ensure you're logged in to your Apple ID (for App Store installations)
-
-**Note:** The setup script will automatically check for Terminal Full Disk Access and guide you through granting it if needed.
-
-#### Ubuntu / Debian
-
-1. Update your system:
-
-   ```bash
-   sudo apt update && sudo apt upgrade -y
-   ```
-
-2. Install Git (required to clone the repository):
-
-   ```bash
-   sudo apt install -y git
-   ```
-
-**Note:** The setup script will automatically install Python 3, pip, Ansible, and other required dependencies.
-
-### Common Setup Steps
-
-1. Clone the repository and run the setup script:
+1. Clone and run the setup script:
 
    ```bash
    git clone https://github.com/TheoPoc/laptop_setup.git
@@ -58,128 +38,57 @@ This repository contains an Ansible playbook for automating workstation setup on
    ./setup.sh
    ```
 
-   The `setup.sh` script will:
-   - **macOS**: Install Homebrew and Ansible
-   - **Ubuntu/Debian**: Install Python 3, pip, and Ansible via pip
-   - **All OS**: Install Ansible Galaxy collections
-
-2. **IMPORTANT: Configure your personal settings**
-
-   Edit [group_vars/all.yml](group_vars/all.yml) and update the following:
-
-   **Git Configuration (Required):**
+2. **Configure your settings** in [group_vars/all.yml](group_vars/all.yml):
 
    ```yaml
-   git_username: "Your Name"  # Replace with your full name
-   git_email: "your.email@example.com"  # Replace with your actual email address
+   git_username: "Your Name"
+   git_email: "your.email@example.com"
    ```
 
-   > **Note:** These values will be used to configure your global Git identity. Make sure to use your real name and email address.
-   > If you don't want to configure Git, set `git_enabled: false`
+   Customize packages, tools, IDE extensions, and other preferences in the same file
 
-   **Optional Customizations:**
-   - Customize packages, tools, and applications in the same file
-   - Review and modify the list of Homebrew packages (macOS) or APT packages (Ubuntu)
-   - Adjust IDE extensions, terminal workflows, and other preferences
+## Usage
 
-## Execution
-
-### Run the full playbook
-
-**macOS:**
+Run the full playbook:
 
 ```bash
 ansible-playbook main.yml
 ```
 
-**Ubuntu / Debian:**
+Run specific roles with tags:
 
 ```bash
-ansible-playbook main.yml
+ansible-playbook main.yml --tags cursor        # Install Cursor IDE
+ansible-playbook main.yml --tags git           # Configure Git
+ansible-playbook main.yml --tags base-tools    # Install base packages
 ```
 
-### Run specific roles with tags
-
-Install only base tools (Homebrew/APT packages):
-
-```bash
-ansible-playbook main.yml --tags base-tools
-```
-
-Install only Cursor IDE:
-
-```bash
-ansible-playbook main.yml --tags cursor
-```
-
-Configure only Git:
-
-```bash
-ansible-playbook main.yml --tags git
-```
-
-Available tags: `base-tools`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore` (macOS only), `macos_settings` (macOS only)
+**Available tags:** `base-tools`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`
 
 ## Quick Reference
 
-### Using Makefile (Recommended)
-
-The repository includes a Makefile for convenient command shortcuts:
+Common Makefile commands:
 
 ```bash
-# Setup and installation
-make setup              # One-command development environment setup
-make install            # Install Ansible and dependencies
-
-# Testing
-make test               # Run all tests (linting + Molecule)
-make test-role ROLE=cursor  # Test specific role
-make check              # Run playbook in check mode
-
-# Linting
-make lint               # Run all linters
-make validate           # Run all validations
-
-# Running playbook
+make setup              # One-command setup
 make run                # Run full playbook
-make run-tag TAG=mise   # Run specific role
-
-# Development
-make pre-commit         # Run pre-commit hooks manually
-make list-roles         # List all available roles
-make list-tags          # List all available tags
-
-# For more commands
-make help
+make test               # Run all tests
+make lint               # Run linters
+make help               # Show all commands
 ```
 
-See [AUTOMATION.md](AUTOMATION.md) for comprehensive automation documentation.
+See [AUTOMATION.md](AUTOMATION.md) for complete automation documentation.
 
 ## What Gets Installed
 
-### Common to Both macOS and Ubuntu
+**Cross-platform:**
+- Base tools (git, python, curl, jq, ripgrep, htop), DevOps tools (terraform, kubectl, helm, k9s, awscli), Cursor IDE, Warp terminal, zsh + Oh My Zsh, Rancher Desktop, mise, vim, gpg
 
-- **Base development tools**: git, python, curl, wget, jq, ripgrep, htop, etc.
-- **DevOps tools** (via mise): terraform, kubectl, helm, k9s, awscli, packer, vault, etc.
-- **IDEs and terminals**: Cursor, Warp
-- **Shell**: zsh with Oh My Zsh and Powerlevel10k
-- **Container runtime**: Rancher Desktop
-- **Version managers**: mise (replacement for rtx)
-- **Git configuration** with OS-specific credential helpers
+**macOS:**
+- Homebrew, App Store apps (Magnet, Bitwarden), iTerm2, system settings, Rosetta 2 (Apple Silicon)
 
-### macOS-Specific
-
-- **Package manager**: Homebrew
-- **App Store apps**: Magnet, Bitwarden, Amphetamine, etc.
-- **Terminal**: iTerm2 (optional)
-- **System settings**: Dock, Finder, Safari configurations
-- **Rosetta 2**: For Apple Silicon Macs
-
-### Ubuntu-Specific
-
-- **Package manager**: APT + Snap
-- **Applications**: Installed via snap or direct downloads
-- **Git credential helper**: libsecret
+**Ubuntu/Debian:**
+- APT + Snap packages, libsecret credential helper
 
 ## Architecture
 
@@ -203,24 +112,7 @@ The playbook is organized into modular roles:
 
 ## Customization
 
-Edit the unified configuration file [group_vars/all.yml](group_vars/all.yml) to customize:
+All settings are in [group_vars/all.yml](group_vars/all.yml):
+- Packages (Homebrew/APT), Cursor IDE (extensions, settings, MCP), DevOps tools (mise), Git config, Warp workflows, App Store apps, Dock apps
 
-- **Homebrew packages** (macOS): taps, formulae, and casks
-- **Cursor IDE**: Extensions, settings, keybindings, MCP configuration
-- **Mise tools**: Version manager tools (terraform, kubectl, helm, etc.)
-- **Git configuration**: Username, email, and credential helper
-- **Warp workflows**: Custom terminal workflows
-- **App Store apps** (macOS): Applications to install
-- **Dock applications** (macOS): Apps to display in the Dock
-- And much more!
-
-**Note**: The configuration automatically adapts to your OS (macOS or Ubuntu) using OS-specific detection in the roles.
-
-## macOS: Create a Rosetta iTerm2
-
-For Apple Silicon Macs running x86_64 applications:
-
-- Open Finder and navigate to Applications menu
-- Copy `iTerm2.app` to `Rosetta iTerm2.app`
-- Right-click `Rosetta iTerm2.app`, select "Get Info"
-- Enable "Open using Rosetta"
+Configuration automatically adapts to your OS.
