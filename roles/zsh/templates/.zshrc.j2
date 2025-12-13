@@ -11,7 +11,13 @@ autoload zmv
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
+{% if ansible_facts.user_id == 'root' %}
+export ZSH=/root/.oh-my-zsh
+{% elif ansible_facts.os_family == 'Darwin' %}
 export ZSH=/Users/{{ ansible_facts.user_id }}/.oh-my-zsh
+{% else %}
+export ZSH=/home/{{ ansible_facts.user_id }}/.oh-my-zsh
+{% endif %}
 #export TERM=screen-256color
 
 
@@ -111,6 +117,7 @@ export LANG=fr_FR.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+{% if ansible_facts.os_family == 'Darwin' %}
 # brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -126,15 +133,18 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # ZSH modules
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+{% endif %}
 
 # fzf
 #source <(fzf --zsh)
 
-# direnv
-eval "$(direnv hook zsh)"
-
 # mise
+{% if ansible_facts.env.MISE_SHELL is defined and ansible_facts.env.MISE_SHELL == "zsh" %}
 eval "$(mise activate zsh)"
+{% endif %}
+
+# direnv
+# eval "$(direnv hook zsh)"
 
 # Powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

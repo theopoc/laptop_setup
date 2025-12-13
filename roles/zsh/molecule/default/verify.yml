@@ -68,6 +68,15 @@
         fail_msg: ".zshrc does not exist"
         success_msg: ".zshrc exists"
 
+    - name: Test .zshrc loading without errors
+      ansible.builtin.shell: |
+        zsh -c 'source ~/.zshrc'
+      register: zshrc_load
+      changed_when: false
+      failed_when: (zshrc_load.rc != 0) or
+        (zshrc_load.stderr != "") or
+        (zshrc_load.stdout != "")
+
     - name: Check if .p10k.zsh exists
       ansible.builtin.stat:
         path: "{{ ansible_facts.env.HOME }}/.p10k.zsh"
@@ -80,22 +89,14 @@
         fail_msg: ".p10k.zsh does not exist"
         success_msg: ".p10k.zsh exists"
 
-    - name: Check if zsh-autosuggestions is installed
-      ansible.builtin.command: dpkg -l zsh-autosuggestions
-      register: zsh_autosuggestions
-      changed_when: false
-      failed_when: false
-
-    - name: Check if zsh-syntax-highlighting is installed
-      ansible.builtin.command: dpkg -l zsh-syntax-highlighting
-      register: zsh_syntax_highlighting
-      changed_when: false
-      failed_when: false
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
 
     - name: Verify zsh plugins are installed
       ansible.builtin.assert:
         that:
-          - zsh_autosuggestions.rc == 0
-          - zsh_syntax_highlighting.rc == 0
+          - "'zsh-autosuggestions' in ansible_facts.packages"
+          - "'zsh-syntax-highlighting' in ansible_facts.packages"
         fail_msg: "Some zsh plugins are not installed"
         success_msg: "All zsh plugins are installed"

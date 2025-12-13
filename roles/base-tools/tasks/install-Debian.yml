@@ -1,6 +1,14 @@
 ---
 # Debian/Ubuntu installation tasks for base-tools
 
+- name: Install dependencies via apt
+  ansible.builtin.apt:
+    name: "zip"
+    state: present
+    update_cache: true
+  become: true
+  tags: base-tools, apt
+
 - name: Install base packages via apt
   ansible.builtin.apt:
     name: "{{ debian_apt_packages }}"

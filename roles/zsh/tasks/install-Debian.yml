@@ -8,6 +8,7 @@
       - zsh
       - zsh-autosuggestions
       - zsh-syntax-highlighting
+      - autojump
     state: present
     update_cache: true
   become: true
@@ -24,6 +25,7 @@
   ansible.builtin.stat:
     path: "{{ ansible_facts.env.HOME }}/.oh-my-zsh"
   register: zsh_oh_my_zsh_installed
+  tags: zsh
 
 - name: Install Oh My Zsh
   ansible.builtin.git:
