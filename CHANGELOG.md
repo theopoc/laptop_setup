@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0](https://github.com/TheoPoc/laptop_setup/compare/v2.6.0...v2.7.0) (2025-12-13)
+
+### ✨ Features
+
+* **claude-code:** add claude-code installation role ([d5f0e07](https://github.com/TheoPoc/laptop_setup/commit/d5f0e0783223a4f5e6a7631bd6c184f6e35e5383))
+
+### ♻️ Code Refactoring
+
+* **claude-code:** simplify role configuration ([32ae787](https://github.com/TheoPoc/laptop_setup/commit/32ae7879e04ebb7d91dd07a17a1eb7840ebc9e12))
+* **claude-code:** streamline macOS and Debian installation tasks ([4272a1c](https://github.com/TheoPoc/laptop_setup/commit/4272a1cc73ac78e0fa1d314455ebc0988c513d78))
+
 ## [2.6.0](https://github.com/TheoPoc/laptop_setup/compare/v2.5.0...v2.6.0) (2025-12-13)
 
 ### ✨ Features
