@@ -1,0 +1,37 @@
+---
+# roles/claude-code/tasks/install-Debian.yml
+# Ubuntu/Debian-specific installation tasks for Claude Code
+
+- name: Ensure curl is installed
+  ansible.builtin.apt:
+    name: curl
+    state: present
+    update_cache: true
+  become: true
+
+- name: Check if Claude Code binary already exists
+  ansible.builtin.stat:
+    path: "{{ claude_code_binary_path }}"
+  register: claude_binary
+
+- name: Install Claude Code via curl script with retry logic
+  ansible.builtin.shell:
+    cmd: curl -fsSL {{ claude_code_install_script_url }} | bash
+  args:
+    creates: "{{ claude_code_binary_path }}"
+  register: curl_install_result
+  retries: "{{ claude_code_download_retries }}"
+  delay: "{{ claude_code_download_retry_delay }}"
+  until: curl_install_result.rc == 0
+  when: not claude_binary.stat.exists
+
+- name: Verify Claude Code installation
+  ansible.builtin.command:
+    cmd: "{{ claude_code_binary_path }} --version"
+  register: claude_version_check
+  changed_when: false
+  failed_when: claude_version_check.rc != 0
+
+- name: Display Claude Code version
+  ansible.builtin.debug:
+    msg: "Claude Code {{ claude_version_check.stdout }} installed successfully"

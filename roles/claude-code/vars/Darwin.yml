@@ -1,0 +1,13 @@
+---
+# roles/claude-code/vars/Darwin.yml
+# macOS-specific variables for Claude Code installation
+
+# Homebrew cask package name
+claude_code_package_name: claude-code
+
+# Package manager type
+claude_code_package_manager: homebrew_cask
+
+# Homebrew paths for verification (Apple Silicon and Intel)
+homebrew_arm_path: /opt/homebrew/bin/brew
+homebrew_intel_path: /usr/local/bin/brew

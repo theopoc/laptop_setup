@@ -1,0 +1,37 @@
+---
+# roles/claude-code/tasks/install-Darwin.yml
+# macOS-specific installation tasks for Claude Code
+
+- name: Check if Homebrew is installed (Apple Silicon)
+  ansible.builtin.stat:
+    path: "{{ homebrew_arm_path }}"
+  register: homebrew_arm
+
+- name: Check if Homebrew is installed (Intel)
+  ansible.builtin.stat:
+    path: "{{ homebrew_intel_path }}"
+  register: homebrew_intel
+
+- name: Fail if Homebrew is not installed
+  ansible.builtin.fail:
+    msg: >
+      Homebrew is not installed. Please ensure the base-tools role has run first
+      or install Homebrew manually from https://brew.sh
+  when: not (homebrew_arm.stat.exists or homebrew_intel.stat.exists)
+
+- name: Install Claude Code via Homebrew cask
+  community.general.homebrew_cask:
+    name: "{{ claude_code_package_name }}"
+    state: present
+  register: claude_install
+
+- name: Verify Claude Code installation
+  ansible.builtin.command:
+    cmd: claude --version
+  register: claude_version_check
+  changed_when: false
+  failed_when: claude_version_check.rc != 0
+
+- name: Display Claude Code version
+  ansible.builtin.debug:
+    msg: "Claude Code {{ claude_version_check.stdout }} installed successfully"

@@ -1,0 +1,7 @@
+---
+# roles/claude-code/defaults/main.yml
+# Default variables for claude-code role
+
+# Feature flag to enable/disable Claude Code installation
+# Set to false in group_vars/all.yml to skip installation
+claude_code_enabled: true

@@ -1,0 +1,34 @@
+---
+# roles/claude-code/molecule/default/verify.yml
+# Molecule verification tests for claude-code role
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  become: false
+
+  tasks:
+    - name: Check Claude Code binary exists
+      ansible.builtin.stat:
+        path: "{{ ansible_facts.env.HOME }}/.local/bin/claude"
+      register: claude_binary_stat
+      failed_when: not claude_binary_stat.stat.exists
+
+    - name: Check Claude Code binary is executable
+      ansible.builtin.assert:
+        that:
+          - claude_binary_stat.stat.exists
+          - claude_binary_stat.stat.executable
+        fail_msg: "Claude Code binary is not executable"
+        success_msg: "Claude Code binary exists and is executable"
+
+    - name: Verify Claude Code runs successfully
+      ansible.builtin.command:
+        cmd: "{{ ansible_facts.env.HOME }}/.local/bin/claude --version"
+      register: claude_version
+      changed_when: false
+      failed_when: claude_version.rc != 0
+
+    - name: Display Claude Code version
+      ansible.builtin.debug:
+        msg: "Claude Code version: {{ claude_version.stdout }}"

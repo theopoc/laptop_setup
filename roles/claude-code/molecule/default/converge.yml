@@ -1,0 +1,13 @@
+---
+# roles/claude-code/molecule/default/converge.yml
+# Molecule converge playbook - executes the claude-code role
+
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Include claude-code role
+      ansible.builtin.include_role:
+        name: claude-code

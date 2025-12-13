@@ -1,0 +1,13 @@
+---
+# roles/claude-code/tasks/main.yml
+# Main task orchestrator for Claude Code installation
+
+- name: Include OS-specific variables
+  ansible.builtin.include_vars: "{{ ansible_facts.os_family }}.yml"
+  when: claude_code_enabled | bool
+  tags: ["claude-code"]
+
+- name: Include OS-specific installation tasks
+  ansible.builtin.include_tasks: "install-{{ ansible_facts.os_family }}.yml"
+  when: claude_code_enabled | bool
+  tags: ["claude-code"]
