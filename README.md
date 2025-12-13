@@ -12,7 +12,7 @@ This repository contains an Ansible playbook for automating workstation setup on
 ## Supported Operating Systems
 
 - **macOS** (Intel and Apple Silicon)
-- **Ubuntu** 20.04 LTS and later
+- **Ubuntu** 24.04 LTS and later
 - **Debian** 12 (Bookworm) and later
 
 ## Installation
@@ -51,15 +51,15 @@ This repository contains an Ansible playbook for automating workstation setup on
 Run the full playbook:
 
 ```bash
-ansible-playbook main.yml
+ansible-playbook main.yml --ask-become-pass
 ```
 
 Run specific roles with tags:
 
 ```bash
-ansible-playbook main.yml --tags cursor        # Install Cursor IDE
-ansible-playbook main.yml --tags git           # Configure Git
-ansible-playbook main.yml --tags base-tools    # Install base packages
+ansible-playbook main.yml --tags cursor  --ask-become-pass      # Install Cursor IDE
+ansible-playbook main.yml --tags git  --ask-become-pass         # Configure Git
+ansible-playbook main.yml --tags base-tools --ask-become-pass   # Install base packages
 ```
 
 **Available tags:** `base-tools`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`
