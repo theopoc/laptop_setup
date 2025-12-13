@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0](https://github.com/TheoPoc/laptop_setup/compare/v2.1.0...v2.2.0) (2025-12-13)
+
+### ✨ Features
+
+* **renovate:** disable manual approval for dependency updates ([700a3cc](https://github.com/TheoPoc/laptop_setup/commit/700a3cce8eb4b5dd653f2c4e56da7b3f3d6cb95b))
+
+### 🔧 Chores
+
+* **deps:** Update GitHub Actions to v25.12.1 ([ca97bdd](https://github.com/TheoPoc/laptop_setup/commit/ca97bdd0ae25e59c73cb1ee317dbe9d5210d5560))
+
 ## [2.1.0](https://github.com/TheoPoc/laptop_setup/compare/v2.0.0...v2.1.0) (2025-12-12)
 
 ### ✨ Features
