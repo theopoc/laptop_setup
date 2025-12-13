@@ -6,3 +6,5 @@ password.txt
 node_modules/
 # Log directories
 logs/
+
+megalinter-reports/
