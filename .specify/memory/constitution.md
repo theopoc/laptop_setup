@@ -22,17 +22,17 @@ Every Ansible role and task MUST be idempotent. Running the playbook multiple ti
 
 ### II. OS-Aware Architecture
 
-Every role MUST support both macOS (Darwin) , Ubuntu and Debian unless explicitly documented as platform-specific. Roles MUST use `ansible_os_family` fact for OS detection, load OS-specific variables from `vars/{{ ansible_os_family }}.yml`, and include OS-specific tasks from `tasks/install-{{ ansible_os_family }}.yml`.
+Every role MUST support both macOS (Darwin) , Ubuntu and Debian unless explicitly documented as platform-specific. Roles MUST use `ansible_facts.os_family` fact for OS detection, load OS-specific variables from `vars/{{ ansible_facts.os_family }}.yml`, and include OS-specific tasks from `tasks/install-{{ ansible_facts.os_family }}.yml`. You can use `ansible_facts.distribution` to strictly separate different configuration between Debian and Ubuntu.
 
 **Rationale**: The playbook's core value is cross-platform automation. Consistent architecture patterns reduce cognitive load and enable contributors to work across roles efficiently.
 
 ### III. Test-First via Molecule (NON-NEGOTIABLE)
 
 All roles with `molecule/` directories MUST have passing Molecule tests before code is merged. When modifying a role:
-1. Update role tasks/variables/templates
-2. Update Molecule test files (converge.yml, verify.yml, molecule.yml)
-3. Run `molecule test` until it passes
-4. Verify idempotence (changed=0 on second run)
+1. Init a scenarion with `molecule init`
+2. Update role tasks/variables/templates
+3. Update Molecule test files (converge.yml, verify.yml, molecule.yml)
+4. Run `molecule test` until it passes
 
 Tests run in Ubuntu 24.04 and Debian 12 containers using Podman. macOS-only roles (rosetta, macos_settings) are exempt from container testing but MUST be manually verified.
 
@@ -47,7 +47,7 @@ All feature changes MUST go through Pull Requests. Direct commits to `main` bran
 **PR requirements**:
 - Descriptive title using conventional commit format
 - Summary of changes in description
-- ALL CI checks passing (lint, test-roles, integration-test, pr-checks)
+- ALL CI checks passing (lint, test-roles, integration-test)
 - Passing Molecule tests for modified roles
 
 **Rationale**: PR workflow ensures code review, automated testing, and quality gates. Branch protection + CI prevents broken code from reaching production.
@@ -69,7 +69,7 @@ All commits MUST use conventional commit format: `type(scope): subject`
 
 ### VI. Single Source of Truth Configuration
 
-All user-configurable variables MUST be defined in `group_vars/all.yml`. Roles MUST NOT introduce role-specific configuration files outside this pattern. Role-specific variables MUST be prefixed with the role name (e.g., `cursor_extensions`, `git_username`). Boolean flags MUST use `_enabled` suffix (e.g., `cursor_mcp_enabled`).
+All user-configurable variables MUST be defined in `group_vars/all.yml`. Roles MUST NOT introduce role-specific configuration files outside this pattern. Role-specific variables MUST be prefixed with the role name (e.g., `cursor_extensions`, `git_username`). Boolean flags MUST use `_enabled` suffix (e.g., `cursor_mcp_enabled`). Roles MUST include default value for variables on `defaults/main.yml` that can be overwrite by `group_vars/all.yml` if user decide.
 
 **Rationale**: Centralized configuration reduces user confusion and enables quick customization. Consistent naming conventions prevent variable collisions and improve searchability.
 
@@ -93,7 +93,6 @@ All pushes and PRs trigger automated CI pipeline:
 - `lint` - Ansible linting and validation
 - `test-roles` - Molecule tests for all roles
 - `integration-test` - Full playbook integration test
-- `pr-checks` - PR automation checks
 
 Branch protection MUST prevent merging until all checks pass.
 
@@ -129,11 +128,12 @@ roles/<role_name>/
 ├── tasks/
 │   ├── main.yml              # Orchestrator - OS detection & task inclusion
 │   ├── install-Darwin.yml    # macOS installation logic
-│   ├── install-Debian.yml    # Ubuntu/Debian installation logic (ansible_os_family=Debian)
+│   ├── install-Debian.yml    # Debian installation logic (ansible_facts.distribution=Debian)
+│   ├── install-Ubuntu.yml    # Ubuntu installation logic (ansible_facts.distribution=Ubuntu)
 │   └── setup-*.yml           # Common configuration tasks
 ├── vars/
 │   ├── Darwin.yml            # macOS-specific variables
-│   └── Debian.yml            # Ubuntu/Debian-specific variables (ansible_os_family=Debian)
+│   └── Debian.yml            # Ubuntu/Debian-specific variables (ansible_facts.distribution=Debian)
 ├── templates/                # Jinja2 templates for config files
 ├── meta/main.yml             # Role dependencies
 └── molecule/                 # Testing infrastructure
@@ -188,7 +188,7 @@ macOS-only roles (rosetta, macos_settings) are exempt from container testing but
 - Be clearly documented as macOS-only
 - Be excluded from CI Molecule tests
 - Include manual testing instructions
-- Use `when: ansible_os_family == 'Darwin'` guards
+- Use `when: ansible_facts.os_family == 'Darwin'` guards
 
 Ubuntu-specific features MUST be tested in Molecule containers.
 
