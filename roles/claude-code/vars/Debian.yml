@@ -1,0 +1,9 @@
+---
+# roles/claude-code/vars/Debian.yml
+# Ubuntu/Debian-specific variables for Claude Code installation
+
+# Installation script URL
+claude_code_install_script_url: https://claude.ai/install.sh
+
+# Binary installation path (user's local bin)
+claude_code_binary_path: "{{ ansible_facts.env.HOME }}/.local/bin/claude"

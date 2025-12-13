@@ -1,0 +1,27 @@
+---
+# roles/claude-code/meta/main.yml
+# Role metadata and dependencies
+
+galaxy_info:
+  role_name: claude_code
+  namespace: laptop_setup
+  author: TheoPoc
+  description: Install Claude Code CLI tool on macOS, Ubuntu, and Debian
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Darwin
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+        - bookworm
+
+dependencies: []

@@ -62,7 +62,7 @@ ansible-playbook main.yml --tags git  --ask-become-pass         # Configure Git
 ansible-playbook main.yml --tags base-tools --ask-become-pass   # Install base packages
 ```
 
-**Available tags:** `base-tools`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`
+**Available tags:** `base-tools`, `claude-code`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`
 
 ## Quick Reference
 
@@ -79,7 +79,7 @@ make help               # Show all commands
 ## What Gets Installed
 
 **Cross-platform:**
-- Base tools (git, python, curl, jq, ripgrep, htop), DevOps tools (terraform, kubectl, helm, k9s, awscli), Cursor IDE, Warp terminal, zsh + Oh My Zsh, Rancher Desktop, mise, vim, gpg
+- Base tools (git, python, curl, jq, ripgrep, htop), DevOps tools (terraform, kubectl, helm, k9s, awscli), Claude Code CLI, Cursor IDE, Warp terminal, zsh + Oh My Zsh, Rancher Desktop, mise, vim, gpg
 
 **macOS:**
 - Homebrew, App Store apps (Magnet, Bitwarden), iTerm2, system settings, Rosetta 2 (Apple Silicon)
@@ -92,6 +92,7 @@ make help               # Show all commands
 The playbook is organized into modular roles:
 
 - **base-tools**: OS-agnostic package installation (Homebrew for macOS, APT for Ubuntu)
+- **claude-code**: Claude Code CLI tool (Homebrew for macOS, curl install for Ubuntu/Debian)
 - **cursor**: Cross-platform IDE with OS-specific configurations
 - **zsh**: Shell configuration with framework
 - **mise**: Development tools version manager

@@ -58,6 +58,7 @@ molecule destroy   # Clean up when done
 
 - appstore
 - base-tools
+- claude-code
 - copier
 - cursor
 - git
@@ -76,7 +77,7 @@ molecule destroy   # Clean up when done
 - rosetta - Rosetta 2 installation for Apple Silicon Macs (requires macOS)
 - macos_settings - macOS system settings configuration (requires macOS)
 
-**Important:** Molecule uses Podman as the driver. Tests run in Ubuntu 24.04 (geerlingguy/docker-ubuntu2404-ansible) and Debian 12 (geerlingguy/docker-debian12-ansible) containers. macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
+**Important:** Molecule uses Docker as the driver. Tests run in Ubuntu 24.04 (geerlingguy/docker-ubuntu2404-ansible) and Debian 12 (geerlingguy/docker-debian12-ansible) containers. macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
 
 ### Linting
 
@@ -473,3 +474,10 @@ To enable Renovate on this repository:
 - Do not take claude as author
 - Valid types: feat, fix, docs, style, refactor, perf, test, chore, ci, revert
 - Use `BREAKING CHANGE:` in commit footer for major version bumps
+
+## Active Technologies
+- Ansible 2.15+ (YAML-based playbook automation) (001-claude-code-role)
+- N/A (installation role, no persistent data storage) (001-claude-code-role)
+
+## Recent Changes
+- 001-claude-code-role: Added Ansible 2.15+ (YAML-based playbook automation)

@@ -1,0 +1,9 @@
+---
+# roles/claude-code/tasks/install-Darwin.yml
+# macOS-specific installation tasks for Claude Code
+
+- name: Install Claude Code via Homebrew cask
+  community.general.homebrew_cask:
+    name: "{{ claude_code_package_name }}"
+    state: present
+  tags: ['claude-code']

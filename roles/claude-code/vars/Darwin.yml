@@ -1,0 +1,6 @@
+---
+# roles/claude-code/vars/Darwin.yml
+# macOS-specific variables for Claude Code installation
+
+# Homebrew cask package name
+claude_code_package_name: claude-code
