@@ -7,6 +7,9 @@
         url: "{{ warp_download_url }}"
         dest: "/tmp/warp-terminal.rpm"
         mode: "0644"
+      retries: 3
+      delay: 5
+      until: warp_rpm_download is succeeded
       register: warp_rpm_download
 
     - name: Install Warp RPM package

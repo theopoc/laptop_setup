@@ -36,6 +36,10 @@
     url: https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac_arm64/sessionmanager-bundle.zip
     dest: /tmp/sessionmanager-bundle.zip
     mode: "0644"
+  retries: 3
+  delay: 5
+  until: session_manager_arm64_download is succeeded
+  register: session_manager_arm64_download
   when:
     - not session_manager_installed.stat.exists
     - ansible_facts.machine == 'arm64'
@@ -46,6 +50,10 @@
     url: https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/sessionmanager-bundle.zip
     dest: /tmp/sessionmanager-bundle.zip
     mode: "0644"
+  retries: 3
+  delay: 5
+  until: session_manager_intel_download is succeeded
+  register: session_manager_intel_download
   when:
     - not session_manager_installed.stat.exists
     - ansible_facts.machine != 'arm64'

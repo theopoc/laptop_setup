@@ -19,7 +19,7 @@
 
 - name: Download and add mise GPG key
   ansible.builtin.shell: |
-    wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | tee /etc/apt/keyrings/mise-archive-keyring.gpg > /dev/null
+    wget --tries=3 --waitretry=5 -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | tee /etc/apt/keyrings/mise-archive-keyring.gpg > /dev/null
   args:
     creates: /etc/apt/keyrings/mise-archive-keyring.gpg
   become: true

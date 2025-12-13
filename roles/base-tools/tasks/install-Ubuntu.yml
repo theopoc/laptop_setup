@@ -38,7 +38,7 @@
 
 - name: Download and convert GPG keys for third-party repositories
   ansible.builtin.shell: |
-    curl -fsSL "{{ item.value.key_url }}" | gpg --dearmor --yes -o /etc/apt/keyrings/{{ item.key }}.gpg
+    curl -fsSL --retry 3 --retry-delay 5 "{{ item.value.key_url }}" | gpg --dearmor --yes -o /etc/apt/keyrings/{{ item.key }}.gpg
     chmod 644 /etc/apt/keyrings/{{ item.key }}.gpg
   args:
     creates: "/etc/apt/keyrings/{{ item.key }}.gpg"
@@ -113,6 +113,9 @@
         return_content: true
       register: slack_page
       check_mode: false
+      retries: 3
+      delay: 5
+      until: slack_page is succeeded
       when:
         - debian_deb_applications.slack is defined
         - debian_deb_applications.slack.enabled | default(true)
@@ -132,6 +135,9 @@
         url: "{{ debian_deb_applications.slack.url_pattern | replace('{version}', slack_version | default('')) }}"
         dest: "/tmp/slack-desktop.deb"
         mode: "0644"
+      retries: 3
+      delay: 5
+      until: slack_download is succeeded
       when:
         - debian_deb_applications.slack is defined
         - debian_deb_applications.slack.enabled | default(true)
@@ -182,6 +188,10 @@
         url: "{{ debian_binary_applications.postman.url }}"
         dest: "/tmp/postman.tar.gz"
         mode: "0644"
+      retries: 3
+      delay: 5
+      until: postman_tarball is succeeded
+      register: postman_tarball
 
     - name: Create Postman installation directory
       ansible.builtin.file:
@@ -223,6 +233,10 @@
         dest: /usr/local/bin/yq
         mode: "0755"
       become: true
+      retries: 3
+      delay: 5
+      until: yq_download is succeeded
+      register: yq_download
       when: not yq_installed.stat.exists
 
     - name: Check if lsd is already installed
@@ -239,6 +253,9 @@
             return_content: true
           register: lsd_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: lsd_release is succeeded
 
         - name: Download lsd deb package
           ansible.builtin.get_url:
@@ -247,6 +264,10 @@
             dest: /tmp/lsd.deb
             mode: "0644"
           check_mode: false
+          retries: 3
+          delay: 5
+          until: lsd_download is succeeded
+          register: lsd_download
 
         - name: Install lsd via deb
           ansible.builtin.apt:
@@ -313,6 +334,9 @@
             return_content: true
           register: dive_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: dive_release is succeeded
 
         - name: Download dive deb package
           ansible.builtin.get_url:
@@ -320,6 +344,10 @@
               package_architecture }}.deb"
             dest: /tmp/dive.deb
             mode: "0644"
+          retries: 3
+          delay: 5
+          until: dive_download is succeeded
+          register: dive_download
 
         - name: Install dive via deb
           ansible.builtin.apt:
@@ -343,6 +371,9 @@
             return_content: true
           register: gopass_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: gopass_release is succeeded
 
         - name: Download gopass deb package
           ansible.builtin.get_url:
@@ -377,6 +408,9 @@
             return_content: true
           register: s5cmd_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: s5cmd_release is succeeded
 
         - name: Download s5cmd binary
           ansible.builtin.unarchive:
@@ -384,6 +418,10 @@
               '64bit' if package_architecture == 'amd64' else package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
+          retries: 3
+          delay: 5
+          until: s5cmd_download is succeeded
+          register: s5cmd_download
 
         - name: Install s5cmd binary
           ansible.builtin.copy:
@@ -409,6 +447,9 @@
             return_content: true
           register: vsh_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: vsh_release is succeeded
 
         - name: Download vsh binary
           ansible.builtin.get_url:
@@ -416,6 +457,10 @@
             dest: /usr/local/bin/vsh
             mode: "0755"
           become: true
+          retries: 3
+          delay: 5
+          until: vsh_download is succeeded
+          register: vsh_download
 
     # Install vkv (Vault key-value CLI)
     - name: Check if vkv is already installed
@@ -432,6 +477,9 @@
             return_content: true
           register: vkv_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: vkv_release is succeeded
 
         - name: Download vkv binary
           ansible.builtin.unarchive:
@@ -439,6 +487,10 @@
               else package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
+          retries: 3
+          delay: 5
+          until: vkv_download is succeeded
+          register: vkv_download
 
         - name: Install vkv binary
           ansible.builtin.copy:
@@ -469,6 +521,9 @@
             return_content: true
           register: safe_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: safe_release is succeeded
 
         - name: Download safe binary
           ansible.builtin.get_url:
@@ -476,6 +531,10 @@
             dest: /usr/local/bin/safe
             mode: "0755"
           become: true
+          retries: 3
+          delay: 5
+          until: safe_download is succeeded
+          register: safe_download
 
     # Install pug (Terraform state interactive management)
     - name: Check if pug is already installed
@@ -492,6 +551,9 @@
             return_content: true
           register: pug_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: pug_release is succeeded
 
         - name: Download pug binary
           ansible.builtin.unarchive:
@@ -499,6 +561,10 @@
               package_architecture }}.zip"
             dest: /tmp
             remote_src: true
+          retries: 3
+          delay: 5
+          until: pug_download is succeeded
+          register: pug_download
 
         - name: Install pug binary
           ansible.builtin.copy:
@@ -524,6 +590,9 @@
             return_content: true
           register: tfautomv_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: tfautomv_release is succeeded
 
         - name: Download tfautomv binary
           ansible.builtin.unarchive:
@@ -560,12 +629,19 @@
             return_content: true
           register: tfmv_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: tfmv_release is succeeded
 
         - name: Download tfmv binary
           ansible.builtin.unarchive:
             src: "https://github.com/suzuki-shunsuke/tfmv/releases/download/{{ tfmv_release.json.tag_name }}/tfmv_linux_{{ package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
+          retries: 3
+          delay: 5
+          until: tfmv_download is succeeded
+          register: tfmv_download
 
         - name: Install tfmv binary
           ansible.builtin.copy:
@@ -591,6 +667,9 @@
             return_content: true
           register: hcledit_release
           check_mode: false
+          retries: 3
+          delay: 5
+          until: hcledit_release is succeeded
 
         - name: Download hcledit binary
           ansible.builtin.unarchive:
@@ -598,6 +677,10 @@
               '') }}_linux_{{ package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
+          retries: 3
+          delay: 5
+          until: hcledit_download is succeeded
+          register: hcledit_download
 
         - name: Install hcledit binary
           ansible.builtin.copy:
