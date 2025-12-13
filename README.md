@@ -9,8 +9,6 @@
 
 This repository contains an Ansible playbook for automating workstation setup on macOS, Ubuntu, and Debian. It installs essential development tools, configures your development environment, and manages applications.
 
-**NEW:** Comprehensive workflow automation with CI/CD, pre-commit hooks, and automated testing! See [AUTOMATION.md](AUTOMATION.md) for details.
-
 ## Supported Operating Systems
 
 - **macOS** (Intel and Apple Silicon)
@@ -77,8 +75,6 @@ make test               # Run all tests
 make lint               # Run linters
 make help               # Show all commands
 ```
-
-See [AUTOMATION.md](AUTOMATION.md) for complete automation documentation.
 
 ## What Gets Installed
 

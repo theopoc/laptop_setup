@@ -479,7 +479,6 @@ git commit -m "WIP"
 
 ## Getting Help
 
-- Check [AUTOMATION.md](AUTOMATION.md) for workflow documentation
 - Review [CLAUDE.md](CLAUDE.md) for architecture details
 - Read existing roles for examples
 - Ask questions in PR discussions
