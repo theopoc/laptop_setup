@@ -4,6 +4,7 @@
   "extends": [
     "config:recommended"
   ],
+  "dependencyDashboardApproval": false,
   "timezone": "Europe/Paris",
   "schedule": [
     "at 2pm on saturday"
