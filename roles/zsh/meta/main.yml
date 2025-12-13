@@ -22,4 +22,5 @@ galaxy_info:
     - shell
     - terminal
 
-dependencies: []
+dependencies:
+  - role: base-tools
