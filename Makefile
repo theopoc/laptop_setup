@@ -79,19 +79,19 @@ pre-commit:
 ## syntax-check: Check playbook syntax
 syntax-check:
 	@echo "$(BLUE)Checking playbook syntax...$(NC)"
-	ansible-playbook main.yml --syntax-check
+	ansible-playbook main.yml --syntax-check --ask-become-pass
 	@echo "$(GREEN)Syntax check passed!$(NC)"
 
 ## check: Run playbook in check mode
 check: syntax-check
 	@echo "$(BLUE)Running playbook in check mode...$(NC)"
-	ansible-playbook main.yml --check --diff
+	ansible-playbook main.yml --check --diff --ask-become-pass
 
 ## run: Run full playbook
 run: syntax-check
 	@echo "$(BLUE)Running playbook...$(NC)"
 	@echo "$(YELLOW)You will be prompted for become password$(NC)"
-	ansible-playbook main.yml
+	ansible-playbook main.yml --ask-become-pass
 
 ## run-tag: Run specific role by tag
 run-tag:
