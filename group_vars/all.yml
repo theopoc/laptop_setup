@@ -82,6 +82,10 @@ debian_apt_packages:
   - unzip # ZIP archive extraction utility
   - firefox-esr # Firefox Extended Support Release (Debian standard)
 
+# Docker installation mode
+# Options: 'docker' (official Docker Desktop/Engine) or 'rancher-desktop'
+docker_mode: "docker"
+
 # Debian/Ubuntu-specific package lists
 ubuntu_apt_packages:
   - git # Version control system
