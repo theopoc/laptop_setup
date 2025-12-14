@@ -39,7 +39,7 @@
       when: ansible_facts.os_family == 'Darwin'
     - role: git
       tags: ["git"]
-    - role: rancher-desktop
-      tags: ["rancher-desktop"]
+    - role: docker
+      tags: ["docker"]
     - role: gpg
       tags: ["gpg"]

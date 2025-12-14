@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: MIT-0
 ---
 galaxy_info:
-  role_name: rancher_desktop
+  role_name: docker
   namespace: ansible_mgmt_laptop
   author: Theo Poccard
-  description: Rancher Desktop installation for macOS and Ubuntu
+  description: Docker installation (Docker Desktop/Engine or Rancher Desktop) for macOS, Ubuntu, and Debian
   license: MIT
   min_ansible_version: "2.14"
 
@@ -14,14 +14,17 @@ galaxy_info:
         - focal
         - jammy
         - noble
+    - name: Debian
+      versions:
+        - bookworm
     - name: MacOSX
       versions:
         - all
 
   galaxy_tags:
-    - rancher
     - docker
-    - kubernetes
     - containers
+    - rancher
+    - kubernetes
 
 dependencies: []

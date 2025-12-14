@@ -20,9 +20,9 @@
   - changed-files:
     - any-glob-to-any-file: 'roles/mise/**/*'
 
-'role: rancher-desktop':
+'role: docker':
   - changed-files:
-    - any-glob-to-any-file: 'roles/rancher-desktop/**/*'
+    - any-glob-to-any-file: 'roles/docker/**/*'
 
 'role: uv':
   - changed-files:

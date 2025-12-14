@@ -19,7 +19,7 @@ ansible-playbook main.yml
 **Run specific role using tags:**
 
 ```bash
-# Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings, uv
+# Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, docker, appstore, macos_settings, uv
 ansible-playbook main.yml --tags <tag_name>
 ```
 
@@ -66,7 +66,7 @@ molecule destroy   # Clean up when done
 - gpg
 - iterm2
 - mise
-- rancher-desktop
+- docker
 - uv
 - vim
 - warp
@@ -127,6 +127,7 @@ roles/cursor/
 - `cursor_*`: IDE extensions, settings, keybindings, MCP configuration
 - `mise_tools`: DevOps tools managed by mise (terraform, kubectl, helm, etc.)
 - `git_*`: Git user configuration
+- `docker_mode`: Docker installation mode ('docker' for official Docker Desktop/Engine, 'rancher-desktop' for Rancher Desktop)
 - `warp_workflows`: Custom terminal workflows for Warp
 - `appstore_apps`: Mac App Store applications (macOS only)
 - `display_applications`: Dock configuration (macOS only)

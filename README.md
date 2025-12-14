@@ -62,7 +62,7 @@ ansible-playbook main.yml --tags git  --ask-become-pass         # Configure Git
 ansible-playbook main.yml --tags base-tools --ask-become-pass   # Install base packages
 ```
 
-**Available tags:** `base-tools`, `claude-code`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`
+**Available tags:** `base-tools`, `claude-code`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `docker`, `appstore`, `macos_settings`, `uv`
 
 ## Quick Reference
 
@@ -79,7 +79,7 @@ make help               # Show all commands
 ## What Gets Installed
 
 **Cross-platform:**
-- Base tools (git, python, curl, jq, ripgrep, htop), DevOps tools (terraform, kubectl, helm, k9s, awscli), Claude Code CLI, Cursor IDE, Warp terminal, zsh + Oh My Zsh, Rancher Desktop, mise, vim, gpg
+- Base tools (git, python, curl, jq, ripgrep, htop), DevOps tools (terraform, kubectl, helm, k9s, awscli), Claude Code CLI, Cursor IDE, Warp terminal, zsh + Oh My Zsh, Docker (Desktop/Engine or Rancher Desktop), mise, vim, gpg
 
 **macOS:**
 - Homebrew, App Store apps (Magnet, Bitwarden), iTerm2, system settings, Rosetta 2 (Apple Silicon)
@@ -98,7 +98,7 @@ The playbook is organized into modular roles:
 - **mise**: Development tools version manager
 - **git**: Git configuration with OS-specific credential helpers
 - **warp**: Modern terminal (supports both macOS and Ubuntu)
-- **rancher-desktop**: Container runtime
+- **docker**: Container runtime (Docker Desktop/Engine or Rancher Desktop)
 - **vim**, **gpg**, **gita**, **copier**, **uv**: Cross-platform tools
 
 ### macOS-only roles
