@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0](https://github.com/TheoPoc/laptop_setup/compare/v2.7.0...v2.8.0) (2025-12-15)
+
+### ✨ Features
+
+* **docker:** add docker alternative to rancher desktop ([735b9aa](https://github.com/TheoPoc/laptop_setup/commit/735b9aa1c1f76e195674805e63b65e557d456cd1))
+
+### 🔧 Chores
+
+* change docker mode to rancher ([637e1aa](https://github.com/TheoPoc/laptop_setup/commit/637e1aabe30c7fe6f9483637f98d9817adb08eca))
+* fix path of installed docker role ([cd9ef40](https://github.com/TheoPoc/laptop_setup/commit/cd9ef409739bad69797c7a710839aeb8f51e0e4e))
+* ignore geerlingguy.docker role on yamllint ([dfd1bed](https://github.com/TheoPoc/laptop_setup/commit/dfd1bed55dbb7624bf721c1401f87b4d9907aaa4))
+* improve readybility of group_vars/all.yml ([930c4f7](https://github.com/TheoPoc/laptop_setup/commit/930c4f7226ae0c2cbc9ed5c76dfd6bc884270a3c))
+
 ## [2.7.0](https://github.com/TheoPoc/laptop_setup/compare/v2.6.0...v2.7.0) (2025-12-13)
 
 ### ✨ Features
