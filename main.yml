@@ -40,6 +40,10 @@
     - role: git
       tags: ["git"]
     - role: rancher-desktop
+      when: docker_mode == "rancher"
       tags: ["rancher-desktop"]
+    - role: geerlingguy.docker
+      when: docker_mode == "docker"
+      tags: ["docker"]
     - role: gpg
       tags: ["gpg"]

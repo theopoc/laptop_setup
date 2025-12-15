@@ -381,3 +381,10 @@ warp_workflows:
     workflow_tags:
       - mysql
     workflow_description: "Show all mysql grants for all users"
+
+############################### DOCKER / CONTAINER VARIABLES ###########################
+
+
+docker_mode: "rancher"
+
+########################################################################################
