@@ -4,12 +4,14 @@
     path: "/etc/mise"
     state: directory
     mode: "0755"
+  become: true
 
 - name: Configure mise
   ansible.builtin.template:
     src: config.toml.j2
     dest: "/etc/mise/config.toml"
     mode: "0644"
+  become: true
 
 - name: Install global tools
   ansible.builtin.command: "mise install -yq --cd {{ ansible_facts.env.HOME }}"

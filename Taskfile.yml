@@ -24,12 +24,6 @@ tasks:
           fi
         platforms: [darwin]
 
-  setup:
-    desc: Initial development environment setup
-    cmds:
-      - echo "Setting up development environment..."
-      - bash scripts/dev-setup.sh
-
   pre-commit:
     desc: Run pre-commit on all files
     cmds:
