@@ -24,19 +24,19 @@ This repository contains an Ansible playbook for automating workstation setup on
 - Log in to your Apple ID (for App Store installations)
 
 **Ubuntu/Debian:**
-- Update system: `sudo apt update && sudo apt upgrade -y`
-- Install Git: `sudo apt install -y git`
-
+```
+sudo apt update && sudo apt upgrade -y && sudo apt install -y git curl
+```
 ### Setup
 
 1. Clone and run the setup script:
 
    ```bash
-   git clone https://github.com/TheoPoc/laptop_setup.git
-   cd laptop_setup
-   ./setup.sh
+   git clone --branch feat/implement-taskfile-mise https://github.com/TheoPoc/laptop_setup.git
+   curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+   mise install -yq --cd laptop_setup && eval "$(mise activate bash)"
    ```
-
+> Make sure you have mise installed
 2. **Configure your settings** in [group_vars/all.yml](group_vars/all.yml):
 
    ```yaml

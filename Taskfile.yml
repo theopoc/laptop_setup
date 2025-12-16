@@ -1,0 +1,156 @@
+---
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: init
+
+  init:
+    desc: Init stack
+    cmds:
+      - cmd: mise install
+      - cmd: pre-commit install
+      - cmd: uv sync --frozen
+      - cmd: uv run ansible-galaxy install -r requirements.yml
+      - cmd: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+          # Setup Homebrew environment
+          if [[ -x /opt/homebrew/bin/brew ]]; then
+              eval "$(/opt/homebrew/bin/brew shellenv)"
+          elif [[ -x /usr/local/bin/brew ]]; then
+              eval "$(/usr/local/bin/brew shellenv)"
+          fi
+        platforms: [darwin]
+
+  setup:
+    desc: Initial development environment setup
+    cmds:
+      - echo "Setting up development environment..."
+      - bash scripts/dev-setup.sh
+
+  pre-commit:
+    desc: Run pre-commit on all files
+    cmds:
+      - echo "Running pre-commit hooks..."
+      - pre-commit run --all-files
+
+  check:
+    desc: Run playbook in check mode
+    cmds:
+      - echo "Running playbook in check mode..."
+      - ansible-playbook main.yml --check --diff --ask-become-pass
+
+  run:
+    desc: Run full playbook
+    cmds:
+      - uv run ansible-playbook main.yml --ask-become-pass
+
+  # run-tag:
+  #   desc: Run specific role by tag
+  #   requires:
+  #     vars:
+  #       - TAG
+  #   cmds:
+  #     - echo "Running role: {{.TAG}}"
+  #     - ansible-playbook main.yml --tags {{.TAG}}
+
+
+  lint:
+    desc: Run all linters
+    cmds:
+      - ansible-lint -v
+      - yamllint -c .yamllint .
+      - ansible-playbook main.yml --syntax-check --ask-become-pass
+      - echo "All linting passed!"
+
+  molecule-test:
+    desc: Run Molecule tests for all roles
+    cmds:
+      - echo "Running Molecule tests for all roles..."
+      - |
+        for role in roles/*/molecule; do
+          if [ -d "$role" ]; then
+            role_name=$(echo $role | cut -d'/' -f2)
+            echo "Testing role: $role_name"
+            cd roles/$role_name && molecule test && cd ../..
+          fi
+        done
+      - echo "All Molecule tests passed!"
+
+  # test-role:
+  #   desc: Run Molecule tests for specific role
+  #   requires:
+  #     vars:
+  #       - ROLE
+  #   preconditions:
+  #     - sh: test -d "roles/{{.ROLE}}/molecule"
+  #       msg: "Role {{.ROLE}} does not have Molecule tests"
+  #   cmds:
+  #     - echo "Testing role: {{.ROLE}}"
+  #     - cd roles/{{.ROLE}} && molecule test
+
+  # molecule-converge:
+  #   desc: Run Molecule converge for specific role
+  #   requires:
+  #     vars:
+  #       - ROLE
+  #   cmds:
+  #     - echo "Running Molecule converge for: {{.ROLE}}"
+  #     - cd roles/{{.ROLE}} && molecule converge
+
+  # molecule-verify:
+  #   desc: Run Molecule verify for specific role
+  #   requires:
+  #     vars:
+  #       - ROLE
+  #   cmds:
+  #     - echo "Running Molecule verify for: {{.ROLE}}"
+  #     - cd roles/{{.ROLE}} && molecule verify
+
+  # molecule-login:
+  #   desc: Login to Molecule test container
+  #   requires:
+  #     vars:
+  #       - ROLE
+  #   interactive: true
+  #   cmds:
+  #     - echo "Logging into Molecule container for: {{.ROLE}}"
+  #     - cd roles/{{.ROLE}} && molecule login
+
+  # molecule-destroy:
+  #   desc: Destroy Molecule test container
+  #   requires:
+  #     vars:
+  #       - ROLE
+  #   cmds:
+  #     - echo "Destroying Molecule container for: {{.ROLE}}"
+  #     - cd roles/{{.ROLE}} && molecule destroy
+
+  # test:
+  #   desc: Run all tests
+  #   deps:
+  #     - lint
+  #     - molecule-test
+  #   cmds:
+  #     - echo "All tests passed!"
+
+  # list-tags:
+  #   desc: List all available tags
+  #   cmds:
+  #     - echo "Available tags:"
+  #     - grep -h "tags:" main.yml | grep -v "#" | sed 's/.*tags://' | tr -d '[]' | tr ',' '\n' | sed 's/^[ \t]*//' | sort -u
+
+
+  # update-galaxy:
+  #   desc: Update Ansible Galaxy roles
+  #   cmds:
+  #     - echo "Updating Ansible Galaxy roles..."
+  #     - ansible-galaxy install -r requirements.yml --force
+
+  version:
+    desc: Show versions of installed tools
+    cmds:
+      - cat .mise.toml |grep -vE "\[tools\]"
+      - uv pip list
