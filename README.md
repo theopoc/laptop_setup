@@ -34,7 +34,8 @@ sudo apt update && sudo apt upgrade -y && sudo apt install -y git curl
    ```bash
    git clone --branch feat/implement-taskfile-mise https://github.com/TheoPoc/laptop_setup.git
    curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
-   mise install -yq --cd laptop_setup && eval "$(mise activate bash)"
+   cd laptop_setup
+   mise install -yq && eval "$(mise activate bash)"
    ```
 > Make sure you have mise installed
 2. **Configure your settings** in [group_vars/all.yml](group_vars/all.yml):
