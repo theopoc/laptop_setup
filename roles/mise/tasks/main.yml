@@ -1,6 +1,14 @@
 ---
+- name: Check if mise is already installed
+  ansible.builtin.command: which mise
+  register: mise_check
+  changed_when: false
+  failed_when: false
+  tags: ["mise"]
+
 - name: Include OS-specific installation tasks
   ansible.builtin.include_tasks: "install-{{ ansible_facts.os_family }}.yml"
+  when: mise_check.rc != 0
   tags: ["mise"]
 
 - name: Configure mise
