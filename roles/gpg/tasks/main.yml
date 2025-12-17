@@ -12,15 +12,14 @@
         - "vars"
   tags: gpg
 
-- name: Install GPG using OS-specific tasks
-  ansible.builtin.include_tasks: "{{ lookup('ansible.builtin.first_found', params) }}"
-  vars:
-    params:
-      files:
-        - "install-{{ ansible_facts.os_family }}.yml"
-        - "install.yml"
-      paths:
-        - "tasks"
+- name: Install GPG using Debian specific tasks
+  ansible.builtin.include_tasks: "install-Debian.yml"
+  when: ansible_facts.distribution == "Debian"
+  tags: gpg
+
+- name: Install GPG using Ubuntu specific tasks
+  ansible.builtin.include_tasks: "install-Ubuntu.yml"
+  when: ansible_facts.distribution == "Ubuntu"
   tags: gpg
 
 - name: Configure GPG using OS-specific tasks
