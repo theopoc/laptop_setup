@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0](https://github.com/TheoPoc/laptop_setup/compare/v2.9.2...v2.10.0) (2025-12-17)
+
+### ✨ Features
+
+* improve git role ([ccfac60](https://github.com/TheoPoc/laptop_setup/commit/ccfac60513f742b1c0e8a69b2a6fa17c7dbf0cc4))
+
+### 🐛 Bug Fixes
+
+* dont install ssm via homebrew ([db58318](https://github.com/TheoPoc/laptop_setup/commit/db58318d2654ea09bddf303e17487dea97d66586))
+* **gpg:** lookup first found ([1056bfd](https://github.com/TheoPoc/laptop_setup/commit/1056bfd4efa659d2b4a4bed19525d656807fdd11))
+* install macvim for macos ([f65f569](https://github.com/TheoPoc/laptop_setup/commit/f65f56964fbebd96a0e20928f93844e9db2d1f65))
+* installation of homebrew ([b52318b](https://github.com/TheoPoc/laptop_setup/commit/b52318bc0e134fa070f8c7e58416e421e77928fd))
+
+### 📚 Documentation
+
+* update README ([4ddecf1](https://github.com/TheoPoc/laptop_setup/commit/4ddecf1b7e0ede5409cce8fc5a553235f0bbd4da))
+
 ## [2.9.2](https://github.com/TheoPoc/laptop_setup/compare/v2.9.1...v2.9.2) (2025-12-17)
 
 ### 🐛 Bug Fixes
