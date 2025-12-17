@@ -25,19 +25,20 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 **Ubuntu/Debian:**
 ```
-sudo apt update && sudo apt upgrade -y && sudo apt install -y git curl
+sudo apt update && \
+sudo apt upgrade -y && \
+sudo apt install -y git curl
 ```
 ### Setup
 
 1. Clone and run the setup script:
 
    ```bash
-   git clone --branch feat/implement-taskfile-mise https://github.com/TheoPoc/laptop_setup.git
+   git clone https://github.com/TheoPoc/laptop_setup.git
    curl https://mise.run | sh
    cd laptop_setup
    mise trust -qa && mise install -yq && eval "$(mise activate bash)"
    ```
-> Make sure you have mise installed
 2. **Configure your settings** in [group_vars/all.yml](group_vars/all.yml):
 
    ```yaml
@@ -47,21 +48,48 @@ sudo apt update && sudo apt upgrade -y && sudo apt install -y git curl
 
    Customize packages, tools, IDE extensions, and other preferences in the same file
 
+3. Initialize the stack (install tools and dependencies):
+
+   ```bash
+   task init
+   ```
+
+4. Run the playbook:
+
+   ```bash
+   task run
+   ```
+
 ## Usage
 
-Initialize the stack (install tools and dependencies):
+You can see all availables commands with
+   ```bash
+   task
+   ```
+
+Common task commands:
 
 ```bash
-task init
+task ansiblelint:               Launch ansible lint              (aliases: alint)
+task ansiblesyntaxecheck:       Launch ansible syntax check      (aliases: ascheck)
+task check:                     Run playbook in check mode
+task default:                   Display helper
+task full-test:                 Run Molecule test on all roles
+task init:                      Init stack
+task lint:                      Run all linters
+task list-tags:                 List all available tags
+task pre-commit:                Run pre-commit on all files
+task run:                       Run full playbook
+task update-galaxy:             Update Ansible Galaxy roles
+task version:                   Show versions of installed tools
+task yamllint:                  Run yamllint      (aliases: ylint)
+task converge:*:                Run Molecule converge for specific role
+task destroy:*:                 Destroy Molecule instances for specific role
+task login:*:*:                 Login to Molecule test container
+task run:*:                     Run playbook by tag
+task test:*:                    Run Molecule tests for specific role
+task verify:*:                  Run Molecule verify for specific role
 ```
-
-Run the full playbook:
-
-```bash
-task run
-```
-
-Run specific roles with tags:
 
 ```bash
 task run cursor              # Install Cursor IDE
@@ -77,25 +105,6 @@ task check
 
 **Available tags:** `base-tools`, `claude-code`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`, and more
 
-## Quick Reference
-
-Common task commands:
-
-```bash
-task init                # Initialize stack (install tools, dependencies, and Ansible roles)
-task run                 # Run full playbook
-task run <tag>           # Run playbook by tag (e.g., task run cursor)
-task check               # Run playbook in check mode (dry-run)
-task lint                # Run all linters (ansible-lint, yamllint, syntax-check)
-task pre-commit          # Run pre-commit hooks on all files
-task test <role>         # Run Molecule tests for a specific role
-task full-test           # Run Molecule tests for all roles
-task list-tags           # List all available tags
-task update-galaxy       # Update Ansible Galaxy roles
-task version             # Show versions of installed tools
-task --list-all          # Show all available tasks with descriptions
-```
-
 ## What Gets Installed
 
 **Cross-platform:**
@@ -105,7 +114,7 @@ task --list-all          # Show all available tasks with descriptions
 - Homebrew, App Store apps (Magnet, Bitwarden), iTerm2, system settings, Rosetta 2 (Apple Silicon)
 
 **Ubuntu/Debian:**
-- APT + Snap packages, libsecret credential helper
+- APT + Snap packages
 
 ## Architecture
 
