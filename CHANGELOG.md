@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0](https://github.com/TheoPoc/laptop_setup/compare/v2.8.0...v2.9.0) (2025-12-17)
+
+### ✨ Features
+
+* dont verify gpg key and ensure answer yes ([8780f25](https://github.com/TheoPoc/laptop_setup/commit/8780f259a0e415acc76c9eddbfc591276a0fc425))
+* implement taskfile and mise ([9dc2a74](https://github.com/TheoPoc/laptop_setup/commit/9dc2a741b0bbece586b694ce912e5d743d78d9f7))
+* improve Taskfile ([aeb347c](https://github.com/TheoPoc/laptop_setup/commit/aeb347cf58ca5cab7cf6fb8e915b8c7b17cc73bf))
+* **mise:** simplify mise installation ([3786d39](https://github.com/TheoPoc/laptop_setup/commit/3786d398ce6cfb90da926cbcb143e7357b8291d9))
+* **mise:** trust mise ([8c13df9](https://github.com/TheoPoc/laptop_setup/commit/8c13df945c52235ce813be252ea6a0cd053b1e16))
+* **mise:** use system wide for mise configuration ([901265b](https://github.com/TheoPoc/laptop_setup/commit/901265b551d9e534be09eb4834384c174cfe3182))
+* **taskfile:** improve list-tags command to output only tags ([268273a](https://github.com/TheoPoc/laptop_setup/commit/268273abe117d053366e5292bd935bd1d23665ea))
+
+### 🐛 Bug Fixes
+
+* **mise:** add root privileges for mise configuration ([47917a2](https://github.com/TheoPoc/laptop_setup/commit/47917a21b796ebfa1da8dff3fe3e46c1d3f3e262))
+* **mise:** path of mise configuration ([fc2bd00](https://github.com/TheoPoc/laptop_setup/commit/fc2bd00b2a97c2272faf4c85ebd06088caee452a))
+
+### 📚 Documentation
+
+* **readme:** update to reflect Taskfile.yml and task runner workflow ([643bd79](https://github.com/TheoPoc/laptop_setup/commit/643bd79d7be52b9bcc8cc296ad44685af2af5019))
+* **taskfile:** Update documentation for Taskfile.yml improvements ([2ddb27f](https://github.com/TheoPoc/laptop_setup/commit/2ddb27f50f137c6eb33b80e86b735232aaccd2dd))
+
+### 🔧 Chores
+
+* update README ([6e20321](https://github.com/TheoPoc/laptop_setup/commit/6e2032137804a41a27c808fba12584971d948863))
+
 ## [2.8.0](https://github.com/TheoPoc/laptop_setup/compare/v2.7.0...v2.8.0) (2025-12-15)
 
 ### ✨ Features
