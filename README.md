@@ -24,19 +24,20 @@ This repository contains an Ansible playbook for automating workstation setup on
 - Log in to your Apple ID (for App Store installations)
 
 **Ubuntu/Debian:**
-- Update system: `sudo apt update && sudo apt upgrade -y`
-- Install Git: `sudo apt install -y git`
-
+```
+sudo apt update && sudo apt upgrade -y && sudo apt install -y git curl
+```
 ### Setup
 
 1. Clone and run the setup script:
 
    ```bash
-   git clone https://github.com/TheoPoc/laptop_setup.git
+   git clone --branch feat/implement-taskfile-mise https://github.com/TheoPoc/laptop_setup.git
+   curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
    cd laptop_setup
-   ./setup.sh
+   mise trust -qa && mise install -yq && eval "$(mise activate bash)"
    ```
-
+> Make sure you have mise installed
 2. **Configure your settings** in [group_vars/all.yml](group_vars/all.yml):
 
    ```yaml
@@ -48,32 +49,51 @@ This repository contains an Ansible playbook for automating workstation setup on
 
 ## Usage
 
+Initialize the stack (install tools and dependencies):
+
+```bash
+task init
+```
+
 Run the full playbook:
 
 ```bash
-ansible-playbook main.yml --ask-become-pass
+task run
 ```
 
 Run specific roles with tags:
 
 ```bash
-ansible-playbook main.yml --tags cursor  --ask-become-pass      # Install Cursor IDE
-ansible-playbook main.yml --tags git  --ask-become-pass         # Configure Git
-ansible-playbook main.yml --tags base-tools --ask-become-pass   # Install base packages
+task run cursor              # Install Cursor IDE
+task run git                 # Configure Git
+task run base-tools          # Install base packages
 ```
 
-**Available tags:** `base-tools`, `claude-code`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`
+Run playbook in check mode (dry-run):
+
+```bash
+task check
+```
+
+**Available tags:** `base-tools`, `claude-code`, `cursor`, `mise`, `zsh`, `git`, `warp`, `vim`, `gpg`, `rancher-desktop`, `appstore`, `macos_settings`, `uv`, and more
 
 ## Quick Reference
 
-Common Makefile commands:
+Common task commands:
 
 ```bash
-make setup              # One-command setup
-make run                # Run full playbook
-make test               # Run all tests
-make lint               # Run linters
-make help               # Show all commands
+task init                # Initialize stack (install tools, dependencies, and Ansible roles)
+task run                 # Run full playbook
+task run <tag>           # Run playbook by tag (e.g., task run cursor)
+task check               # Run playbook in check mode (dry-run)
+task lint                # Run all linters (ansible-lint, yamllint, syntax-check)
+task pre-commit          # Run pre-commit hooks on all files
+task test <role>         # Run Molecule tests for a specific role
+task full-test           # Run Molecule tests for all roles
+task list-tags           # List all available tags
+task update-galaxy       # Update Ansible Galaxy roles
+task version             # Show versions of installed tools
+task --list-all          # Show all available tasks with descriptions
 ```
 
 ## What Gets Installed

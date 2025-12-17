@@ -3,7 +3,9 @@
 
 - name: Install dependencies via apt
   ansible.builtin.apt:
-    name: "zip"
+    name:
+      - zip
+      - unzip
     state: present
     update_cache: true
   become: true

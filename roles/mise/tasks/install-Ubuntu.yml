@@ -6,6 +6,8 @@
       - gpg
       - wget
       - git
+      - zip
+      - unzip
     state: present
     update_cache: true
   become: true

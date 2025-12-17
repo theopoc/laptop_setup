@@ -8,32 +8,69 @@ This is an Ansible playbook repository for automating workstation setup on macOS
 
 ## Common Commands
 
+### Task Management
+
+This project uses **Taskfile.yml** for managing development and deployment tasks. Run tasks with:
+
+```bash
+task <task_name>
+```
+
+**Key tasks:**
+
+```bash
+task init                # Initialize stack (install tools, dependencies, and Ansible roles)
+task run                 # Run full playbook
+task run <tag>           # Run playbook by tag (e.g., task run cursor)
+task check               # Run playbook in check mode (dry-run)
+task lint                # Run all linters (ansible-lint, yamllint, syntax-check)
+task pre-commit          # Run pre-commit hooks on all files
+task test <role>         # Run Molecule tests for a specific role
+task converge <role>     # Run Molecule converge for a specific role
+task verify <role>       # Run Molecule verify for a specific role
+task login <role> <host> # Login to Molecule test container
+task destroy <role>      # Destroy Molecule test container for a specific role
+task full-test           # Run Molecule tests for all roles
+task list-tags           # List all available Ansible tags
+task update-galaxy       # Update Ansible Galaxy roles
+task version             # Show versions of installed tools
+```
+
 ### Running the Playbook
 
 **Full playbook execution:**
 
 ```bash
-ansible-playbook main.yml
+task run
+# or directly with ansible-playbook:
+uv run ansible-playbook main.yml --ask-become-pass
 ```
 
 **Run specific role using tags:**
 
 ```bash
-# Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings, uv
-ansible-playbook main.yml --tags <tag_name>
+# Using the convenience task (recommended):
+task run cursor
+
+# Or directly with ansible-playbook:
+# Available tags: base-tools, cursor, mise, zsh, git, warp, vim, gpg, rancher-desktop, appstore, macos_settings, uv, claude-code
+uv run ansible-playbook main.yml --tags <tag_name> --ask-become-pass
 ```
 
 **Examples:**
 
 ```bash
-# Install only Cursor IDE
-ansible-playbook main.yml --tags cursor
+# Install only Cursor IDE (using task)
+task run cursor
 
-# Configure Git only
-ansible-playbook main.yml --tags git
+# Configure Git only (using task)
+task run git
 
-# Install Cursor IDE and Git
-ansible-playbook main.yml --tags cursor,git
+# Install Cursor IDE and Git (using ansible-playbook directly)
+uv run ansible-playbook main.yml --tags cursor,git --ask-become-pass
+
+# List all available tags
+task list-tags
 ```
 
 ### Testing with Molecule
@@ -41,17 +78,33 @@ ansible-playbook main.yml --tags cursor,git
 **Test a specific role:**
 
 ```bash
-cd roles/<role_name>
-molecule test
+task test <role_name>
+```
+
+**Test all roles:**
+
+```bash
+task full-test
 ```
 
 **Test without destroying the container (for debugging):**
 
 ```bash
-molecule converge  # Run playbook
-molecule verify    # Run tests
-molecule login     # SSH into container
-molecule destroy   # Clean up when done
+task converge <role_name>  # Run playbook
+task verify <role_name>    # Run tests
+task login <role_name> <host>  # SSH into container (get host name from molecule list)
+task destroy <role_name>   # Clean up when done
+```
+
+**Examples:**
+
+```bash
+task test base-tools       # Test base-tools role
+task full-test             # Run Molecule tests for all roles
+task converge cursor       # Setup cursor role test container
+task verify cursor         # Verify cursor role configuration
+task login cursor default  # Login to cursor role test container
+task destroy cursor        # Clean up cursor role test container
 ```
 
 **Roles with Molecule tests:**
@@ -82,7 +135,47 @@ molecule destroy   # Clean up when done
 ### Linting
 
 ```bash
-ansible-lint
+task lint
+```
+
+This runs the following linting checks in parallel:
+- `task ansiblelint` (alias: `task alint`) - Ansible linting (`uv run ansible-lint -v`)
+- `task yamllint` (alias: `task ylint`) - YAML validation (`uv run yamllint -c .yamllint --no-warnings .`)
+- `task ansiblesyntaxecheck` (alias: `task ascheck`) - Playbook syntax validation (`uv run ansible-playbook main.yml --syntax-check`)
+
+Individual linters can be run separately:
+
+```bash
+task ansiblelint           # Run only Ansible linter
+task alint                 # Short alias for ansible linter
+task yamllint              # Run only YAML linter
+task ylint                 # Short alias for YAML linter
+task ansiblesyntaxecheck   # Run only syntax check
+task ascheck               # Short alias for syntax check
+```
+
+### Utility Tasks
+
+```bash
+task list-tags             # List all available Ansible tags
+task update-galaxy         # Update Ansible Galaxy roles to latest versions
+```
+
+### Advanced Features
+
+**Pass additional arguments to tasks using `--` separator:**
+
+```bash
+task run cursor -- --extra-vars "some_var=value"       # Pass extra vars to playbook
+task test base-tools -- --verbosity=v                  # Pass verbosity to molecule
+task check -- --diff                                   # Pass options to check task
+```
+
+**Available tasks can be listed:**
+
+```bash
+task --list-all            # Show all available tasks with descriptions
+task                       # Display task list (same as above, the default task)
 ```
 
 ## Architecture
@@ -117,6 +210,18 @@ roles/cursor/
 └── molecule/                 # Testing infrastructure
 ```
 
+### Tool Management with mise
+
+This project uses **mise** (formerly rtx) as a polyglot runtime manager defined in `.mise.toml`:
+
+**Managed tools:**
+- `python`: Python runtime (currently 3.14)
+- `uv`: Python package manager and installer (currently 0.9.17)
+- `task`: Task runner for running Taskfile.yml commands (currently 3.45.5)
+- `pre-commit`: Git hook framework (currently 4.5.0)
+
+These tools are installed during `task init` and are available in your shell environment. New shells should activate mise: `eval "$(mise activate bash)"` (or your shell).
+
 ### Configuration Management
 
 **Single source of truth:** All user-configurable variables are defined in `group_vars/all.yml`
@@ -125,7 +230,7 @@ roles/cursor/
 
 - `homebrew`: Package manager configuration for macOS (taps, formulae, casks)
 - `cursor_*`: IDE extensions, settings, keybindings, MCP configuration
-- `mise_tools`: DevOps tools managed by mise (terraform, kubectl, helm, etc.)
+- `mise_tools`: DevOps tools managed by mise in Ansible (terraform, kubectl, helm, etc.)
 - `git_*`: Git user configuration
 - `warp_workflows`: Custom terminal workflows for Warp
 - `appstore_apps`: Mac App Store applications (macOS only)
@@ -160,7 +265,7 @@ Test configurations disable features incompatible with containers (e.g., `cursor
 - Use `block:` and `rescue:` for error handling
 - Leverage Jinja2 templates for dynamic configurations
 - Use handlers for service restarts only when necessary
-- Validate playbooks with `ansible-lint` before running
+- Validate playbooks with `task lint` before running (runs ansible-lint, yamllint, and syntax checks)
 
 ### Testing Workflow - CRITICAL
 
@@ -174,8 +279,7 @@ Test configurations disable features incompatible with containers (e.g., `cursor
 3. **Run Molecule tests** to ensure everything works:
 
    ```bash
-   cd roles/<role_name>
-   molecule test
+   task test <role_name>
    ```
 
 4. **Fix any failures** until tests pass successfully
@@ -293,15 +397,49 @@ This repository follows a strict PR-based workflow for all code changes:
 
 ## Important Notes
 
+### Migration from setup.sh to mise
+
+**Breaking change:** The `setup.sh` and `scripts/dev-setup.sh` scripts have been removed. The project now uses **mise** for tool management and **Taskfile.yml** for task automation.
+
+**Old workflow:**
+```bash
+./setup.sh  # No longer available
+```
+
+**New workflow:**
+```bash
+curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+mise trust -qa && mise install -yq && eval "$(mise activate bash)"
+task init
+```
+
 ### Initial Setup
 
 Users must:
 
-1. Run `./setup.sh` to install dependencies and Ansible (supports macOS, Ubuntu, and Debian)
-   - macOS: Installs Homebrew and Ansible
-   - Ubuntu/Debian: Installs Python 3, pip, and Ansible
-2. Configure `hosts` file with their username
-3. Edit `group_vars/all.yml` with personal settings (Git config, packages, etc.)
+1. **Install mise** (macOS, Ubuntu, and Debian):
+   ```bash
+   curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+   ```
+
+2. **Clone the repository and initialize the stack:**
+   ```bash
+   git clone https://github.com/TheoPoc/laptop_setup.git
+   cd laptop_setup
+   mise trust -qa && mise install -yq && eval "$(mise activate bash)"
+   task init
+   ```
+   This installs all dependencies via mise (Python, uv, task, pre-commit) and runs the Ansible Galaxy role installation.
+
+3. **Configure `hosts` file** with your username
+
+4. **Edit `group_vars/all.yml`** with personal settings (Git config, packages, etc.)
+
+**What happens during `task init`:**
+- Installs all tools defined in `.mise.toml` (Python, uv, task, pre-commit)
+- Installs Ansible Galaxy roles from `requirements.yml`
+- Installs Python dependencies via `uv sync --frozen`
+- Installs Homebrew (macOS only)
 
 ### macOS-Specific Requirements
 
@@ -314,7 +452,7 @@ Users must:
 
 - System must be updated first
 - Git must be pre-installed (to clone the repository)
-- Python3 and pip are automatically installed by `setup.sh`
+- Python3 and pip are automatically installed by mise (during `task init`)
 - Uses snap for some application installations (Ubuntu)
 - Uses direct downloads for some applications (Debian)
 
@@ -476,8 +614,19 @@ To enable Renovate on this repository:
 - Use `BREAKING CHANGE:` in commit footer for major version bumps
 
 ## Active Technologies
-- Ansible 2.15+ (YAML-based playbook automation) (001-claude-code-role)
-- N/A (installation role, no persistent data storage) (001-claude-code-role)
+- **Ansible 2.15+** - YAML-based playbook automation
+- **mise** - Polyglot runtime manager for tool versions (Python, uv, task, pre-commit)
+- **Taskfile.yml** - Task runner for orchestrating common development operations
+- **uv** - Fast Python package manager and installer
+- **pre-commit** - Git hook framework for code quality checks
+- **Molecule** - Testing framework for Ansible roles
+- **semantic-release** - Automated versioning and release management
+- **Renovate** - Automated dependency updates
 
 ## Recent Changes
-- 001-claude-code-role: Added Ansible 2.15+ (YAML-based playbook automation)
+- **feat/implement-taskfile-mise**: Implemented Taskfile.yml for task automation and moved tool management to mise
+  - Removed `setup.sh` and `scripts/dev-setup.sh`
+  - Added `.mise.toml` for managing Python, uv, task, and pre-commit versions
+  - Added `Taskfile.yml` for common development tasks (init, run, lint, test, etc.)
+  - Simplified project initialization workflow
+  - Tool versions are now centrally managed and reproducible
