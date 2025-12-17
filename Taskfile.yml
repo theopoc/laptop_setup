@@ -3,6 +3,7 @@ version: '3'
 
 tasks:
   default:
+    desc: Display helper
     cmds:
       - cmd: task --list-all
     silent: true
@@ -24,6 +25,7 @@ tasks:
               eval "$(/usr/local/bin/brew shellenv)"
           fi
         platforms: [darwin]
+    run: once
 
   pre-commit:
     desc: Run pre-commit on all files
@@ -35,19 +37,19 @@ tasks:
     desc: Run playbook in check mode
     cmds:
       - echo "Running playbook in check mode..."
-      - uv run ansible-playbook main.yml --check --diff --ask-become-pass
+      - uv run ansible-playbook main.yml --check --diff --ask-become-pass {{.CLI_ARGS}}
 
   run:
     desc: Run full playbook
     cmds:
-      - uv run ansible-playbook main.yml --ask-become-pass
+      - uv run ansible-playbook main.yml --ask-become-pass {{.CLI_ARGS}}
 
   run:*:
     desc: Run playbook by tag
     vars:
       TAG: '{{index .MATCH 0}}'
     cmds:
-      - uv run ansible-playbook main.yml --tags {{.TAG}} --ask-become-pass
+      - uv run ansible-playbook main.yml --tags {{.TAG}} --ask-become-pass {{.CLI_ARGS}}
 
   lint:
     desc: Run all linters
@@ -59,36 +61,44 @@ tasks:
       - echo "All linting passed!"
 
   ansiblelint:
+    desc: Launch ansible lint
     aliases:
       - alint
     cmds:
       - uv run ansible-lint -v
 
   yamllint:
+    desc: Run yamllint
     aliases:
       - ylint
     cmds:
       - uv run yamllint -c .yamllint --no-warnings .
 
   ansiblesyntaxecheck:
+    desc: Launch ansible syntax check
     aliases:
       - ascheck
     cmds:
       - uv run ansible-playbook main.yml --syntax-check --ask-become-pass
 
-        #  molecule-test:
-        #    desc: Run Molecule tests for all roles
-        #    cmds:
-        #      - echo "Running Molecule tests for all roles..."
-        #      - |
-        #        for role in roles/*/molecule; do
-        #          if [ -d "$role" ]; then
-        #            role_name=$(echo $role | cut -d'/' -f2)
-        #            echo "Testing role: $role_name"
-        #            cd roles/$role_name && molecule test && cd ../..
-        #          fi
-        #        done
-        #      - echo "All Molecule tests passed!"
+  full-test:
+    desc: Run Molecule test on all roles
+    vars:
+      ROLES_LIST:
+        sh: "ls -d roles/*/ | xargs -n1 basename"
+    cmds:
+      - for: { var: ROLES_LIST }
+        task: test
+        vars:
+          ROLE: '{{.ITEM}}'
+
+  test:
+    internal: true
+    dir: roles/{{.ROLE}}
+    cmds:
+      - echo "Launching test molecule for {{.ROLE}}"
+      - uv run molecule test {{.CLI_ARGS}}
+    silent: true
 
   test:*:
     desc: Run Molecule tests for specific role
@@ -99,7 +109,7 @@ tasks:
     vars:
       ROLE: '{{index .MATCH 0}}'
     cmds:
-      - uv run molecule test
+      - uv run molecule test {{.CLI_ARGS}}
 
   converge:*:
     desc: Run Molecule converge for specific role
@@ -110,7 +120,7 @@ tasks:
     vars:
       ROLE: '{{index .MATCH 0}}'
     cmds:
-      - uv run molecule converge
+      - uv run molecule converge {{.CLI_ARGS}}
 
   verify:*:
     desc: Run Molecule verify for specific role
@@ -121,7 +131,7 @@ tasks:
     vars:
       ROLE: '{{index .MATCH 0}}'
     cmds:
-      - uv run molecule verify
+      - uv run molecule verify {{.CLI_ARGS}}
 
   destroy:*:
     desc: Destroy Molecule instances for specific role
@@ -132,7 +142,7 @@ tasks:
     vars:
       ROLE: '{{index .MATCH 0}}'
     cmds:
-      - uv run molecule destroy
+      - uv run molecule destroy {{.CLI_ARGS}}
 
   login:*:*:
     desc: Login to Molecule test container
@@ -147,22 +157,16 @@ tasks:
       - uv run molecule list -f simple
       - uv run molecule login --host {{.HOST}}
 
-  # fulltest:
-  #   desc: Run all Molecule tests
-  #   cmds:
-  #     - uv run molecule test
-
-  # list-tags:
-  #   desc: List all available tags
-  #   cmds:
-  #     - echo "Available tags:"
-  #     - grep -h "tags:" main.yml | grep -v "#" | sed 's/.*tags://' | tr -d '[]' | tr ',' '\n' | sed 's/^[ \t]*//' | sort -u
+  list-tags:
+    desc: List all available tags
+    cmds:
+      - uv run ansible-playbook main.yml --list-tags | grep "TASK TAGS:" | sed 's/.*\[//;s/\].*//' | tr ',' '\n' | sed 's/^ *//;s/ *$//' | grep .
 
   update-galaxy:
     desc: Update Ansible Galaxy roles
     cmds:
       - echo "Updating Ansible Galaxy roles..."
-      - ansible-galaxy install -r requirements.yml --force
+      - uv run ansible-galaxy install -r requirements.yml --force
     silent: true
 
   version:

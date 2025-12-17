@@ -21,14 +21,18 @@ task <task_name>
 ```bash
 task init                # Initialize stack (install tools, dependencies, and Ansible roles)
 task run                 # Run full playbook
+task run <tag>           # Run playbook by tag (e.g., task run cursor)
 task check               # Run playbook in check mode (dry-run)
 task lint                # Run all linters (ansible-lint, yamllint, syntax-check)
 task pre-commit          # Run pre-commit hooks on all files
 task test <role>         # Run Molecule tests for a specific role
 task converge <role>     # Run Molecule converge for a specific role
 task verify <role>       # Run Molecule verify for a specific role
-task login <role>        # Login to Molecule test container for a specific role
+task login <role> <host> # Login to Molecule test container
 task destroy <role>      # Destroy Molecule test container for a specific role
+task full-test           # Run Molecule tests for all roles
+task list-tags           # List all available Ansible tags
+task update-galaxy       # Update Ansible Galaxy roles
 task version             # Show versions of installed tools
 ```
 
@@ -64,6 +68,9 @@ task run git
 
 # Install Cursor IDE and Git (using ansible-playbook directly)
 uv run ansible-playbook main.yml --tags cursor,git --ask-become-pass
+
+# List all available tags
+task list-tags
 ```
 
 ### Testing with Molecule
@@ -74,12 +81,18 @@ uv run ansible-playbook main.yml --tags cursor,git --ask-become-pass
 task test <role_name>
 ```
 
+**Test all roles:**
+
+```bash
+task full-test
+```
+
 **Test without destroying the container (for debugging):**
 
 ```bash
 task converge <role_name>  # Run playbook
 task verify <role_name>    # Run tests
-task login <role_name>     # SSH into container
+task login <role_name> <host>  # SSH into container (get host name from molecule list)
 task destroy <role_name>   # Clean up when done
 ```
 
@@ -87,9 +100,10 @@ task destroy <role_name>   # Clean up when done
 
 ```bash
 task test base-tools       # Test base-tools role
+task full-test             # Run Molecule tests for all roles
 task converge cursor       # Setup cursor role test container
 task verify cursor         # Verify cursor role configuration
-task login cursor          # Login to cursor role test container
+task login cursor default  # Login to cursor role test container
 task destroy cursor        # Clean up cursor role test container
 ```
 
@@ -125,16 +139,43 @@ task lint
 ```
 
 This runs the following linting checks in parallel:
-- `task ansiblelint` - Ansible linting (`uv run ansible-lint -v`)
-- `task yamllint` - YAML validation (`uv run yamllint -c .yamllint --no-warnings .`)
-- `task ansiblesyntaxecheck` - Playbook syntax validation (`uv run ansible-playbook main.yml --syntax-check`)
+- `task ansiblelint` (alias: `task alint`) - Ansible linting (`uv run ansible-lint -v`)
+- `task yamllint` (alias: `task ylint`) - YAML validation (`uv run yamllint -c .yamllint --no-warnings .`)
+- `task ansiblesyntaxecheck` (alias: `task ascheck`) - Playbook syntax validation (`uv run ansible-playbook main.yml --syntax-check`)
 
 Individual linters can be run separately:
 
 ```bash
 task ansiblelint           # Run only Ansible linter
+task alint                 # Short alias for ansible linter
 task yamllint              # Run only YAML linter
+task ylint                 # Short alias for YAML linter
 task ansiblesyntaxecheck   # Run only syntax check
+task ascheck               # Short alias for syntax check
+```
+
+### Utility Tasks
+
+```bash
+task list-tags             # List all available Ansible tags
+task update-galaxy         # Update Ansible Galaxy roles to latest versions
+```
+
+### Advanced Features
+
+**Pass additional arguments to tasks using `--` separator:**
+
+```bash
+task run cursor -- --extra-vars "some_var=value"       # Pass extra vars to playbook
+task test base-tools -- --verbosity=v                  # Pass verbosity to molecule
+task check -- --diff                                   # Pass options to check task
+```
+
+**Available tasks can be listed:**
+
+```bash
+task --list-all            # Show all available tasks with descriptions
+task                       # Display task list (same as above, the default task)
 ```
 
 ## Architecture
