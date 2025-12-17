@@ -46,3 +46,4 @@
     state: present
     update_cache: true
   become: true
+  when: mise_check.rc != 0

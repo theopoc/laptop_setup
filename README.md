@@ -33,7 +33,7 @@ sudo apt update && sudo apt upgrade -y && sudo apt install -y git curl
 
    ```bash
    git clone --branch feat/implement-taskfile-mise https://github.com/TheoPoc/laptop_setup.git
-   curl https://mise.run | MISE_INSTALL_PATH=/usr/local/bin/mise sh
+   curl https://mise.run | sh
    cd laptop_setup
    mise trust -qa && mise install -yq && eval "$(mise activate bash)"
    ```

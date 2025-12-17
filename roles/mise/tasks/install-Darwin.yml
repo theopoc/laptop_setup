@@ -3,3 +3,4 @@
   community.general.homebrew:
     name: mise
     state: present
+  when: mise_check.rc != 0
