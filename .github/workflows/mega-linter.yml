@@ -77,23 +77,22 @@ jobs:
           # VALIDATE_ALL_CODEBASE: true
           #
           # To validate only diff with main, set to:
-          # VALIDATE_ALL_CODEBASE: >-
-          #   ${{
-          #     github.event_name == 'push' &&
-          #     github.ref == 'refs/heads/main'
-          #   }}
-          VALIDATE_ALL_CODEBASE: true
-
-          # Disable LLM Advisor for bot PRs (dependabot, renovate, etc.)
-          LLM_ADVISOR_ENABLED: >-
+          VALIDATE_ALL_CODEBASE: >-
             ${{
-              github.event_name != 'pull_request' ||
-              (github.event.pull_request.user.login != 'dependabot[bot]' &&
-               github.event.pull_request.user.login != 'renovate[bot]' &&
-               github.event.pull_request.user.login != 'github-actions[bot]' &&
-               !startsWith(github.event.pull_request.user.login, 'dependabot') &&
-               !startsWith(github.event.pull_request.user.login, 'renovate'))
+              github.event_name == 'push' &&
+              github.ref == 'refs/heads/main'
             }}
+          # VALIDATE_ALL_CODEBASE: true
+          # Disable LLM Advisor for bot PRs (dependabot, renovate, etc.)
+          # LLM_ADVISOR_ENABLED: >-
+          #   ${{
+          #     github.event_name != 'pull_request' ||
+          #     (github.event.pull_request.user.login != 'dependabot[bot]' &&
+          #      github.event.pull_request.user.login != 'renovate[bot]' &&
+          #      github.event.pull_request.user.login != 'github-actions[bot]' &&
+          #      !startsWith(github.event.pull_request.user.login, 'dependabot') &&
+          #      !startsWith(github.event.pull_request.user.login, 'renovate'))
+          #   }}
 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
