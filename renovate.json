@@ -6,9 +6,6 @@
   ],
   "dependencyDashboardApproval": false,
   "timezone": "Europe/Paris",
-  "schedule": [
-    "at 2pm on saturday"
-  ],
   "labels": [
     "dependencies",
     "renovate"
@@ -29,10 +26,7 @@
         "npm"
       ],
       "groupName": "npm dependencies",
-      "commitMessageTopic": "npm dependencies",
-      "schedule": [
-        "at 2pm on saturday"
-      ]
+      "commitMessageTopic": "npm dependencies"
     },
     {
       "description": "Group Ansible Galaxy collections updates",
@@ -40,10 +34,7 @@
         "galaxy-collection"
       ],
       "groupName": "Ansible collections",
-      "commitMessageTopic": "Ansible collections",
-      "schedule": [
-        "at 2pm on saturday"
-      ]
+      "commitMessageTopic": "Ansible collections"
     },
     {
       "description": "Group Ansible Galaxy roles updates",
@@ -51,10 +42,7 @@
         "galaxy"
       ],
       "groupName": "Ansible roles",
-      "commitMessageTopic": "Ansible roles",
-      "schedule": [
-        "at 2pm on saturday"
-      ]
+      "commitMessageTopic": "Ansible roles"
     },
     {
       "description": "Group GitHub Actions updates",
@@ -63,9 +51,6 @@
       ],
       "groupName": "GitHub Actions",
       "commitMessageTopic": "GitHub Actions",
-      "schedule": [
-        "at 2pm on saturday"
-      ],
       "pinDigests": false
     },
     {
@@ -74,10 +59,7 @@
         "pep621"
       ],
       "groupName": "Python dependencies",
-      "commitMessageTopic": "Python dependencies",
-      "schedule": [
-        "at 2pm on saturday"
-      ]
+      "commitMessageTopic": "Python dependencies"
     },
     {
       "description": "Auto-merge minor and patch updates for non-major versions",
@@ -130,9 +112,6 @@
   ],
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": [
-      "before 6am on monday"
-    ],
     "commitMessageAction": "Update",
     "commitMessageTopic": "lock files",
     "automerge": true,
