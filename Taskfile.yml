@@ -15,17 +15,9 @@ tasks:
       - pre-commit install
       - uv sync --frozen
       - uv run ansible-galaxy install -r requirements.yml
-      - task: install-homebrew
+      - cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        platforms: [darwin]
     run: once
-
-  install-homebrew:
-    desc: Install homebrew for MacOS
-    cmds:
-      - cmd: NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - cmd: eval "$(/opt/homebrew/bin/brew shellenv)"
-        platforms: [darwin/arm64]
-      - cmd: eval "$(/usr/local/bin/brew shellenv)"
-        platforms: [darwin/386]
 
   pre-commit:
     desc: Run pre-commit on all files

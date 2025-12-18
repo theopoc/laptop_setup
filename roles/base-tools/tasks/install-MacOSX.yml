@@ -5,23 +5,27 @@
   community.general.homebrew:
     update_homebrew: true
     upgrade_all: true
+    path: "{{ homebrew_path }}"
   tags: base-tools, homebrew, upgrade
 
 - name: Install homebrew taps
   community.general.homebrew_tap:
     name: "{{ homebrew.taps }}"
+    path: "{{ homebrew_path }}"
   tags: base-tools, homebrew, taps
 
 - name: Install homebrew formulae
   community.general.homebrew:
     name: "{{ homebrew.formulae }}"
     state: present
+    path: "{{ homebrew_path }}"
   tags: base-tools, homebrew, formulae
 
 - name: Install homebrew casks
   community.general.homebrew_cask:
     name: "{{ homebrew.casks }}"
     state: present
+    path: "{{ homebrew_path }}"
   tags: base-tools, homebrew, casks
 
 # Native installation of AWS Session Manager Plugin
