@@ -2,7 +2,7 @@
 # Tasks for installing and configuring Warp terminal
 
 - name: Include OS-specific variables
-  ansible.builtin.include_vars: "{{ ansible_facts.distribution | lower }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts.distribution }}.yml"
   when: warp_enabled | bool
   tags: warp
 

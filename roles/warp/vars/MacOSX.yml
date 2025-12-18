@@ -1,5 +1,5 @@
 ---
-# macOS specific variables for Warp Terminal role
+# Darwin (macOS) specific variables for Warp Terminal role
 
 # Default installation method for macOS
 warp_install_method: "homebrew"
