@@ -5,4 +5,5 @@
   community.general.homebrew_cask:
     name: cursor
     state: present
+    path: "{{ cursor_homebrew_path }}"
   tags: ["cursor"]

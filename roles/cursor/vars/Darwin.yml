@@ -5,3 +5,5 @@ cursor_config_dir: "{{ ansible_facts.env.HOME }}/Library/Application Support/Cur
 cursor_user_dir: "{{ ansible_facts.env.HOME }}/Library/Application Support/Cursor/User"
 cursor_cli_path: "/opt/homebrew/bin/cursor"
 cursor_rules_dir: "{{ ansible_facts.env.HOME }}/Documents/cursor"
+
+cursor_homebrew_path: "{{ '/opt/homebrew/bin' if ansible_facts.architecture == 'arm64' else '/usr/local/bin' }}"

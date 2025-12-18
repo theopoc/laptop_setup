@@ -6,4 +6,5 @@
   community.general.homebrew_cask:
     name: "{{ claude_code_package_name }}"
     state: present
+    path: "{{ claude_code_homebrew_path }}"
   tags: ['claude-code']

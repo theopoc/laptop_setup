@@ -21,10 +21,12 @@
     - name: Setup tap for nightlight
       community.general.homebrew_tap:
         name: smudge/smudge
+        path: "{{ macos_settings_homebrew_path }}"
 
     - name: Install nightlight
       community.general.homebrew:
         name: nightlight
+        path: "{{ macos_settings_homebrew_path }}"
 
     - name: Configure Night Shift
       ansible.builtin.command: nightlight schedule {{ others.nightshift.start_time }} {{ others.nightshift.end_time }}

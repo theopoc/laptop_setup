@@ -4,3 +4,5 @@
 
 # Homebrew cask package name
 claude_code_package_name: claude-code
+
+claude_code_homebrew_path: "{{ '/opt/homebrew/bin' if ansible_facts.architecture == 'arm64' else '/usr/local/bin' }}"

@@ -13,3 +13,5 @@ iterm2_color_schemes:
   git_repository: https://github.com/mbadolato/iTerm2-Color-Schemes.git
   branch: master
   selected_theme: Solarized Dark - Patched
+
+iterm2_homebrew_path: "{{ '/opt/homebrew/bin' if ansible_facts.architecture == 'arm64' else '/usr/local/bin' }}"

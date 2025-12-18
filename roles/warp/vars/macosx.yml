@@ -7,3 +7,6 @@ warp_install_method: "homebrew"
 # Workflow directory path for macOS
 warp_workflows_dir: "{{ ansible_facts.env.HOME }}/.warp/workflows"
 warp_parent_dir: "{{ ansible_facts.env.HOME }}/.warp"
+
+# Homebrew path for macOS
+warp_homebrew_path: "{{ '/opt/homebrew/bin' if ansible_facts.architecture == 'arm64' else '/usr/local/bin' }}"

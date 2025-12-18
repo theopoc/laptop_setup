@@ -5,4 +5,5 @@
   community.general.homebrew:
     name: "{{ vim_package }}"
     state: present
+    path: "{{ vim_homebrew_path }}"
   tags: vim

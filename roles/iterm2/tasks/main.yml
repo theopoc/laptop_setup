@@ -3,6 +3,7 @@
   community.general.homebrew_cask:
     name: iterm2
     state: present
+    path: "{{ iterm2_homebrew_path }}"
   tags: iterm2, casks
 
 - name: Open iTerm2 to generate default .plist

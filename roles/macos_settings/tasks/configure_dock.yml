@@ -18,6 +18,7 @@
       community.general.homebrew:
         name: dockutil
         state: present
+        path: "{{ macos_settings_homebrew_path}}"
       notify: Kill Dock
       changed_when: false
 

@@ -3,6 +3,7 @@
   community.general.homebrew:
     name: mas
     state: present
+    path: "{{ appstore_homebrew_path }}"
   tags: ["appstore"]
 
 - name: Check if user is signed into Mac App Store

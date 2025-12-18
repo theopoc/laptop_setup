@@ -11,18 +11,11 @@ tasks:
   init:
     desc: Init stack
     cmds:
-      - cmd: mise install
-      - cmd: pre-commit install
-      - cmd: uv sync --frozen
-      - cmd: uv run ansible-galaxy install -r requirements.yml
+      - mise install
+      - pre-commit install
+      - uv sync --frozen
+      - uv run ansible-galaxy install -r requirements.yml
       - cmd: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        platforms: [darwin]
-      - cmd: |
-          if [[ -x /opt/homebrew/bin/brew ]]; then
-              eval "$(/opt/homebrew/bin/brew shellenv)"
-          elif [[ -x /usr/local/bin/brew ]]; then
-              eval "$(/usr/local/bin/brew shellenv)"
-          fi
         platforms: [darwin]
     run: once
 

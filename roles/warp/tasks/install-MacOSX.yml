@@ -4,6 +4,7 @@
     name: "{{ warp_homebrew_cask_name }}"
     state: "{{ warp_homebrew_cask_state }}"
     greedy: "{{ warp_homebrew_cask_greedy }}"
+    path: "{{ warp_homebrew_path }}"
   register: warp_homebrew_result
   when:
     - warp_enabled | bool

@@ -9,3 +9,5 @@ architecture_mapping:
 
 # Mapped architecture for package downloads
 package_architecture: "{{ architecture_mapping[ansible_facts.architecture] | default('amd64') }}"
+
+base_tools_homebrew_path: "{{ '/opt/homebrew/bin' if ansible_facts.architecture == 'arm64' else '/usr/local/bin' }}"
