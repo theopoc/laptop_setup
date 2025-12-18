@@ -1,5 +1,4 @@
 ---
-
 # ============================================================================
 # Base-tools role
 # ============================================================================
@@ -41,8 +40,8 @@ homebrew:
     - tfmv # Terraform state mv command generator
     - hcledit # CLI tool for editing HCL files
     - thefuck # Corrects your previous console command
-    - rar     # for archive
-    - macvim  # vim specific for macos
+    - rar # for archive
+    - macvim # vim specific for macos
 
   casks:
     - google-chrome
@@ -384,7 +383,5 @@ warp_workflows:
 
 ############################### DOCKER / CONTAINER VARIABLES ###########################
 
-
 docker_mode: "rancher"
-
 ########################################################################################

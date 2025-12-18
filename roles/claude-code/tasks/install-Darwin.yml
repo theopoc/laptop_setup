@@ -7,4 +7,3 @@
     state: present
     path: "{{ claude_code_homebrew_path }}"
   tags: ["claude-code"]
-
