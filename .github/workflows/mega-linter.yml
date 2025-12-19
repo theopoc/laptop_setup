@@ -41,6 +41,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+
+          # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to
+          # improve performance
+          fetch-depth: 0
+
       - name: Megalinter public image cache
         uses: ./.github/actions/docker_image_cache
         with:
