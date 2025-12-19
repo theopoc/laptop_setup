@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/docker_image_cache
         id: cache_step
         with:
-          image_name_tag: 'ghcr.io/oxsecurity/megalinter-documentation:v9.2.0'
+          image_name_tag: 'ghcr.io/theopoc/megalinter-custom-flavor-ansible/megalinter-custom-flavor:latest'
 
       # MegaLinter with docker run (bypasses automatic image pull)
       - name: MegaLinter
@@ -107,7 +107,7 @@ jobs:
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v ${{ github.workspace }}:/github/workspace \
             --workdir /github/workspace \
-            ghcr.io/oxsecurity/megalinter-documentation:v9.2.0
+            ghcr.io/theopoc/megalinter-custom-flavor-ansible/megalinter-custom-flavor:latest
 
       # Check if MegaLinter made any changes to files
       - name: Check for modified files
