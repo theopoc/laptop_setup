@@ -36,8 +36,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  docker_cache:
+    name: cache
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Megalinter public image cache
+        uses: ./.github/actions/docker_image_cache
+        with:
+          image_name_tag: 'ghcr.io/oxsecurity/megalinter-documentation:v9.2.0'
+
   megalinter:
     name: MegaLinter
+    needs: ["cache"]
     runs-on: ubuntu-latest
 
     # Give the default GITHUB_TOKEN write permission to commit and push, comment
@@ -57,11 +68,6 @@ jobs:
           # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to
           # improve performance
           fetch-depth: 0
-
-      - name: Megalinter public image cache
-        uses: ./.github/actions/docker_image_cache
-        with:
-          image_name_tag: 'ghcr.io/oxsecurity/megalinter-documentation:v9.2.0'
 
       # MegaLinter
       - name: MegaLinter
