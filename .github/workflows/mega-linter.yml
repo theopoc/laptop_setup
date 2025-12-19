@@ -59,38 +59,21 @@ jobs:
           # improve performance
           fetch-depth: 0
 
-      - name: Megalinter public image cache
+      - name: Cache Docker image
         uses: ./.github/actions/docker_image_cache
-        id: step1
+        id: cache_step
         with:
           image_name_tag: 'ghcr.io/oxsecurity/megalinter-documentation:v9.2.0'
 
-      # MegaLinter
+      # MegaLinter with docker run (bypasses automatic image pull)
       - name: MegaLinter
-        if: steps.step1.conclusion == 'success'
-        # You can override MegaLinter flavor used to have faster performances
-        # More info at https://megalinter.io/latest/flavors/
-        uses: oxsecurity/megalinter/flavors/documentation@v9
-
-        id: ml
-
-        # All available variables are described in documentation
-        # https://megalinter.io/latest/config-file/
+        if: steps.cache_step.conclusion == 'success'
         env:
-          # Validates all source when push on main, else just the git diff with
-          # main. Override with true if you always want to lint all sources
-          #
-          # To validate the entire codebase, set to:
-          # VALIDATE_ALL_CODEBASE: true
-          #
-          # To validate only diff with main, set to:
           VALIDATE_ALL_CODEBASE: >-
             ${{
               github.event_name == 'push' &&
               github.ref == 'refs/heads/main'
             }}
-          # VALIDATE_ALL_CODEBASE: true
-          # Disable LLM Advisor for bot PRs (dependabot, renovate, etc.)
           LLM_ADVISOR_ENABLED: >-
             ${{
               github.event_name != 'pull_request' ||
@@ -100,22 +83,54 @@ jobs:
                !startsWith(github.event.pull_request.user.login, 'dependabot') &&
                !startsWith(github.event.pull_request.user.login, 'renovate'))
             }}
-
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLY_FIXES: all
+          APPLY_FIXES_EVENT: pull_request
+          APPLY_FIXES_MODE: commit
+        run: |
+          docker run \
+            --name megalinter \
+            -e VALIDATE_ALL_CODEBASE="${{ env.VALIDATE_ALL_CODEBASE }}" \
+            -e LLM_ADVISOR_ENABLED="${{ env.LLM_ADVISOR_ENABLED }}" \
+            -e GITHUB_TOKEN="${{ env.GITHUB_TOKEN }}" \
+            -e APPLY_FIXES="${{ env.APPLY_FIXES }}" \
+            -e APPLY_FIXES_EVENT="${{ env.APPLY_FIXES_EVENT }}" \
+            -e APPLY_FIXES_MODE="${{ env.APPLY_FIXES_MODE }}" \
+            -e GITHUB_REPOSITORY="${{ github.repository }}" \
+            -e GITHUB_REF="${{ github.ref }}" \
+            -e GITHUB_SHA="${{ github.sha }}" \
+            -e GITHUB_RUN_ID="${{ github.run_id }}" \
+            -e GITHUB_RUN_NUMBER="${{ github.run_number }}" \
+            -e GITHUB_EVENT_NAME="${{ github.event_name }}" \
+            -e GITHUB_ACTOR="${{ github.actor }}" \
+            -e GITHUB_WORKSPACE=/github/workspace \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v ${{ github.workspace }}:/github/workspace \
+            --workdir /github/workspace \
+            ghcr.io/oxsecurity/megalinter-documentation:v9.2.0
 
+      # Check if MegaLinter made any changes to files
+      - name: Check for modified files
+        id: check_changes
+        run: |
+          if git diff --quiet HEAD; then
+            echo "has_updated_sources=0" >> $GITHUB_OUTPUT
+          else
+            echo "has_updated_sources=1" >> $GITHUB_OUTPUT
+          fi
 
-          # Uncomment to use ApiReporter (Grafana)
-          # API_REPORTER: true
-          # API_REPORTER_URL: ${{ secrets.API_REPORTER_URL }}
-          # API_REPORTER_BASIC_AUTH_USERNAME: ${{ secrets.API_REPORTER_BASIC_AUTH_USERNAME }}
-          # API_REPORTER_BASIC_AUTH_PASSWORD: ${{ secrets.API_REPORTER_BASIC_AUTH_PASSWORD }}
-          # API_REPORTER_METRICS_URL: ${{ secrets.API_REPORTER_METRICS_URL }}
-          # API_REPORTER_METRICS_BASIC_AUTH_USERNAME: ${{ secrets.API_REPORTER_METRICS_BASIC_AUTH_USERNAME }}
-          # API_REPORTER_METRICS_BASIC_AUTH_PASSWORD: ${{ secrets.API_REPORTER_METRICS_BASIC_AUTH_PASSWORD }}
-          # API_REPORTER_DEBUG: false
-
-          # ADD YOUR CUSTOM ENV VARIABLES HERE TO OVERRIDE VALUES OF
-          # .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
+      # Uncomment to use ApiReporter (Grafana)
+      # - name: API Reporter
+      #   if: always()
+      #   env:
+      #     API_REPORTER: true
+      #     API_REPORTER_URL: ${{ secrets.API_REPORTER_URL }}
+      #     API_REPORTER_BASIC_AUTH_USERNAME: ${{ secrets.API_REPORTER_BASIC_AUTH_USERNAME }}
+      #     API_REPORTER_BASIC_AUTH_PASSWORD: ${{ secrets.API_REPORTER_BASIC_AUTH_PASSWORD }}
+      #     API_REPORTER_METRICS_URL: ${{ secrets.API_REPORTER_METRICS_URL }}
+      #     API_REPORTER_METRICS_BASIC_AUTH_USERNAME: ${{ secrets.API_REPORTER_METRICS_BASIC_AUTH_USERNAME }}
+      #     API_REPORTER_METRICS_BASIC_AUTH_PASSWORD: ${{ secrets.API_REPORTER_METRICS_BASIC_AUTH_PASSWORD }}
+      #     API_REPORTER_DEBUG: false
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
@@ -134,7 +149,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         id: cpr
         if: >-
-          steps.ml.outputs.has_updated_sources == 1 &&
+          steps.check_changes.outputs.has_updated_sources == 1 &&
           (
             env.APPLY_FIXES_EVENT == 'all' ||
             env.APPLY_FIXES_EVENT == github.event_name
@@ -153,7 +168,7 @@ jobs:
 
       - name: Create PR output
         if: >-
-          steps.ml.outputs.has_updated_sources == 1 &&
+          steps.check_changes.outputs.has_updated_sources == 1 &&
           (
             env.APPLY_FIXES_EVENT == 'all' ||
             env.APPLY_FIXES_EVENT == github.event_name
@@ -172,7 +187,7 @@ jobs:
       # (for now works only on PR from same repository, not from forks)
       - name: Prepare commit
         if: >-
-          steps.ml.outputs.has_updated_sources == 1 &&
+          steps.check_changes.outputs.has_updated_sources == 1 &&
           (
             env.APPLY_FIXES_EVENT == 'all' ||
             env.APPLY_FIXES_EVENT == github.event_name
@@ -189,7 +204,7 @@ jobs:
       - name: Commit and push applied linter fixes
         uses: stefanzweifel/git-auto-commit-action@v7
         if: >-
-          steps.ml.outputs.has_updated_sources == 1 &&
+          steps.check_changes.outputs.has_updated_sources == 1 &&
           (
             env.APPLY_FIXES_EVENT == 'all' ||
             env.APPLY_FIXES_EVENT == github.event_name
