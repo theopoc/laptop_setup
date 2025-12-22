@@ -9,6 +9,7 @@ zsh_ohmyzsh:
     - copyfile
     - autojump
     - fastfile
+    - kubectl
 
 zsh_powerlevel10k:
   theme:
