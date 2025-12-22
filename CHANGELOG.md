@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0](https://github.com/TheoPoc/laptop_setup/compare/v2.10.3...v2.11.0) (2025-12-22)
+
+### ✨ Features
+
+* install kubectl zsh plugins ([c26bcb3](https://github.com/TheoPoc/laptop_setup/commit/c26bcb34c45aa55a56ae3cf0c7ab279068fa8c41))
+
+### 🔧 Chores
+
+* **deps:** Update dependency pre-commit to v4.5.1 ([#68](https://github.com/TheoPoc/laptop_setup/issues/68)) ([7fa1862](https://github.com/TheoPoc/laptop_setup/commit/7fa186232b6d775e17387acc5ee1445cc1695792))
+* **deps:** Update dependency uv to v0.9.18 ([#69](https://github.com/TheoPoc/laptop_setup/issues/69)) ([3a13192](https://github.com/TheoPoc/laptop_setup/commit/3a13192e9718765b9dee6651818c5626a84f700e))
+* **deps:** Update lock files ([#70](https://github.com/TheoPoc/laptop_setup/issues/70)) ([2571441](https://github.com/TheoPoc/laptop_setup/commit/25714413219dc26793d5cb585264bbd2262e23a4))
+* **renovate:** enable auto-merge for vulnerability alerts ([a0bf9d9](https://github.com/TheoPoc/laptop_setup/commit/a0bf9d9188cf73b82814b53688f06b7c120285ed))
+* **renovate:** remove schedules to enable immediate PR creation ([c82f1dc](https://github.com/TheoPoc/laptop_setup/commit/c82f1dc6117c474367a340862636cd333c0c0e1c))
+
 ## [2.10.3](https://github.com/TheoPoc/laptop_setup/compare/v2.10.2...v2.10.3) (2025-12-18)
 
 ### 🐛 Bug Fixes
