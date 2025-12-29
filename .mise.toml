@@ -1,6 +1,6 @@
 [tools]
 python = "3.14"
-uv = "0.9.18"
+uv = "0.9.20"
 task = "3.45.5"
 pre-commit = "4.5.1"
 
