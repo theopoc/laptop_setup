@@ -8,13 +8,13 @@
     state: present
     update_cache: true
   become: true
-  tags: ['claude-code']
+  tags: ["claude-code"]
 
 - name: Check if Claude Code binary already exists
   ansible.builtin.stat:
     path: "{{ claude_code_binary_path }}"
   register: claude_binary
-  tags: ['claude-code']
+  tags: ["claude-code"]
 
 - name: Install Claude Code via curl script with retry logic
   ansible.builtin.shell:
@@ -26,4 +26,4 @@
   delay: 5
   until: curl_install_result.rc == 0
   when: not claude_binary.stat.exists
-  tags: ['claude-code']
+  tags: ["claude-code"]

@@ -16,7 +16,7 @@
       - ripgrep
       - htop
       - yq
-      - shellcheck 
+      - shellcheck
     ubuntu_apt_packages:
       - git
       - python3

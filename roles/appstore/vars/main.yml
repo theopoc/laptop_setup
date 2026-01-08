@@ -1,3 +1,2 @@
 ---
-
 appstore_homebrew_path: "{{ '/opt/homebrew/bin' if ansible_facts.architecture == 'arm64' else '/usr/local/bin' }}"

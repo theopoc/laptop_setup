@@ -1,5 +1,4 @@
 ---
-
 - name: Get uv path from mise
   ansible.builtin.command:
     cmd: "mise which uv"

@@ -1,5 +1,4 @@
 ---
-
 - name: Configure Git username
   community.general.git_config:
     name: user.name

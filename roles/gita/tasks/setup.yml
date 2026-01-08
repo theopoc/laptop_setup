@@ -1,5 +1,4 @@
 ---
-
 - name: Create gita config directory
   ansible.builtin.file:
     path: "{{ gita_config_dir }}"

@@ -1,5 +1,5 @@
 ---
-version: '3'
+version: "3"
 
 tasks:
   default:
@@ -39,7 +39,7 @@ tasks:
   run:*:
     desc: Run playbook by tag
     vars:
-      TAG: '{{index .MATCH 0}}'
+      TAG: "{{index .MATCH 0}}"
     cmds:
       - uv run ansible-playbook main.yml --tags {{.TAG}} --ask-become-pass {{.CLI_ARGS}}
 
@@ -82,7 +82,7 @@ tasks:
       - for: { var: ROLES_LIST }
         task: test
         vars:
-          ROLE: '{{.ITEM}}'
+          ROLE: "{{.ITEM}}"
 
   test:
     internal: true
@@ -99,7 +99,7 @@ tasks:
         msg: "Role {{.ROLE}} does not have Molecule tests"
     dir: roles/{{.ROLE}}
     vars:
-      ROLE: '{{index .MATCH 0}}'
+      ROLE: "{{index .MATCH 0}}"
     cmds:
       - uv run molecule test {{.CLI_ARGS}}
 
@@ -110,7 +110,7 @@ tasks:
         msg: "Role {{.ROLE}} does not have Molecule tests"
     dir: roles/{{.ROLE}}
     vars:
-      ROLE: '{{index .MATCH 0}}'
+      ROLE: "{{index .MATCH 0}}"
     cmds:
       - uv run molecule converge {{.CLI_ARGS}}
 
@@ -121,7 +121,7 @@ tasks:
         msg: "Role {{.ROLE}} does not have Molecule tests"
     dir: roles/{{.ROLE}}
     vars:
-      ROLE: '{{index .MATCH 0}}'
+      ROLE: "{{index .MATCH 0}}"
     cmds:
       - uv run molecule verify {{.CLI_ARGS}}
 
@@ -132,7 +132,7 @@ tasks:
         msg: "Role {{.ROLE}} does not have Molecule tests"
     dir: roles/{{.ROLE}}
     vars:
-      ROLE: '{{index .MATCH 0}}'
+      ROLE: "{{index .MATCH 0}}"
     cmds:
       - uv run molecule destroy {{.CLI_ARGS}}
 
@@ -143,8 +143,8 @@ tasks:
         msg: "Role {{.ROLE}} does not have Molecule tests"
     dir: roles/{{.ROLE}}
     vars:
-      ROLE: '{{index .MATCH 0}}'
-      HOST: '{{index .MATCH 1}}'
+      ROLE: "{{index .MATCH 0}}"
+      HOST: "{{index .MATCH 1}}"
     cmds:
       - uv run molecule list -f simple
       - uv run molecule login --host {{.HOST}}

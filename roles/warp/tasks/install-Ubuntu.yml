@@ -1,5 +1,4 @@
 ---
-
 - name: Install dependencies
   ansible.builtin.apt:
     name: "{{ warp_package_dependencies }}"

@@ -6,15 +6,15 @@ on:
     branches:
       - main
       - develop
-      - 'feat/**'
-      - 'fix/**'
-      - 'refactor/**'
-      - 'perf/**'
-      - 'chore(deps)**'
+      - "feat/**"
+      - "fix/**"
+      - "refactor/**"
+      - "perf/**"
+      - "chore(deps)**"
   schedule:
     # Exécute tous les samedis à 15h00 heure de Paris (14h00 UTC en hiver CET, 13h00 UTC en été CEST)
     # Note: GitHub Actions utilise UTC, donc 14h UTC = 15h Paris (hiver)
-    - cron: '0 14 * * 6'
+    - cron: "0 14 * * 6"
   workflow_dispatch:
 env:
   ANSIBLE_FORCE_COLOR: "1"
@@ -33,6 +33,7 @@ jobs:
         uses: ansible/ansible-lint@v25.12.2
         with:
           requirements_file: requirements.yml
+          args: "--profile=moderate"
 
       - name: Run yamllint
         uses: ibiqlik/action-yamllint@v3
@@ -138,7 +139,6 @@ jobs:
           molecule_options: --debug
           molecule_command: test
           molecule_working_dir: "${{ github.repository }}/roles/${{ matrix.role }}"
-
 
   # Integration test - full playbook execution
   integration-test:

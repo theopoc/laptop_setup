@@ -20,4 +20,8 @@ skip_list:
   - role-name  # Role naming conventions are flexible
 
 exclude_paths:
+  - .cache/
+  - node_modules/
+  - .claude/
+  - .specify
   - .github/  # GitHub-specific files have different YAML requirements

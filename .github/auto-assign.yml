@@ -20,7 +20,6 @@ skipKeywords:
   - wip
   - WIP
   - draft
-
 # File patterns and specific reviewers
 # fileReviewers:
 #   '**/*.yml':

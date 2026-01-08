@@ -2,7 +2,6 @@
 - name: Verify
   hosts: all
   tasks:
-
     - name: Check if Warp package is installed
       ansible.builtin.package_facts:
         manager: auto

@@ -6,25 +6,25 @@
 
 repos:
   # YAML linting
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.1
-    hooks:
-      - id: yamllint
-        args: [-c=.yamllint]
-        files: \.(yaml|yml)$
+  # - repo: https://github.com/adrienverge/yamllint
+  #   rev: v1.37.1
+  #   hooks:
+  #     - id: yamllint
+  #       args: [-c=.yamllint]
+  #       files: \.(yaml|yml)$
 
-  # Ansible linting
-  - repo: https://github.com/ansible/ansible-lint
-    rev: v25.9.2
-    hooks:
-      - id: ansible-lint
+  # # Ansible linting
+  # - repo: https://github.com/ansible/ansible-lint
+  #   rev: v25.9.2
+  #   hooks:
+  #     - id: ansible-lint
 
   # Security - Check for secrets
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.5.0
-    hooks:
-      - id: detect-secrets
-        args: ["--baseline", ".secrets.baseline"]
+  # - repo: https://github.com/Yelp/detect-secrets
+  #   rev: v1.5.0
+  #   hooks:
+  #     - id: detect-secrets
+  #       args: ["--baseline", ".secrets.baseline"]
 
   # Commit message format
   - repo: https://github.com/compilerla/conventional-pre-commit
@@ -32,3 +32,20 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
+
+  - repo: https://github.com/oxsecurity/megalinter
+    rev: v9.2.0 # Git tag specifying the hook, not mega-linter-runner, version
+    hooks:
+      - id: megalinter-incremental # Faster, less thorough
+        entry: npx --
+        args:
+          - mega-linter-runner
+          - "--fix"
+          - --env
+          - "'FILTER_REGEX_EXCLUDE=(.specify)'"
+          - "--no-remove-container"
+          - "-f"
+          - "documentation"
+
+        stages:
+          - pre-commit

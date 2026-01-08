@@ -1,5 +1,4 @@
 ---
-
 cursor_application_path: /Applications/Cursor.app/Contents/MacOS/Cursor
 # Override default extensions or add environment-specific ones
 additional_cursor_extensions: []
@@ -7,7 +6,8 @@ additional_cursor_extensions: []
 visual_studio_code_config_dirname: "{{ (visual_studio_code_build == 'insiders') | ternary('Code - Insiders', 'Cursor') }}"
 
 # Directory under $HOME where where VS Code config is stored
-visual_studio_code_config_path: "{{ (ansible_facts.distribution == 'MacOSX') | ternary('Library/Application Support', '.config') }}/{{ visual_studio_code_config_dirname
+visual_studio_code_config_path:
+  "{{ (ansible_facts.distribution == 'MacOSX') | ternary('Library/Application Support', '.config') }}/{{ visual_studio_code_config_dirname
   }}"
 
 # The package name to install

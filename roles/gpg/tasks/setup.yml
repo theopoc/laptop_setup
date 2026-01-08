@@ -1,5 +1,4 @@
 ---
-
 - name: Create GPG configuration directory
   ansible.builtin.file:
     path: "{{ gpg_config_dir }}"

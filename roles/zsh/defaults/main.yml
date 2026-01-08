@@ -1,5 +1,4 @@
 ---
-
 zsh_ohmyzsh:
   url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
   plugins:

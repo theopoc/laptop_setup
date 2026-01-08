@@ -254,7 +254,8 @@
 
         - name: Download lsd deb package
           ansible.builtin.get_url:
-            url: "https://github.com/lsd-rs/lsd/releases/download/{{ lsd_release.json.tag_name }}/lsd_{{ lsd_release.json.tag_name | replace('v', '') }}_{{ package_architecture
+            url:
+              "https://github.com/lsd-rs/lsd/releases/download/{{ lsd_release.json.tag_name }}/lsd_{{ lsd_release.json.tag_name | replace('v', '') }}_{{ package_architecture
               }}.deb"
             dest: /tmp/lsd.deb
             mode: "0644"
@@ -335,7 +336,8 @@
 
         - name: Download dive deb package
           ansible.builtin.get_url:
-            url: "https://github.com/wagoodman/dive/releases/download/{{ dive_release.json.tag_name }}/dive_{{ dive_release.json.tag_name | replace('v', '') }}_linux_{{
+            url:
+              "https://github.com/wagoodman/dive/releases/download/{{ dive_release.json.tag_name }}/dive_{{ dive_release.json.tag_name | replace('v', '') }}_linux_{{
               package_architecture }}.deb"
             dest: /tmp/dive.deb
             mode: "0644"
@@ -372,7 +374,8 @@
 
         - name: Download gopass deb package
           ansible.builtin.get_url:
-            url: "https://github.com/gopasspw/gopass/releases/download/{{ gopass_release.json.tag_name }}/gopass_{{ gopass_release.json.tag_name | replace('v', '')
+            url:
+              "https://github.com/gopasspw/gopass/releases/download/{{ gopass_release.json.tag_name }}/gopass_{{ gopass_release.json.tag_name | replace('v', '')
               }}_linux_{{ package_architecture }}.deb"
             dest: /tmp/gopass.deb
             mode: "0644"
@@ -409,7 +412,8 @@
 
         - name: Download s5cmd binary
           ansible.builtin.unarchive:
-            src: "https://github.com/peak/s5cmd/releases/download/{{ s5cmd_release.json.tag_name }}/s5cmd_{{ s5cmd_release.json.tag_name | replace('v', '') }}_Linux-{{
+            src:
+              "https://github.com/peak/s5cmd/releases/download/{{ s5cmd_release.json.tag_name }}/s5cmd_{{ s5cmd_release.json.tag_name | replace('v', '') }}_Linux-{{
               '64bit' if package_architecture == 'amd64' else package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
@@ -478,7 +482,8 @@
 
         - name: Download vkv binary
           ansible.builtin.unarchive:
-            src: "https://github.com/falcosuessgott/vkv/releases/download/{{ vkv_release.json.tag_name }}/vkv_Linux_{{ 'x86_64' if package_architecture == 'amd64'
+            src:
+              "https://github.com/falcosuessgott/vkv/releases/download/{{ vkv_release.json.tag_name }}/vkv_Linux_{{ 'x86_64' if package_architecture == 'amd64'
               else package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
@@ -552,7 +557,8 @@
 
         - name: Download pug binary
           ansible.builtin.unarchive:
-            src: "https://github.com/leg100/pug/releases/download/{{ pug_release.json.tag_name }}/pug_{{ pug_release.json.tag_name | replace('v', '') }}_linux_{{
+            src:
+              "https://github.com/leg100/pug/releases/download/{{ pug_release.json.tag_name }}/pug_{{ pug_release.json.tag_name | replace('v', '') }}_linux_{{
               package_architecture }}.zip"
             dest: /tmp
             remote_src: true
@@ -591,7 +597,8 @@
 
         - name: Download tfautomv binary
           ansible.builtin.unarchive:
-            src: "https://github.com/busser/tfautomv/releases/download/{{ tfautomv_release.json.tag_name }}/tfautomv_{{ tfautomv_release.json.tag_name | replace('v',
+            src:
+              "https://github.com/busser/tfautomv/releases/download/{{ tfautomv_release.json.tag_name }}/tfautomv_{{ tfautomv_release.json.tag_name | replace('v',
               '') }}_linux_{{ package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
@@ -668,7 +675,8 @@
 
         - name: Download hcledit binary
           ansible.builtin.unarchive:
-            src: "https://github.com/minamijoyo/hcledit/releases/download/{{ hcledit_release.json.tag_name }}/hcledit_{{ hcledit_release.json.tag_name | replace('v',
+            src:
+              "https://github.com/minamijoyo/hcledit/releases/download/{{ hcledit_release.json.tag_name }}/hcledit_{{ hcledit_release.json.tag_name | replace('v',
               '') }}_linux_{{ package_architecture }}.tar.gz"
             dest: /tmp
             remote_src: true
@@ -703,6 +711,5 @@
     - /tmp/hcledit
   failed_when: false
   tags: base-tools, cleanup
-
 # Note: We do NOT cleanup Slack .deb file to maintain idempotence
 # The file presence check prevents re-downloading on subsequent runs

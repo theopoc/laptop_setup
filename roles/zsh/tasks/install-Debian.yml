@@ -4,7 +4,7 @@
 - name: Install zsh and related packages via apt
   ansible.builtin.apt:
     name:
-      - git  # Required for cloning Oh My Zsh and themes
+      - git # Required for cloning Oh My Zsh and themes
       - zsh
       - zsh-autosuggestions
       - zsh-syntax-highlighting
