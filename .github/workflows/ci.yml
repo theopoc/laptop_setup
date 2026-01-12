@@ -11,6 +11,7 @@ on:
       - 'refactor/**'
       - 'perf/**'
       - 'chore(deps)**'
+      - 'renovate/**'
   schedule:
     # Exécute tous les samedis à 15h00 heure de Paris (14h00 UTC en hiver CET, 13h00 UTC en été CEST)
     # Note: GitHub Actions utilise UTC, donc 14h UTC = 15h Paris (hiver)
