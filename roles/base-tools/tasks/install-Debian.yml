@@ -292,6 +292,7 @@
       changed_when: not "is already installed" in install_python_cli_tools.stderr
       loop:
         - tldr
+        - glances
       become: false
       tags: base-tools
 
