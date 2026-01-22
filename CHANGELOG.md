@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.0](https://github.com/TheoPoc/laptop_setup/compare/v2.11.0...v2.12.0) (2026-01-22)
+
+### ✨ Features
+
+* install glances ([06bca37](https://github.com/TheoPoc/laptop_setup/commit/06bca375a5dabdbb0ffa929057495169ffe8c7b3))
+
+### 👷 CI/CD
+
+* add renovate branches to CI workflow triggers ([4750a08](https://github.com/TheoPoc/laptop_setup/commit/4750a086246993de3aae2844ee9357fb963fd88e))
+
+### 🔧 Chores
+
+* **deps:** Update dependency uv to v0.9.20 ([#73](https://github.com/TheoPoc/laptop_setup/issues/73)) ([516c2f1](https://github.com/TheoPoc/laptop_setup/commit/516c2f14cf5eefb863ab5fad1a29970d02c31b24))
+* **deps:** Update dependency uv to v0.9.21 ([#74](https://github.com/TheoPoc/laptop_setup/issues/74)) ([3f9f414](https://github.com/TheoPoc/laptop_setup/commit/3f9f41466db827fec8f620bbe5c289d9b50e52ce))
+* **deps:** Update dependency uv to v0.9.22 ([#77](https://github.com/TheoPoc/laptop_setup/issues/77)) ([4eaf294](https://github.com/TheoPoc/laptop_setup/commit/4eaf294e77ebb7790cac863eee527eed86129956))
+* **deps:** Update dependency uv to v0.9.24 ([#79](https://github.com/TheoPoc/laptop_setup/issues/79)) ([b9bcfbe](https://github.com/TheoPoc/laptop_setup/commit/b9bcfbe3db90d72e688be07d1bf62639c6b7e749))
+* **deps:** Update dependency uv to v0.9.25 ([#82](https://github.com/TheoPoc/laptop_setup/issues/82)) ([6b26d76](https://github.com/TheoPoc/laptop_setup/commit/6b26d7680337f7cb3a710e69577fbb7c7f912607))
+* **deps:** Update dependency uv to v0.9.26 ([#84](https://github.com/TheoPoc/laptop_setup/issues/84)) ([000dd24](https://github.com/TheoPoc/laptop_setup/commit/000dd2458b3bf5087c3597a06fab9f6a1163e93b))
+* **deps:** Update GitHub Actions to v25.12.2 ([#71](https://github.com/TheoPoc/laptop_setup/issues/71)) ([65accd4](https://github.com/TheoPoc/laptop_setup/commit/65accd45665581b22d43385003ca17dadb07afa4))
+* **deps:** Update GitHub Actions to v26 ([26ff933](https://github.com/TheoPoc/laptop_setup/commit/26ff933239a3eecc0cf63e1d60e408578951dc1b))
+* **deps:** Update GitHub Actions to v26.1.1 ([#85](https://github.com/TheoPoc/laptop_setup/issues/85)) ([3e437f0](https://github.com/TheoPoc/laptop_setup/commit/3e437f0ee878795bc2715e37805106d0f8364e47))
+* **deps:** Update GitHub Actions to v6 ([e690bb3](https://github.com/TheoPoc/laptop_setup/commit/e690bb39336b72b1c189b788cf88a1d252e3311c))
+* **deps:** Update lock files ([#75](https://github.com/TheoPoc/laptop_setup/issues/75)) ([fb1a52d](https://github.com/TheoPoc/laptop_setup/commit/fb1a52d486be57ccb2d51bf7cfa7fee454ffcb5b))
+* **deps:** Update lock files ([#80](https://github.com/TheoPoc/laptop_setup/issues/80)) ([7422c60](https://github.com/TheoPoc/laptop_setup/commit/7422c60b1cd8c151ec716af2b686238078697484))
+* **deps:** Update Python dependencies ([#76](https://github.com/TheoPoc/laptop_setup/issues/76)) ([9802c5a](https://github.com/TheoPoc/laptop_setup/commit/9802c5a1818b6d6345ade738c32a12bac51410ee))
+* **deps:** Update Python dependencies ([#81](https://github.com/TheoPoc/laptop_setup/issues/81)) ([c536e34](https://github.com/TheoPoc/laptop_setup/commit/c536e3410ba422d9ea94d04cf6fdbf8a4b987948))
+
 ## [2.11.0](https://github.com/TheoPoc/laptop_setup/compare/v2.10.3...v2.11.0) (2025-12-22)
 
 ### ✨ Features
