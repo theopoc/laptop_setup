@@ -144,7 +144,7 @@ eval "$(mise activate zsh)"
 {% endif %}
 
 # direnv
-# eval "$(direnv hook zsh)"
+[[ $commands[direnv] ]] && eval "$(direnv hook zsh)"
 
 # Powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
