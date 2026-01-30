@@ -41,7 +41,7 @@ jobs:
           config_file: .yamllint
 
       - name: Validate Ansible syntax
-        uses: dawidd6/action-ansible-playbook@v6
+        uses: dawidd6/action-ansible-playbook@v7
         with:
           playbook: main.yml
           directory: ./
@@ -152,7 +152,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run playbook integration test
-        uses: dawidd6/action-ansible-playbook@v6
+        uses: dawidd6/action-ansible-playbook@v7
         with:
           playbook: main.yml
           directory: ./
