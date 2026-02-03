@@ -177,6 +177,9 @@ mise_tools:
   updatecli: "latest"
   granted: "latest"
   uv: "latest"
+  lazygit: "latest"
+  sops: "latest"
+  age: "latest"
 
 # ============================================================================
 # Cursor Role
