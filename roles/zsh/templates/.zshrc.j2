@@ -139,7 +139,7 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 #source <(fzf --zsh)
 
 # mise
-{% if ansible_facts.env.MISE_SHELL is defined and ansible_facts.env.MISE_SHELL == "zsh" %}
+{% if ansible_facts.env.MISE_SHELL is defined %}
 eval "$(mise activate zsh)"
 {% endif %}
 
