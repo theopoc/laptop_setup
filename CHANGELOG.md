@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.13.0](https://github.com/TheoPoc/laptop_setup/compare/v2.12.1...v2.13.0) (2026-02-03)
+
+### ✨ Features
+
+* install xclip as dependency for copyfile on Ubuntu/Debian ([b00d532](https://github.com/TheoPoc/laptop_setup/commit/b00d5323a97bd349be0c0e2fdc553d32403d9532))
+
 ## [2.12.1](https://github.com/TheoPoc/laptop_setup/compare/v2.12.0...v2.12.1) (2026-01-22)
 
 ### 🐛 Bug Fixes
