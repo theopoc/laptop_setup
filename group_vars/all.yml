@@ -80,6 +80,7 @@ debian_apt_packages:
   - lsb-release # LSB version reporting utility
   - unzip # ZIP archive extraction utility
   - firefox-esr # Firefox Extended Support Release (Debian standard)
+  - glances     # Equivalent to htop but better
 
 ubuntu_apt_packages:
   - git # Version control system
@@ -105,6 +106,7 @@ ubuntu_apt_packages:
   - lsb-release # LSB version reporting utility
   - unzip # ZIP archive extraction utility
   - snapd # snap
+  - glances # Equivalent to htop but better
 
 ubuntu_snap_packages:
   - firefox
