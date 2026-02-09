@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.16.1](https://github.com/TheoPoc/laptop_setup/compare/v2.16.0...v2.16.1) (2026-02-09)
+
+### 🐛 Bug Fixes
+
+* **spotify:** fix pgp key for spotify repository ([4d045a4](https://github.com/TheoPoc/laptop_setup/commit/4d045a49a95ec3a18f332fc2ef5798f739d6b82e))
+
+### 🔧 Chores
+
+* **deps:** Update dependency uv to v0.9.30 ([#92](https://github.com/TheoPoc/laptop_setup/issues/92)) ([95caf5b](https://github.com/TheoPoc/laptop_setup/commit/95caf5beb658ebf893127fb902e1f1ff3b777b14))
+
 ## [2.16.0](https://github.com/TheoPoc/laptop_setup/compare/v2.15.0...v2.16.0) (2026-02-04)
 
 ### ✨ Features
