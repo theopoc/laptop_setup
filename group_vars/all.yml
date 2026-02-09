@@ -120,7 +120,7 @@ debian_apt_repositories:
     package: "google-chrome-stable"
   spotify:
     enabled: true
-    key_url: "https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg"
+    key_url: "https://download.spotify.com/debian/pubkey_5384CE82BA52C83A.asc"
     repo_url: "http://repository.spotify.com stable non-free"
     repo_options: ""
     package: "spotify-client"
