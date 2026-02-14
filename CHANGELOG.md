@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.0](https://github.com/TheoPoc/laptop_setup/compare/v2.16.1...v2.17.0) (2026-02-14)
+
+### ✨ Features
+
+* install tree for ubuntu/debian ([bdb8442](https://github.com/TheoPoc/laptop_setup/commit/bdb844298c12c25ccdb4edc99bcfb0c1d1914ebd))
+
 ## [2.16.1](https://github.com/TheoPoc/laptop_setup/compare/v2.16.0...v2.16.1) (2026-02-09)
 
 ### 🐛 Bug Fixes
