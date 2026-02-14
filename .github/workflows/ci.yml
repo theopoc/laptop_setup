@@ -139,6 +139,8 @@ jobs:
           molecule_options: --debug
           molecule_command: test
           molecule_working_dir: "${{ github.repository }}/roles/${{ matrix.role }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   # Integration test - full playbook execution
@@ -160,6 +162,7 @@ jobs:
           options: |
             -i hosts
             --diff
+            -e github_token=${{ secrets.GITHUB_TOKEN }}
 
   # Generate documentation
   documentation:

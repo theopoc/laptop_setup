@@ -19,6 +19,7 @@
     method: GET
     return_content: true
     status_code: 200
+    headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
   register: latest_release
   check_mode: false
   when: not rancher_desktop_installed.stat.exists
