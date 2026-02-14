@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.1](https://github.com/TheoPoc/laptop_setup/compare/v2.19.0...v2.19.1) (2026-02-14)
+
+### 🐛 Bug Fixes
+
+* **ci:** replace molecule-action with direct uv-based molecule execution ([ac78daa](https://github.com/TheoPoc/laptop_setup/commit/ac78daa84a2f88e9244616f9d7c2bc12ec8f86d4))
+* **ci:** use .python-version file instead of hardcoded version ([426fe35](https://github.com/TheoPoc/laptop_setup/commit/426fe35545cde8bcba7a1da0ec80f79098a46892))
+* debug parameter order for molecule ([41fb147](https://github.com/TheoPoc/laptop_setup/commit/41fb147e58ff180d8b8fbfa22380dd432fbefaa7))
+
+### ✅ Tests
+
+* **ci:** trigger molecule test for base-tools role ([4bc3247](https://github.com/TheoPoc/laptop_setup/commit/4bc324729b6030ef5acd896d9e18d24c0831f393))
+
+## [2.19.0](https://github.com/TheoPoc/laptop_setup/compare/v2.18.0...v2.19.0) (2026-02-14)
+
+### ✨ Features
+
+* add direnv for automatic mise and uv sync on project entry ([9d74866](https://github.com/TheoPoc/laptop_setup/commit/9d74866fb416a9d5d495d53f53abafe97f6445b4))
+* auto-detect Docker rootless socket in Taskfile and add troubleshooting docs ([0cc6f31](https://github.com/TheoPoc/laptop_setup/commit/0cc6f31e2934510de4a05bf605b92ac15b4984fa))
+
+### 🔧 Chores
+
+* **deps:** add yamllint to mise and ansible-lint as dev dependency ([cfd8e28](https://github.com/TheoPoc/laptop_setup/commit/cfd8e2881fc887685aad1ec0756a8db864ba278e))
+
 ## [2.18.0](https://github.com/TheoPoc/laptop_setup/compare/v2.17.0...v2.18.0) (2026-02-14)
 
 ### ✨ Features
