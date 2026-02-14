@@ -1,6 +1,6 @@
 ---
 # Main task file for base-tools role
-# Dispatches to OS-specific installation tasks
+# Dispatches to OS-specific installation tasks and packages
 
 - name: Include OS-specific installation tasks
   ansible.builtin.include_tasks: "install-{{ ansible_facts.distribution }}.yml"
