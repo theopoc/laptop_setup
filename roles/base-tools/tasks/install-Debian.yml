@@ -246,8 +246,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/lsd-rs/lsd/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: lsd_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: lsd_release is succeeded
@@ -328,8 +330,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/wagoodman/dive/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: dive_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: dive_release is succeeded
@@ -365,8 +369,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/gopasspw/gopass/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: gopass_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: gopass_release is succeeded
@@ -402,8 +408,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/peak/s5cmd/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: s5cmd_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: s5cmd_release is succeeded
@@ -441,8 +449,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/fishi0x01/vsh/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: vsh_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: vsh_release is succeeded
@@ -471,8 +481,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/falcosuessgott/vkv/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: vkv_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: vkv_release is succeeded
@@ -515,8 +527,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/egen/safe/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: safe_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: safe_release is succeeded
@@ -545,8 +559,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/leg100/pug/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: pug_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: pug_release is succeeded
@@ -584,8 +600,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/busser/tfautomv/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: tfautomv_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: tfautomv_release is succeeded
@@ -623,8 +641,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/suzuki-shunsuke/tfmv/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: tfmv_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: tfmv_release is succeeded
@@ -661,8 +681,10 @@
           ansible.builtin.uri:
             url: https://api.github.com/repos/minamijoyo/hcledit/releases/latest
             return_content: true
+            headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
           register: hcledit_release
           check_mode: false
+          no_log: "{{ (github_token | default('') | length > 0) | bool }}"
           retries: 3
           delay: 5
           until: hcledit_release is succeeded
