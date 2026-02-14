@@ -144,3 +144,35 @@ All settings are in [group_vars/all.yml](group_vars/all.yml):
 - Packages (Homebrew/APT), Cursor IDE (extensions, settings, MCP), DevOps tools (mise), Git config, Warp workflows, App Store apps, Dock apps
 
 Configuration automatically adapts to your OS.
+
+## Troubleshooting
+
+### Molecule tests fail with "Failed to create temporary directory" (Docker rootless)
+
+If Molecule containers are created successfully but Ansible fails to connect with:
+
+```
+fatal: [ubuntu-24-04]: UNREACHABLE! => {"msg": "Failed to create temporary directory..."}
+```
+
+This is caused by a mismatch between the Docker CLI and the Python Docker SDK when using **Docker rootless mode**. The Docker CLI respects the active Docker context (e.g. `rootless` using `unix:///run/user/<uid>/docker.sock`), but the Python Docker SDK defaults to `unix:///var/run/docker.sock` (root daemon). Molecule creates containers on the root daemon while Ansible tries to reach them on the rootless daemon.
+
+**Diagnosis:**
+
+```bash
+docker context ls  # Look for "rootless *" as active context
+```
+
+**Solution:**
+
+The `Taskfile.yml` auto-detects the rootless Docker socket and sets `DOCKER_HOST` accordingly. If you run Molecule outside of Task, export the variable manually:
+
+```bash
+export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
+```
+
+Or switch Docker back to the default (root) context:
+
+```bash
+docker context use default
+```

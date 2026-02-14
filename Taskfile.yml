@@ -1,6 +1,15 @@
 ---
 version: '3'
 
+env:
+  DOCKER_HOST:
+    sh: |
+      if [ -n "$DOCKER_HOST" ]; then
+        echo "$DOCKER_HOST"
+      elif [ -S "/run/user/$(id -u)/docker.sock" ]; then
+        echo "unix:///run/user/$(id -u)/docker.sock"
+      fi
+
 tasks:
   default:
     desc: Display helper
