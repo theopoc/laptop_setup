@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.2](https://github.com/TheoPoc/laptop_setup/compare/v2.19.1...v2.19.2) (2026-02-14)
+
+### 🐛 Bug Fixes
+
+* github rate limit ([c78498b](https://github.com/TheoPoc/laptop_setup/commit/c78498b6815c2bf5efe0f60654b929fb60d85dbd))
+* prevent github token leak in uri task error output ([f9261b6](https://github.com/TheoPoc/laptop_setup/commit/f9261b6c6a5b2f97005738db2dfe6e4dde346f73))
+
 ## [2.19.1](https://github.com/TheoPoc/laptop_setup/compare/v2.19.0...v2.19.1) (2026-02-14)
 
 ### 🐛 Bug Fixes
