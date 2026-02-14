@@ -81,6 +81,7 @@ debian_apt_packages:
   - unzip # ZIP archive extraction utility
   - firefox-esr # Firefox Extended Support Release (Debian standard)
   - glances     # Equivalent to htop but better
+  - tree
 
 ubuntu_apt_packages:
   - git # Version control system
@@ -107,6 +108,7 @@ ubuntu_apt_packages:
   - unzip # ZIP archive extraction utility
   - snapd # snap
   - glances # Equivalent to htop but better
+  - tree
 
 ubuntu_snap_packages:
   - firefox
