@@ -143,7 +143,7 @@ jobs:
         run: uv sync
 
       - name: Run Molecule tests (Ubuntu 24.04 + Debian 12)
-        run: uv run molecule test --debug
+        run: uv run molecule --debug test
         working-directory: roles/${{ matrix.role }}
         env:
           ANSIBLE_FORCE_COLOR: "1"
