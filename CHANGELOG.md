@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.18.0](https://github.com/TheoPoc/laptop_setup/compare/v2.17.0...v2.18.0) (2026-02-14)
+
+### ✨ Features
+
+* add versions requirements for collections on test molecules ([3f009d7](https://github.com/TheoPoc/laptop_setup/commit/3f009d7539c9eb29534d1f3de9fde3fa74110e3c))
+
+### 🔧 Chores
+
+* remove makefile and related files to speckit ([0cdb116](https://github.com/TheoPoc/laptop_setup/commit/0cdb11604554f167e3929e0ddc5cbf68f5fd17ce))
+
 ## [2.17.0](https://github.com/TheoPoc/laptop_setup/compare/v2.16.1...v2.17.0) (2026-02-14)
 
 ### ✨ Features
