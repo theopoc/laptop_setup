@@ -22,6 +22,7 @@
     headers: "{{ {'Authorization': 'Bearer ' + github_token} if github_token | default('') | length > 0 else omit }}"
   register: latest_release
   check_mode: false
+  no_log: "{{ (github_token | default('') | length > 0) | bool }}"
   when: not rancher_desktop_installed.stat.exists
   retries: 3
   delay: 5
