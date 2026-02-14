@@ -11,3 +11,8 @@ dependencies = [
     "molecule>=25.12.0",
     "molecule-plugins[docker]>=25.8.12",
 ]
+
+[dependency-groups]
+dev = [
+    "ansible-lint>=26.1.1",
+]
