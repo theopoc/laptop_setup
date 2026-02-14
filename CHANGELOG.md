@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.0](https://github.com/TheoPoc/laptop_setup/compare/v2.18.0...v2.19.0) (2026-02-14)
+
+### ✨ Features
+
+* add direnv for automatic mise and uv sync on project entry ([9d74866](https://github.com/TheoPoc/laptop_setup/commit/9d74866fb416a9d5d495d53f53abafe97f6445b4))
+* auto-detect Docker rootless socket in Taskfile and add troubleshooting docs ([0cc6f31](https://github.com/TheoPoc/laptop_setup/commit/0cc6f31e2934510de4a05bf605b92ac15b4984fa))
+
+### 🔧 Chores
+
+* **deps:** add yamllint to mise and ansible-lint as dev dependency ([cfd8e28](https://github.com/TheoPoc/laptop_setup/commit/cfd8e2881fc887685aad1ec0756a8db864ba278e))
+
 ## [2.18.0](https://github.com/TheoPoc/laptop_setup/compare/v2.17.0...v2.18.0) (2026-02-14)
 
 ### ✨ Features
