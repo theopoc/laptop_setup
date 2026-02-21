@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.0](https://github.com/TheoPoc/laptop_setup/compare/v2.19.2...v2.20.0) (2026-02-21)
+
+### ✨ Features
+
+* **warp:** add workflow command to run temporary kubernetes pod ([b8234d0](https://github.com/TheoPoc/laptop_setup/commit/b8234d02e01ec0560807439ff7ddde1bc001f60c))
+
+### 🔧 Chores
+
+* **deps:** Update Ansible collections to v5.0.6 ([#96](https://github.com/TheoPoc/laptop_setup/issues/96)) ([83cd444](https://github.com/TheoPoc/laptop_setup/commit/83cd444c62633c6ea6f1e0e8c54ff8b47c891d75))
+* **deps:** Update Ansible roles to v8 ([59e6c29](https://github.com/TheoPoc/laptop_setup/commit/59e6c294ccb3da502994e36ff518c0b56205a7e9))
+* **deps:** Update dependency uv to v0.10.3 ([#93](https://github.com/TheoPoc/laptop_setup/issues/93)) ([307ffb8](https://github.com/TheoPoc/laptop_setup/commit/307ffb8890e5e4eae64b476abc264b8ab38e7cd7))
+* **deps:** Update GitHub Actions to v7 ([12e1791](https://github.com/TheoPoc/laptop_setup/commit/12e1791e32d750f7e8822c02a69793be6ffeabea))
+* **deps:** Update npm dependencies to v12.0.6 ([#97](https://github.com/TheoPoc/laptop_setup/issues/97)) ([4e71e6f](https://github.com/TheoPoc/laptop_setup/commit/4e71e6f18be2558fc68001ebad0b5dcef166a40a))
+* **deps:** Update Python dependencies ([#98](https://github.com/TheoPoc/laptop_setup/issues/98)) ([874fbfb](https://github.com/TheoPoc/laptop_setup/commit/874fbfbd3e01a6a086aea001a6c4e81b004ec53c))
+
 ## [2.19.2](https://github.com/TheoPoc/laptop_setup/compare/v2.19.1...v2.19.2) (2026-02-14)
 
 ### 🐛 Bug Fixes
