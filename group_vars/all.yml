@@ -401,6 +401,22 @@ warp_workflows:
     workflow_tags:
       - mysql
     workflow_description: "Show all mysql grants for all users"
+  - workflow_name: "Running temporary kubernetes pod"
+    workflow_command: !unsafe "k run -n {{ namespace }} -it --rm --restart=Never --image {{ image }} -- {{ command }}"
+    workflow_tags:
+      - kubernetes
+      - pod
+    workflow_description: "Running temporary kubernetes pod"
+    workflow_arguments:
+      - name: image
+        description: "Container image"
+        default_value: "busybox"
+      - name: namespace
+        description: "Namespace"
+        default_value: "default"
+      - name: command
+        description: "command"
+        default_value: "sh"
 
 ############################### DOCKER / CONTAINER VARIABLES ###########################
 
