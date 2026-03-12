@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.21.0](https://github.com/TheoPoc/laptop_setup/compare/v2.20.0...v2.21.0) (2026-03-12)
+
+### ✨ Features
+
+* **cursor:** bump version to 2.6.19 ([cba2705](https://github.com/TheoPoc/laptop_setup/commit/cba27055e5f71b84e80c762a5a8e0f7d5339bcb9))
+
+### 🐛 Bug Fixes
+
+* **cursor:** exclude unavailable extensions on Linux ([625efbd](https://github.com/TheoPoc/laptop_setup/commit/625efbdb50fb9df52d242ca02eb8f8701204523c))
+
+### 🔧 Chores
+
+* **deps:** Update Ansible collections to v12.4.0 ([#102](https://github.com/TheoPoc/laptop_setup/issues/102)) ([f6f22c9](https://github.com/TheoPoc/laptop_setup/commit/f6f22c9d9743042a3cd78382714cc55072d3850d))
+* **deps:** Update dependency uv to v0.10.5 ([#99](https://github.com/TheoPoc/laptop_setup/issues/99)) ([627ca69](https://github.com/TheoPoc/laptop_setup/commit/627ca69943fe2678fa884faef8c61e2860b25177))
+* **deps:** Update dependency uv to v0.10.6 ([#103](https://github.com/TheoPoc/laptop_setup/issues/103)) ([48649c8](https://github.com/TheoPoc/laptop_setup/commit/48649c8c011e2cf0ebd00084e853fac29707ea2a))
+* **deps:** Update lock files ([#100](https://github.com/TheoPoc/laptop_setup/issues/100)) ([8826530](https://github.com/TheoPoc/laptop_setup/commit/8826530689fe42c7c2d5546cfb250bd9ce9fdd77))
+* **deps:** Update Python dependencies ([#101](https://github.com/TheoPoc/laptop_setup/issues/101)) ([b8121f4](https://github.com/TheoPoc/laptop_setup/commit/b8121f411aabff2f3ad2b838808429cc17a519a0))
+
 ## [2.20.0](https://github.com/TheoPoc/laptop_setup/compare/v2.19.2...v2.20.0) (2026-02-21)
 
 ### ✨ Features
