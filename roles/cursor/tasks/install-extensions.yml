@@ -5,4 +5,5 @@
   with_items: "{{ cursor_extensions }}"
   register: cursor_result
   changed_when: "'already installed' not in cursor_result.stdout"
+  when: (item.id | default(item.name)) not in cursor_extensions_exclude
   tags: cursor
