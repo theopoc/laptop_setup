@@ -6,7 +6,7 @@ cursor_extensions_exclude:
   - "timonwong.shellcheck"
 
 
-cursor_version: "1.7"
+cursor_version: "2.6.19"
 cursor_download_url: "https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/{{ cursor_version }}"
 cursor_config_dir: "{{ ansible_facts.env.HOME }}/.config/Cursor"
 cursor_user_dir: "{{ ansible_facts.env.HOME }}/.config/Cursor/User"
