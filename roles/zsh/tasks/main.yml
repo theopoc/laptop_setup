@@ -4,3 +4,10 @@
 - name: Include OS-specific installation tasks
   ansible.builtin.include_tasks: "install-{{ ansible_facts.os_family }}.yml"
   tags: zsh
+
+- name: Ensure ~/.zshrc.d directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.zshrc.d"
+    state: directory
+    mode: "0755"
+  tags: zsh
