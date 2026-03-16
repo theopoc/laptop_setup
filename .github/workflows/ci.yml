@@ -124,7 +124,7 @@ jobs:
         (github.ref != 'refs/heads/main' && needs.detect-changes.outputs.roles != '[]')
       )
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         role: ${{ github.ref == 'refs/heads/main' && fromJSON(needs.discover-roles.outputs.roles) || fromJSON(needs.detect-changes.outputs.roles) }}
     steps:
