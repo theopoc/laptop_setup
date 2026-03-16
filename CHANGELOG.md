@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.22.1](https://github.com/TheoPoc/laptop_setup/compare/v2.22.0...v2.22.1) (2026-03-16)
+
+### 🐛 Bug Fixes
+
+* **ci:** cache mise tools and pass GitHub token to avoid rate limits ([5ea1b49](https://github.com/TheoPoc/laptop_setup/commit/5ea1b49db5b3e568c8f980e31c37f454d10c354f))
+
 ## [2.22.0](https://github.com/TheoPoc/laptop_setup/compare/v2.21.0...v2.22.0) (2026-03-16)
 
 ### ✨ Features
