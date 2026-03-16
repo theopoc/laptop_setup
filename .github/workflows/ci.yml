@@ -5,17 +5,19 @@ on:
   push:
     branches:
       - main
-      - develop
       - 'feat/**'
       - 'fix/**'
       - 'refactor/**'
       - 'perf/**'
       - 'chore(deps)**'
       - 'renovate/**'
+    paths-ignore:
+      - '**.md'
+      - Taskfile.yml
+      - '.pre-commit-config.yaml'
   pull_request:
     branches:
       - main
-      - develop
   schedule:
     # Exécute tous les samedis à 15h00 heure de Paris (14h00 UTC en hiver CET, 13h00 UTC en été CEST)
     # Note: GitHub Actions utilise UTC, donc 14h UTC = 15h Paris (hiver)
