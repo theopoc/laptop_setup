@@ -58,7 +58,6 @@ jobs:
   discover-roles:
     name: Discover Available Roles
     runs-on: ubuntu-24.04
-    needs: lint
     outputs:
       roles: ${{ steps.get-roles.outputs.roles }}
       filters: ${{ steps.get-roles.outputs.filters }}
@@ -97,7 +96,7 @@ jobs:
   detect-changes:
     name: Detect Changed Roles
     runs-on: ubuntu-24.04
-    needs: [lint, discover-roles]
+    needs: [discover-roles]
     if: github.ref != 'refs/heads/main'
     outputs:
       roles: ${{ steps.filter.outputs.changes }}
