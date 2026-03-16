@@ -12,6 +12,10 @@ on:
       - 'perf/**'
       - 'chore(deps)**'
       - 'renovate/**'
+  pull_request:
+    branches:
+      - main
+      - develop
   schedule:
     # Exécute tous les samedis à 15h00 heure de Paris (14h00 UTC en hiver CET, 13h00 UTC en été CEST)
     # Note: GitHub Actions utilise UTC, donc 14h UTC = 15h Paris (hiver)
@@ -155,7 +159,7 @@ jobs:
     name: Integration Test - Full Playbook
     runs-on: ubuntu-24.04
     needs: [discover-roles, detect-changes, test-roles]
-    if: always() && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') && (needs.test-roles.result == 'success' || needs.test-roles.result == 'skipped')
+    if: always() && (github.event_name == 'pull_request' || github.event_name == 'schedule') && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') && (needs.test-roles.result == 'success' || needs.test-roles.result == 'skipped')
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
