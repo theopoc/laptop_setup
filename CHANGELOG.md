@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.22.0](https://github.com/TheoPoc/laptop_setup/compare/v2.21.0...v2.22.0) (2026-03-16)
+
+### ✨ Features
+
+* **zsh:** ensure ~/.zshrc.d directory exists ([43d6d9a](https://github.com/TheoPoc/laptop_setup/commit/43d6d9aac16b61b77669d7b32c6a178b11cd3da5))
+
+### 🔧 Chores
+
+* **deps:** Update GitHub Actions to v26.3.0 ([#104](https://github.com/TheoPoc/laptop_setup/issues/104)) ([e0d9020](https://github.com/TheoPoc/laptop_setup/commit/e0d902072fb8976f28d11a0d052c6ff63a6d1ace))
+* **deps:** Update npm dependencies to v9.3.0 ([#106](https://github.com/TheoPoc/laptop_setup/issues/106)) ([489fb55](https://github.com/TheoPoc/laptop_setup/commit/489fb5508e76e24728d29ce46c09e596495d0ba3))
+* **deps:** Update Python dependencies ([#110](https://github.com/TheoPoc/laptop_setup/issues/110)) ([7933687](https://github.com/TheoPoc/laptop_setup/commit/7933687758f7aaf46a86ec407f16d98c61f2c69f))
+* remove claude local commands related to speckit ([f138a49](https://github.com/TheoPoc/laptop_setup/commit/f138a49f713f8b50aa593e3049a8af3cc846935a))
+
 ## [2.21.0](https://github.com/TheoPoc/laptop_setup/compare/v2.20.0...v2.21.0) (2026-03-12)
 
 ### ✨ Features
