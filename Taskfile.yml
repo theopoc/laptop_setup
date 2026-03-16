@@ -10,6 +10,8 @@ env:
         echo "unix:///run/user/$(id -u)/docker.sock"
       elif [ -S "${HOME}/.rd/docker.sock" ]; then
         echo "unix://${HOME}/.rd/docker.sock"
+      elif [ -S "/var/run/docker.sock" ]; then
+        echo "unix:///var/run/docker.sock"
       fi
 
 tasks:
