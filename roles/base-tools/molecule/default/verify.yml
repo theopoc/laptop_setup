@@ -39,14 +39,18 @@
       changed_when: false
       failed_when: htop_installed.rc != 0
 
-    - name: Check if yq is installed
-      ansible.builtin.command: which yq
+    - name: Check if yq is installed via mise
+      ansible.builtin.command: mise which yq
       register: yq_installed
       changed_when: false
       failed_when: yq_installed.rc != 0
 
     - name: Verify yq version
-      ansible.builtin.command: yq --version
+      ansible.builtin.shell: |
+        eval "$(mise activate bash)"
+        yq --version
+      args:
+        executable: /bin/bash
       register: yq_version
       changed_when: false
 
@@ -60,8 +64,8 @@
       changed_when: false
       failed_when: shellcheck_installed.rc != 0
 
-    - name: Check if lsd is installed
-      ansible.builtin.command: which lsd
+    - name: Check if lsd is installed via mise
+      ansible.builtin.command: mise which lsd
       register: lsd_installed
       changed_when: false
       failed_when: lsd_installed.rc != 0
@@ -76,63 +80,56 @@
       changed_when: false
       failed_when: tldr_installed.rc != 0
 
-    - name: Check if dive is installed
-      ansible.builtin.command: which dive
+    - name: Check if dive is installed via mise
+      ansible.builtin.command: mise which dive
       register: dive_installed
       changed_when: false
       failed_when: dive_installed.rc != 0
 
-    - name: Check if gopass is installed
-      ansible.builtin.command: which gopass
+    - name: Check if gopass is installed via mise
+      ansible.builtin.command: mise which gopass
       register: gopass_installed
       changed_when: false
       failed_when: gopass_installed.rc != 0
 
-    - name: Check if s5cmd is installed
-      ansible.builtin.command: which s5cmd
+    - name: Check if s5cmd is installed via mise
+      ansible.builtin.command: mise which s5cmd
       register: s5cmd_installed
       changed_when: false
       failed_when: s5cmd_installed.rc != 0
 
-    - name: Check if vsh is installed
-      ansible.builtin.command: which vsh
+    - name: Check if vsh is installed via mise
+      ansible.builtin.command: mise which vsh
       register: vsh_installed
       changed_when: false
       failed_when: vsh_installed.rc != 0
 
-    - name: Check if vkv is installed
-      ansible.builtin.command: which vkv
+    - name: Check if vkv is installed via mise
+      ansible.builtin.command: mise which vkv
       register: vkv_installed
       changed_when: false
       failed_when: vkv_installed.rc != 0
 
-    - name: Check if safe is installed (amd64 only)
-      ansible.builtin.command: which safe
-      register: safe_installed
-      changed_when: false
-      failed_when: safe_installed.rc != 0
-      when: ansible_facts.architecture == 'x86_64'
-
-    - name: Check if pug is installed
-      ansible.builtin.command: which pug
+    - name: Check if pug is installed via mise
+      ansible.builtin.command: mise which pug
       register: pug_installed
       changed_when: false
       failed_when: pug_installed.rc != 0
 
-    - name: Check if tfautomv is installed
-      ansible.builtin.command: which tfautomv
+    - name: Check if tfautomv is installed via mise
+      ansible.builtin.command: mise which tfautomv
       register: tfautomv_installed
       changed_when: false
       failed_when: tfautomv_installed.rc != 0
 
-    - name: Check if tfmv is installed
-      ansible.builtin.command: which tfmv
+    - name: Check if tfmv is installed via mise
+      ansible.builtin.command: mise which tfmv
       register: tfmv_installed
       changed_when: false
       failed_when: tfmv_installed.rc != 0
 
-    - name: Check if hcledit is installed
-      ansible.builtin.command: which hcledit
+    - name: Check if hcledit is installed via mise
+      ansible.builtin.command: mise which hcledit
       register: hcledit_installed
       changed_when: false
       failed_when: hcledit_installed.rc != 0
