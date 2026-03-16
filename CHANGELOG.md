@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.23.1](https://github.com/TheoPoc/laptop_setup/compare/v2.23.0...v2.23.1) (2026-03-16)
+
+### 🐛 Bug Fixes
+
+* **uv:** ignore unsupported shell error in uv tool update-shell ([663c79a](https://github.com/TheoPoc/laptop_setup/commit/663c79ab02ec40f70bb450efaa7dc2104ef76dd0))
+
+### ✅ Tests
+
+* **mise:** inject GITHUB_TOKEN in Molecule converge ([a61e93a](https://github.com/TheoPoc/laptop_setup/commit/a61e93a6b4bf1fae214945132d2e599f5a12cbc8))
+
 ## [2.23.0](https://github.com/TheoPoc/laptop_setup/compare/v2.22.2...v2.23.0) (2026-03-16)
 
 ### ✨ Features
