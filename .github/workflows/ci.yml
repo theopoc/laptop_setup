@@ -3,12 +3,6 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
-      - Taskfile.yml
-      - '.pre-commit-config.yaml'
   schedule:
     # Exécute tous les samedis à 15h00 heure de Paris (14h00 UTC en hiver CET, 13h00 UTC en été CEST)
     # Note: GitHub Actions utilise UTC, donc 14h UTC = 15h Paris (hiver)
@@ -24,6 +18,7 @@ env:
   PYTHON_VERSION: "3.11"
 
 jobs:
+  # Linting and validation
   lint:
     name: Lint and Validate
     runs-on: ubuntu-24.04
@@ -51,10 +46,112 @@ jobs:
             -i hosts
             --syntax-check
 
+  # Discover all available roles dynamically
+  discover-roles:
+    name: Discover Available Roles
+    runs-on: ubuntu-24.04
+    needs: lint
+    outputs:
+      roles: ${{ steps.get-roles.outputs.roles }}
+      filters: ${{ steps.get-roles.outputs.filters }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Discover testable roles and generate filters
+        id: get-roles
+        run: |
+          # Only include roles that have a molecule directory
+          testable_roles=()
+          filters=""
+
+          for role in roles/*/; do
+            role_name=$(basename "$role")
+            if [ -d "roles/${role_name}/molecule" ]; then
+              testable_roles+=("$role_name")
+              filters="${filters}${role_name}:\n  - 'roles/${role_name}/**'\n"
+            else
+              echo "Skipping $role_name (no molecule tests)"
+            fi
+          done
+
+          # Output roles list
+          roles=$(printf '%s\n' "${testable_roles[@]}" | jq -R -s -c 'split("\n")[:-1]')
+          echo "roles=$roles" >> $GITHUB_OUTPUT
+          echo "Found testable roles: $roles"
+
+          # Output filters
+          echo "filters<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$filters" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  # Detect changed roles to optimize testing (only on feature branches)
+  detect-changes:
+    name: Detect Changed Roles
+    runs-on: ubuntu-24.04
+    needs: [lint, discover-roles]
+    if: github.ref != 'refs/heads/main'
+    outputs:
+      roles: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Detect changed roles
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: ${{ needs.discover-roles.outputs.filters }}
+
+  # Test matrix for changed roles only with Molecule (or all roles on main branch)
+  # Note: Molecule tests run against multiple platforms (Ubuntu 24.04, Debian 12)
+  # as configured in each role's molecule/default/molecule.yml file
+  test-roles:
+    name: Test Role - ${{ matrix.role }}
+    runs-on: ubuntu-24.04
+    needs: [lint, discover-roles, detect-changes]
+    if: |
+      always() &&
+      needs.lint.result == 'success' &&
+      needs.discover-roles.result == 'success' &&
+      (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') &&
+      (
+        (github.ref == 'refs/heads/main' && needs.discover-roles.outputs.roles != '[]') ||
+        (github.ref != 'refs/heads/main' && needs.detect-changes.outputs.roles != '[]')
+      )
+    strategy:
+      fail-fast: true
+      matrix:
+        role: ${{ github.ref == 'refs/heads/main' && fromJSON(needs.discover-roles.outputs.roles) || fromJSON(needs.detect-changes.outputs.roles) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: .python-version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run Molecule tests (Ubuntu 24.04 + Debian 12)
+        run: uv run molecule --debug test
+        working-directory: roles/${{ matrix.role }}
+        env:
+          ANSIBLE_FORCE_COLOR: "1"
+          ANSIBLE_ROLES_PATH: ../../../
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Integration test - full playbook execution
   integration-test:
     name: Integration Test - Full Playbook
     runs-on: ubuntu-24.04
-    needs: [lint]
+    needs: [discover-roles, detect-changes, test-roles]
+    if: always() && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') && (needs.test-roles.result == 'success' || needs.test-roles.result == 'skipped')
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -80,11 +177,12 @@ jobs:
         env:
           MISE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  # Generate documentation
   documentation:
     name: Generate Documentation
     runs-on: ubuntu-latest
-    needs: [integration-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: integration-test
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -114,16 +212,20 @@ jobs:
             exit 1
           fi
 
+  # Notify on completion
   notify:
     name: Notify Results
     runs-on: ubuntu-latest
-    needs: [lint, integration-test]
+    needs: [lint, discover-roles, detect-changes, test-roles, integration-test]
     if: always()
     steps:
       - name: Check workflow status
         id: check
         run: |
           if [ "${{ needs.lint.result }}" = "failure" ] || \
+             [ "${{ needs.discover-roles.result }}" = "failure" ] || \
+             [ "${{ needs.detect-changes.result }}" = "failure" ] || \
+             [ "${{ needs.test-roles.result }}" = "failure" ] || \
              [ "${{ needs.integration-test.result }}" = "failure" ]; then
             echo "status=failure" >> $GITHUB_OUTPUT
             echo "status_emoji=❌" >> $GITHUB_OUTPUT
@@ -151,6 +253,12 @@ jobs:
 
             <b>Job Results:</b>
             • Lint: ${{ needs.lint.result == 'success' && '✅' || '❌' }}
-            • Integration Test: ${{ needs.integration-test.result == 'success' && '✅' || needs.integration-test.result == 'skipped' && '⏭️' || '❌' }}
+            • Discover Roles: ${{ needs.discover-roles.result == 'success' && '✅' || '❌' }}
+            • Detect Changes: ${{ needs.detect-changes.result == 'success' && '✅' || needs.detect-changes.result == 'skipped' && '⏭️' || '❌' }}
+            • Test Roles: ${{ needs.test-roles.result == 'success' && '✅' || needs.test-roles.result == 'skipped' && '⏭️' || '❌' }}
+            • Integration Test: ${{ needs.integration-test.result == 'success' && '✅' || '❌' }}
+
+            <b>Discovered Roles:</b> ${{ needs.discover-roles.outputs.roles }}
+            <b>Tested Roles:</b> ${{ github.ref == 'refs/heads/main' && 'All roles (main branch)' || (needs.detect-changes.outputs.roles != '[]' && needs.detect-changes.outputs.roles || 'None (no changes detected)') }}
 
             <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View Workflow Run</a>
