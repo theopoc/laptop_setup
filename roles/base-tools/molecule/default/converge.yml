@@ -16,8 +16,7 @@
       - jq
       - ripgrep
       - htop
-      - yq
-      - shellcheck 
+      - shellcheck
     ubuntu_apt_packages:
       - git
       - python3
@@ -28,11 +27,20 @@
       - jq
       - ripgrep
       - htop
-      - yq
       - shellcheck
       - snapd
     mise_tools:
       uv: latest
+      yq: latest
+      lsd: latest
+      dive: latest
+      "aqua:peak/s5cmd": latest
+      "github:gopasspw/gopass": latest
+      "github:fishi0x01/vsh": latest
+      "github:falcosuessgott/vkv": latest
+      "aqua:leg100/pug": latest
+      "github:busser/tfautomv": latest
+      "aqua:suzuki-shunsuke/tfmv": latest
   tasks:
     - name: Include base-tools role
       ansible.builtin.include_role:
