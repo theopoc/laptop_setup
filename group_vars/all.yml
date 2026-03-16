@@ -186,7 +186,7 @@ mise_tools:
   "github:falcosuessgott/vkv": "latest"
   "aqua:leg100/pug": "latest"
   "github:busser/tfautomv": "latest"
-  tfmv: "latest"
+  "aqua:suzuki-shunsuke/tfmv": "latest"
   "aqua:minamijoyo/hcledit": "latest"
 
 # ============================================================================

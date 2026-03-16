@@ -40,8 +40,7 @@
       "github:falcosuessgott/vkv": latest
       "aqua:leg100/pug": latest
       "github:busser/tfautomv": latest
-      tfmv: latest
-      "aqua:minamijoyo/hcledit": latest
+      "aqua:suzuki-shunsuke/tfmv": latest
   tasks:
     - name: Include base-tools role
       ansible.builtin.include_role:

@@ -128,12 +128,6 @@
       changed_when: false
       failed_when: tfmv_installed.rc != 0
 
-    - name: Check if hcledit is installed via mise
-      ansible.builtin.command: mise which hcledit
-      register: hcledit_installed
-      changed_when: false
-      failed_when: hcledit_installed.rc != 0
-
     - name: Check if snap is installed
       ansible.builtin.command: which snap
       register: snap_installed
