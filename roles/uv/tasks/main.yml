@@ -32,6 +32,7 @@
     - "'already' not in uv_shell_update.stdout"
     - "'already' not in uv_shell_update.stderr"
     - "'shell could not be determined' not in uv_shell_update.stderr"
+    - "'currently unsupported' not in uv_shell_update.stderr"
   when:
     - uv_path.rc == 0
     - uv_path.stdout is defined
