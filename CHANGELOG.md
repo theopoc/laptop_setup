@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.22.2](https://github.com/TheoPoc/laptop_setup/compare/v2.22.1...v2.22.2) (2026-03-16)
+
+### 🐛 Bug Fixes
+
+* **taskfile:** add Rancher Desktop socket path for macOS DOCKER_HOST detection ([43b73b7](https://github.com/TheoPoc/laptop_setup/commit/43b73b7eb4f4f434e987de0dc3fcdeb0b3e7b0de))
+
+### 👷 CI/CD
+
+* add concurrency group to cancel redundant workflow runs ([194bc26](https://github.com/TheoPoc/laptop_setup/commit/194bc26ada16518183a179d9fc7c6504ccaea672))
+* enable fail fast strategy on matrix ([d65add5](https://github.com/TheoPoc/laptop_setup/commit/d65add59b2aeffcfc31ae8d1aa3027988403ff2b))
+* merge detect-changes into discover-roles job ([dccc760](https://github.com/TheoPoc/laptop_setup/commit/dccc7606ef1f87d3aba748b5b71e625c72169228))
+* remove develop branch trigger and add paths-ignore for non-code files ([f9d53b2](https://github.com/TheoPoc/laptop_setup/commit/f9d53b2d618b4002573b93e5ec90a38374a7bbc6))
+* remove redundant lint dependency from discover-roles and detect-changes ([f278fb9](https://github.com/TheoPoc/laptop_setup/commit/f278fb99fc2b24622eaa1158adee4348a25c1220))
+* restrict integration-test to pull_request and schedule events ([f308a0d](https://github.com/TheoPoc/laptop_setup/commit/f308a0d46833197225d2dbdaac4593d20d50655d))
+* split into 2-tier workflow strategy ([7d0cb0f](https://github.com/TheoPoc/laptop_setup/commit/7d0cb0fe825b46be5ca9c05fa2fe2c42d0feb51b))
+
+### 🔧 Chores
+
+* **deps:** Update dependency uv to v0.10.10 ([#105](https://github.com/TheoPoc/laptop_setup/issues/105)) ([eb87a4d](https://github.com/TheoPoc/laptop_setup/commit/eb87a4da694c43aea9dca3eb3a2da57ddafc7a15))
+* **deps:** Update lock files ([#109](https://github.com/TheoPoc/laptop_setup/issues/109)) ([fb83a31](https://github.com/TheoPoc/laptop_setup/commit/fb83a31c03dba592dce2570ac063f47e9a80d648))
+
 ## [2.22.1](https://github.com/TheoPoc/laptop_setup/compare/v2.22.0...v2.22.1) (2026-03-16)
 
 ### 🐛 Bug Fixes
