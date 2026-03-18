@@ -46,7 +46,7 @@
 
     # --- deb install method ---
     - name: Check bat is installed (deb method)
-      ansible.builtin.command: which bat
+      ansible.builtin.command: bat --version
       register: bat_installed
       changed_when: false
 
