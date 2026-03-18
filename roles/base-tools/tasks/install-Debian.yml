@@ -1,5 +1,5 @@
 ---
-# Debian/Ubuntu installation tasks for base-tools
+# Debian installation tasks for base-tools
 
 - name: Install dependencies via apt
   ansible.builtin.apt:
@@ -19,7 +19,7 @@
   become: true
   tags: base-tools, apt
 
-# Install applications from third-party APT repositories (using modern signed-by method)
+# === apt_repository install method ===
 - name: Create keyrings directory for APT keys
   ansible.builtin.file:
     path: /etc/apt/keyrings
@@ -27,8 +27,8 @@
     mode: "0755"
   become: true
   when:
-    - debian_apt_repositories is defined
-    - debian_apt_repositories | length > 0
+    - debian_applications is defined
+    - (debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list | length) > 0
   tags: base-tools, desktop-apps
 
 - name: Download and convert GPG keys for third-party repositories
@@ -38,11 +38,8 @@
   args:
     creates: "/etc/apt/keyrings/{{ item.key }}.gpg"
   become: true
-  loop: "{{ debian_apt_repositories | dict2items }}"
-  when:
-    - debian_apt_repositories is defined
-    - debian_apt_repositories | length > 0
-    - item.value.enabled | default(true)
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list }}"
+  when: debian_applications is defined
   tags: base-tools, desktop-apps
 
 - name: Add third-party APT repositories with signed-by
@@ -52,11 +49,8 @@
     filename: "{{ item.key }}"
     update_cache: true
   become: true
-  loop: "{{ debian_apt_repositories | dict2items }}"
-  when:
-    - debian_apt_repositories is defined
-    - debian_apt_repositories | length > 0
-    - item.value.enabled | default(true)
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list }}"
+  when: debian_applications is defined
   tags: base-tools, desktop-apps
 
 - name: Install applications from third-party repositories
@@ -64,153 +58,101 @@
     name: "{{ item.value.package }}"
     state: present
   become: true
-  loop: "{{ debian_apt_repositories | dict2items }}"
-  when:
-    - debian_apt_repositories is defined
-    - debian_apt_repositories | length > 0
-    - item.value.enabled | default(true)
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list }}"
+  when: debian_applications is defined
   # Allow GUI apps to fail in containers (Chrome, Spotify need X11/Wayland dependencies)
   failed_when: false
   tags: base-tools, desktop-apps
 
-# Install applications via direct .deb downloads
+# === deb install method ===
 - name: Install applications via .deb packages
-  when:
-    - debian_deb_applications is defined
-    - debian_deb_applications | length > 0
+  ansible.builtin.apt:
+    deb: "{{ item.value.url_pattern }}"
+    state: present
+  become: true
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'deb') | selectattr('value.enabled', 'equalto', true) | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: debian_applications is defined
+  # Allow installation to fail in containers (missing dependencies, etc.)
+  failed_when: false
   tags: base-tools, desktop-apps
 
-  # Install Postman via tarball
+# === binary install method ===
+- name: Install binary applications
+  when:
+    - debian_applications is defined
+    - (debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'binary') | selectattr('value.enabled', 'equalto', true) | list | length) > 0
+  tags: base-tools, desktop-apps
   block:
-    # Check if Slack package is already installed or attempted
-    - name: Check if Slack is already installed or .deb file exists
-      ansible.builtin.command: "dpkg -s slack-desktop"
-      register: slack_installed
-      when:
-        - debian_deb_applications.slack is defined
-        - debian_deb_applications.slack.enabled | default(true)
-      failed_when: false
-      changed_when: false
-      check_mode: false
-
-    - name: Check if Slack .deb file exists
-      ansible.builtin.stat:
-        path: "/tmp/slack-desktop.deb"
-      register: slack_deb_exists
-      when:
-        - debian_deb_applications.slack is defined
-        - debian_deb_applications.slack.enabled | default(true)
-
-    # Get latest versions for applications with url_pattern (only if not already installed/downloaded)
-    - name: Get latest Slack version
-      ansible.builtin.uri:
-        url: "https://slack.com/downloads/instructions/linux"
-        return_content: true
-      register: slack_page
-      check_mode: false
-      retries: 3
-      delay: 5
-      until: slack_page is succeeded
-      when:
-        - debian_deb_applications.slack is defined
-        - debian_deb_applications.slack.enabled | default(true)
-        - debian_deb_applications.slack.url_pattern is defined
-        - slack_installed.rc != 0
-        - not slack_deb_exists.stat.exists
-
-    - name: Extract Slack version from page
+    - name: Set list of binary applications
       ansible.builtin.set_fact:
-        slack_version: "{{ slack_page.content | regex_search('desktop-releases/linux/x64/([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') | first }}"
-      when:
-        - slack_page is defined
-        - slack_page.content is defined
+        _binary_apps: "{{ debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'binary') | selectattr('value.enabled', 'equalto', true) | list }}"
 
-    - name: Download Slack .deb package
+    - name: Check if binary applications are already installed
+      ansible.builtin.stat:
+        path: "{{ item.value.install_dir }}"
+      register: _binary_stat
+      loop: "{{ _binary_apps }}"
+
+    - name: Build list of binary applications to install
+      ansible.builtin.set_fact:
+        _binary_to_install: >-
+          {{ _binary_to_install | default([]) +
+             ([_binary_apps[idx]] if not _binary_stat.results[idx].stat.exists else []) }}
+      loop: "{{ range(_binary_apps | length) | list }}"
+      loop_control:
+        loop_var: idx
+
+    - name: Download binary application tarballs
       ansible.builtin.get_url:
-        url: "{{ debian_deb_applications.slack.url_pattern | replace('{version}', slack_version | default('')) }}"
-        dest: "/tmp/slack-desktop.deb"
+        url: "{{ item.value.url }}"
+        dest: "/tmp/{{ item.key }}.tar.gz"
         mode: "0644"
+      loop: "{{ _binary_to_install | default([]) }}"
       retries: 3
       delay: 5
-      until: slack_download is succeeded
-      when:
-        - debian_deb_applications.slack is defined
-        - debian_deb_applications.slack.enabled | default(true)
-        - slack_installed.rc != 0
-        - not slack_deb_exists.stat.exists
-      # Allow downloads to fail in containers (network restrictions, old URLs, etc.)
+      until: _binary_downloads is succeeded
+      register: _binary_downloads
+      # Allow downloads to fail in containers (network issues, etc.)
       failed_when: false
-      register: slack_download
 
-    - name: Install Slack .deb package
-      ansible.builtin.apt:
-        deb: "/tmp/slack-desktop.deb"
-        state: present
-      become: true
-      when:
-        - slack_download is not skipped
-        - slack_download.changed is defined
-        - slack_download.changed
-      # Allow installation to fail in containers (missing dependencies, etc.)
-      failed_when: false
-- name: Check if Postman is already installed
-  ansible.builtin.stat:
-    path: "{{ debian_binary_applications.postman.install_dir }}"
-  register: postman_installed
-  when:
-    - debian_binary_applications is defined
-    - debian_binary_applications | length > 0
-    - debian_binary_applications.postman is defined
-    - debian_binary_applications.postman.enabled | default(true)
-  tags: base-tools, desktop-apps
-
-- name: Install Postman
-  when:
-    - debian_binary_applications is defined
-    - debian_binary_applications | length > 0
-    - debian_binary_applications.postman is defined
-    - debian_binary_applications.postman.enabled | default(true)
-    - postman_installed is defined
-    - not postman_installed.stat.exists
-  # Allow Postman installation to fail in containers (GUI dependencies, network issues, etc.)
-  ignore_errors: true
-  tags: base-tools, desktop-apps
-
-  # Additional tools that need manual installation
-  block:
-    - name: Download Postman tarball
-      ansible.builtin.get_url:
-        url: "{{ debian_binary_applications.postman.url }}"
-        dest: "/tmp/postman.tar.gz"
-        mode: "0644"
-      retries: 3
-      delay: 5
-      until: postman_tarball is succeeded
-      register: postman_tarball
-
-    - name: Create Postman installation directory
+    - name: Create binary application installation directories
       ansible.builtin.file:
-        path: "{{ debian_binary_applications.postman.install_dir }}"
+        path: "{{ item.value.install_dir }}"
         state: directory
         mode: "0755"
       become: true
+      loop: "{{ _binary_to_install | default([]) }}"
+      failed_when: false
 
-    - name: Extract Postman
+    - name: Extract binary application tarballs
       ansible.builtin.unarchive:
-        src: "/tmp/postman.tar.gz"
-        dest: "{{ debian_binary_applications.postman.install_dir }}"
+        src: "/tmp/{{ item.key }}.tar.gz"
+        dest: "{{ item.value.install_dir }}"
         remote_src: true
         extra_opts: [--strip-components=1]
       become: true
+      loop: "{{ _binary_to_install | default([]) }}"
       when: not ansible_check_mode
+      failed_when: false
 
-    - name: Create Postman symlink
+    - name: Create binary application symlinks
       ansible.builtin.file:
-        src: "{{ debian_binary_applications.postman.install_dir }}/Postman"
-        dest: "/usr/local/bin/{{ debian_binary_applications.postman.binary_name }}"
+        src: "{{ item.value.install_dir }}/{{ item.value.binary_path }}"
+        dest: "/usr/local/bin/{{ item.value.binary_name }}"
         state: link
       become: true
+      loop: "{{ _binary_to_install | default([]) }}"
       when: not ansible_check_mode
+      failed_when: false
+
+    - name: Clean up binary application tarballs
+      ansible.builtin.file:
+        path: "/tmp/{{ item.key }}.tar.gz"
+        state: absent
+      loop: "{{ _binary_to_install | default([]) }}"
+      failed_when: false
 
 - name: Install Python CLI tools via uv
   tags: base-tools, additional
@@ -254,15 +196,3 @@
         - "'shell could not be determined' not in uv_shell_update.stderr"
       when:
         - uv_update_shell | bool
-
-- name: Clean up temporary download files
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: absent
-  loop:
-    - /tmp/postman.tar.gz
-  failed_when: false
-  tags: base-tools, cleanup
-
-# Note: We do NOT cleanup Slack .deb file to maintain idempotence
-# The file presence check prevents re-downloading on subsequent runs

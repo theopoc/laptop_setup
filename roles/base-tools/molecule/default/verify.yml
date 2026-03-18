@@ -4,133 +4,74 @@
   gather_facts: true
   tasks:
     - name: Check if git is installed
-      ansible.builtin.command: which git
+      ansible.builtin.command: git --version
       register: git_installed
       changed_when: false
-      failed_when: git_installed.rc != 0
 
-    - name: Check if python3 is installed
-      ansible.builtin.command: which python3
-      register: python_installed
-      changed_when: false
-      failed_when: python_installed.rc != 0
+    - name: Assert git is installed
+      ansible.builtin.assert:
+        that: git_installed.rc == 0
+        fail_msg: "git is not installed"
 
-    - name: Check if curl is installed
-      ansible.builtin.command: which curl
-      register: curl_installed
-      changed_when: false
-      failed_when: curl_installed.rc != 0
-
-    - name: Check if jq is installed
-      ansible.builtin.command: which jq
-      register: jq_installed
-      changed_when: false
-      failed_when: jq_installed.rc != 0
-
-    - name: Check if ripgrep is installed
-      ansible.builtin.command: which rg
-      register: ripgrep_installed
-      changed_when: false
-      failed_when: ripgrep_installed.rc != 0
-
-    - name: Check if htop is installed
-      ansible.builtin.command: which htop
-      register: htop_installed
-      changed_when: false
-      failed_when: htop_installed.rc != 0
-
-    - name: Check if yq is installed via mise
-      ansible.builtin.command: mise which yq
-      register: yq_installed
-      changed_when: false
-      failed_when: yq_installed.rc != 0
-
-    - name: Verify yq version
-      ansible.builtin.shell: |
-        eval "$(mise activate bash)"
-        yq --version
-      args:
-        executable: /bin/bash
-      register: yq_version
-      changed_when: false
-
-    - name: Display yq version
-      ansible.builtin.debug:
-        msg: "yq version: {{ yq_version.stdout }}"
-
-    - name: Check if shellcheck is installed
-      ansible.builtin.command: which shellcheck
-      register: shellcheck_installed
-      changed_when: false
-      failed_when: shellcheck_installed.rc != 0
-
-    - name: Check if lsd is installed via mise
-      ansible.builtin.command: mise which lsd
-      register: lsd_installed
-      changed_when: false
-      failed_when: lsd_installed.rc != 0
-
-    - name: Check if tldr is installed
-      ansible.builtin.shell: |
-        eval "$(mise activate bash)"
-        uvx tldr tar
-      register: tldr_installed
-      args:
-        executable: /bin/bash
-      changed_when: false
-      failed_when: tldr_installed.rc != 0
-
-    - name: Check if dive is installed via mise
-      ansible.builtin.command: mise which dive
-      register: dive_installed
-      changed_when: false
-      failed_when: dive_installed.rc != 0
-
-    - name: Check if gopass is installed via mise
-      ansible.builtin.command: mise which gopass
-      register: gopass_installed
-      changed_when: false
-      failed_when: gopass_installed.rc != 0
-
-    - name: Check if s5cmd is installed via mise
-      ansible.builtin.command: mise which s5cmd
+    - name: Check if s5cmd is installed via mise (aqua type)
+      ansible.builtin.command: mise exec s5cmd -- s5cmd version
       register: s5cmd_installed
       changed_when: false
-      failed_when: s5cmd_installed.rc != 0
 
-    - name: Check if vsh is installed via mise
-      ansible.builtin.command: mise which vsh
-      register: vsh_installed
-      changed_when: false
-      failed_when: vsh_installed.rc != 0
+    - name: Assert s5cmd is installed via mise (aqua type)
+      ansible.builtin.assert:
+        that: s5cmd_installed.rc == 0
+        fail_msg: "s5cmd is not installed via mise (aqua type)"
 
-    - name: Check if vkv is installed via mise
-      ansible.builtin.command: mise which vkv
-      register: vkv_installed
-      changed_when: false
-      failed_when: vkv_installed.rc != 0
+    # --- apt_repository install method ---
+    - name: Check GPG key was created (apt_repository method)
+      ansible.builtin.stat:
+        path: /etc/apt/keyrings/google_chrome.gpg
+      register: apt_repo_key
 
-    - name: Check if pug is installed via mise
-      ansible.builtin.command: mise which pug
-      register: pug_installed
-      changed_when: false
-      failed_when: pug_installed.rc != 0
+    - name: Assert GPG key was created (apt_repository method)
+      ansible.builtin.assert:
+        that: apt_repo_key.stat.exists
+        fail_msg: "GPG key /etc/apt/keyrings/google_chrome.gpg was not created"
 
-    - name: Check if tfautomv is installed via mise
-      ansible.builtin.command: mise which tfautomv
-      register: tfautomv_installed
-      changed_when: false
-      failed_when: tfautomv_installed.rc != 0
+    - name: Check APT sources file was created (apt_repository method)
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/google_chrome.list
+      register: apt_repo_sources
 
-    - name: Check if tfmv is installed via mise
-      ansible.builtin.command: mise which tfmv
-      register: tfmv_installed
-      changed_when: false
-      failed_when: tfmv_installed.rc != 0
+    - name: Assert APT sources file was created (apt_repository method)
+      ansible.builtin.assert:
+        that: apt_repo_sources.stat.exists
+        fail_msg: "APT sources file /etc/apt/sources.list.d/google_chrome.list was not created"
 
-    - name: Check if snap is installed
-      ansible.builtin.command: which snap
-      register: snap_installed
+    # --- deb install method ---
+    - name: Check bat is installed (deb method)
+      ansible.builtin.command: bat --version
+      register: bat_installed
       changed_when: false
-      failed_when: snap_installed.rc != 0
-      when: ansible_facts.distribution == "Ubuntu"
+
+    - name: Assert bat is installed (deb method)
+      ansible.builtin.assert:
+        that: bat_installed.rc == 0
+        fail_msg: "bat is not installed (deb method)"
+
+    # --- binary install method ---
+    - name: Check delta install directory exists (binary method)
+      ansible.builtin.stat:
+        path: /opt/delta
+      register: delta_dir
+
+    - name: Assert delta install directory exists (binary method)
+      ansible.builtin.assert:
+        that: delta_dir.stat.exists
+        fail_msg: "delta install directory /opt/delta does not exist"
+
+    - name: Check delta symlink exists (binary method)
+      ansible.builtin.stat:
+        path: /usr/local/bin/delta
+      register: delta_symlink
+
+    - name: Assert delta symlink exists (binary method)
+      ansible.builtin.assert:
+        that: delta_symlink.stat.exists
+        fail_msg: "delta symlink /usr/local/bin/delta does not exist"

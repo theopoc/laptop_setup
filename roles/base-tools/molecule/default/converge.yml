@@ -8,39 +8,35 @@
     github_token: "{{ lookup('env', 'GITHUB_TOKEN') | default('') }}"
     debian_apt_packages:
       - git
-      - python3
-      - python3-pip
-      - curl
-      - wget
-      - unzip
-      - jq
-      - ripgrep
-      - htop
-      - shellcheck
     ubuntu_apt_packages:
       - git
-      - python3
-      - python3-pip
-      - curl
-      - wget
-      - unzip
-      - jq
-      - ripgrep
-      - htop
-      - shellcheck
-      - snapd
     mise_tools:
       uv: latest
-      yq: latest
-      lsd: latest
-      dive: latest
       "aqua:peak/s5cmd": latest
       "github:gopasspw/gopass": latest
-      "github:fishi0x01/vsh": latest
-      "github:falcosuessgott/vkv": latest
-      "aqua:leg100/pug": latest
-      "github:busser/tfautomv": latest
-      "aqua:suzuki-shunsuke/tfmv": latest
+    # Test all three debian_applications install methods
+    debian_applications:
+      # apt_repository: adds GPG key + third-party APT repo, installs package
+      google_chrome:
+        enabled: true
+        install_method: apt_repository
+        key_url: "https://dl.google.com/linux/linux_signing_key.pub"
+        repo_url: "http://dl.google.com/linux/chrome/deb/ stable main"
+        repo_options: "arch=amd64"
+        package: "google-chrome-stable"
+      # deb: downloads and installs a .deb package (no version detection)
+      bat:
+        enabled: true
+        install_method: deb
+        url_pattern: "https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb"
+      # binary: downloads tarball, extracts to install_dir, creates symlink
+      delta:
+        enabled: true
+        install_method: binary
+        url: "https://github.com/dandavison/delta/releases/download/0.18.2/delta-0.18.2-x86_64-unknown-linux-musl.tar.gz"
+        install_dir: "/opt/delta"
+        binary_name: "delta"
+        binary_path: "delta"
   tasks:
     - name: Include base-tools role
       ansible.builtin.include_role:
