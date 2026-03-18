@@ -24,19 +24,213 @@
   become: true
   tags: base-tools, apt, molecule-notest
 
-# Install Debian applications (supports apt_repository, deb, and binary install methods)
-- name: Install Debian applications
-  ansible.builtin.include_tasks:
-    file: install-debian-app.yml
-    apply:
-      tags: [base-tools, desktop-apps]
-  loop: "{{ (debian_applications | default({})) | dict2items }}"
-  loop_control:
-    loop_var: app
+# === apt_repository install method ===
+- name: Create keyrings directory for APT keys
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  become: true
   when:
     - debian_applications is defined
-    - app.value.enabled | default(true) | bool
-  tags: [base-tools, desktop-apps]
+    - (debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list | length) > 0
+  tags: base-tools, desktop-apps
+
+- name: Download and convert GPG keys for third-party repositories
+  ansible.builtin.shell: |
+    curl -fsSL --retry 3 --retry-delay 5 "{{ item.value.key_url }}" | gpg --dearmor --yes -o /etc/apt/keyrings/{{ item.key }}.gpg
+    chmod 644 /etc/apt/keyrings/{{ item.key }}.gpg
+  args:
+    creates: "/etc/apt/keyrings/{{ item.key }}.gpg"
+  become: true
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list }}"
+  when: debian_applications is defined
+  tags: base-tools, desktop-apps
+
+- name: Add third-party APT repositories with signed-by
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/{{ item.key }}.gpg{{ ' ' + item.value.repo_options if item.value.repo_options else '' }}] {{ item.value.repo_url }}"
+    state: present
+    filename: "{{ item.key }}"
+    update_cache: true
+  become: true
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list }}"
+  when: debian_applications is defined
+  tags: base-tools, desktop-apps
+
+- name: Install applications from third-party repositories
+  ansible.builtin.apt:
+    name: "{{ item.value.package }}"
+    state: present
+  become: true
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'apt_repository') | selectattr('value.enabled', 'equalto', true) | list }}"
+  when: debian_applications is defined
+  # Allow GUI apps to fail in containers (Chrome, Spotify need X11/Wayland dependencies)
+  failed_when: false
+  tags: base-tools, desktop-apps
+
+# === deb install method ===
+- name: Install applications via .deb packages
+  when:
+    - debian_applications is defined
+    - (debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'deb') | selectattr('value.enabled', 'equalto', true) | list | length) > 0
+  tags: base-tools, desktop-apps
+  block:
+    - name: Set list of deb applications
+      ansible.builtin.set_fact:
+        _deb_apps: "{{ debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'deb') | selectattr('value.enabled', 'equalto', true) | list }}"
+
+    - name: Check if deb applications are already installed
+      ansible.builtin.command: "dpkg -s {{ item.value.package_name }}"
+      register: _deb_installed
+      loop: "{{ _deb_apps }}"
+      failed_when: false
+      changed_when: false
+      check_mode: false
+
+    - name: Check if deb files already exist
+      ansible.builtin.stat:
+        path: "/tmp/{{ item.value.package_name }}.deb"
+      register: _deb_file_stat
+      loop: "{{ _deb_apps }}"
+
+    - name: Build list of deb applications to download
+      ansible.builtin.set_fact:
+        _deb_to_process: >-
+          {{ _deb_to_process | default([]) +
+             ([_deb_apps[idx]] if _deb_installed.results[idx].rc != 0 and not _deb_file_stat.results[idx].stat.exists else []) }}
+      loop: "{{ range(_deb_apps | length) | list }}"
+      loop_control:
+        loop_var: idx
+
+    - name: Get latest version for deb applications
+      ansible.builtin.uri:
+        url: "{{ item.value.version_url }}"
+        return_content: true
+      register: _deb_version_pages
+      loop: "{{ _deb_to_process | default([]) }}"
+      when:
+        - item.value.version_url is defined
+        - item.value.version_regex is defined
+      check_mode: false
+      retries: 3
+      delay: 5
+      until: _deb_version_pages is succeeded
+
+    - name: Extract versions from pages
+      ansible.builtin.set_fact:
+        _deb_versions: >-
+          {{ _deb_versions | default({}) |
+             combine({item.item.key: item.content | regex_search(item.item.value.version_regex, '\\1') | first}) }}
+      loop: "{{ _deb_version_pages.results | default([]) }}"
+      when:
+        - item is not skipped
+        - item.content is defined
+
+    - name: Download deb packages
+      ansible.builtin.get_url:
+        url: "{{ item.value.url_pattern | replace('{version}', (_deb_versions | default({}))[item.key] | default('')) }}"
+        dest: "/tmp/{{ item.value.package_name }}.deb"
+        mode: "0644"
+      register: _deb_downloads
+      loop: "{{ _deb_to_process | default([]) }}"
+      retries: 3
+      delay: 5
+      until: _deb_downloads is succeeded
+      # Allow downloads to fail in containers (network restrictions, old URLs, etc.)
+      failed_when: false
+
+    - name: Install deb packages
+      ansible.builtin.apt:
+        deb: "/tmp/{{ item.item.value.package_name }}.deb"
+        state: present
+      become: true
+      loop: "{{ _deb_downloads.results | default([]) }}"
+      when:
+        - item is not skipped
+        - item.changed is defined
+        - item.changed
+      # Allow installation to fail in containers (missing dependencies, etc.)
+      failed_when: false
+
+# Note: We do NOT cleanup .deb files to maintain idempotence
+# The file presence check prevents re-downloading on subsequent runs
+
+# === binary install method ===
+- name: Install binary applications
+  when:
+    - debian_applications is defined
+    - (debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'binary') | selectattr('value.enabled', 'equalto', true) | list | length) > 0
+  tags: base-tools, desktop-apps
+  block:
+    - name: Set list of binary applications
+      ansible.builtin.set_fact:
+        _binary_apps: "{{ debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'binary') | selectattr('value.enabled', 'equalto', true) | list }}"
+
+    - name: Check if binary applications are already installed
+      ansible.builtin.stat:
+        path: "{{ item.value.install_dir }}"
+      register: _binary_stat
+      loop: "{{ _binary_apps }}"
+
+    - name: Build list of binary applications to install
+      ansible.builtin.set_fact:
+        _binary_to_install: >-
+          {{ _binary_to_install | default([]) +
+             ([_binary_apps[idx]] if not _binary_stat.results[idx].stat.exists else []) }}
+      loop: "{{ range(_binary_apps | length) | list }}"
+      loop_control:
+        loop_var: idx
+
+    - name: Download binary application tarballs
+      ansible.builtin.get_url:
+        url: "{{ item.value.url }}"
+        dest: "/tmp/{{ item.key }}.tar.gz"
+        mode: "0644"
+      loop: "{{ _binary_to_install | default([]) }}"
+      retries: 3
+      delay: 5
+      until: _binary_downloads is succeeded
+      register: _binary_downloads
+      # Allow downloads to fail in containers (network issues, etc.)
+      failed_when: false
+
+    - name: Create binary application installation directories
+      ansible.builtin.file:
+        path: "{{ item.value.install_dir }}"
+        state: directory
+        mode: "0755"
+      become: true
+      loop: "{{ _binary_to_install | default([]) }}"
+      failed_when: false
+
+    - name: Extract binary application tarballs
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ item.key }}.tar.gz"
+        dest: "{{ item.value.install_dir }}"
+        remote_src: true
+        extra_opts: [--strip-components=1]
+      become: true
+      loop: "{{ _binary_to_install | default([]) }}"
+      when: not ansible_check_mode
+      failed_when: false
+
+    - name: Create binary application symlinks
+      ansible.builtin.file:
+        src: "{{ item.value.install_dir }}/{{ item.value.binary_path }}"
+        dest: "/usr/local/bin/{{ item.value.binary_name }}"
+        state: link
+      become: true
+      loop: "{{ _binary_to_install | default([]) }}"
+      when: not ansible_check_mode
+      failed_when: false
+
+    - name: Clean up binary application tarballs
+      ansible.builtin.file:
+        path: "/tmp/{{ item.key }}.tar.gz"
+        state: absent
+      loop: "{{ _binary_to_install | default([]) }}"
+      failed_when: false
 
 - name: Install Python CLI tools via uv
   tags: base-tools, additional
