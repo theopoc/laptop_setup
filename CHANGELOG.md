@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.24.0](https://github.com/TheoPoc/laptop_setup/compare/v2.23.1...v2.24.0) (2026-03-18)
+
+### ✨ Features
+
+* install taws ([fc99e0e](https://github.com/TheoPoc/laptop_setup/commit/fc99e0ed99a29f844a14fc4178af6aa428bfd170))
+
+### 👷 CI/CD
+
+* restore monolithic pipeline with integration tests on push ([dfccabd](https://github.com/TheoPoc/laptop_setup/commit/dfccabd0df85bba7fee5f147ac51a8f6793aafba))
+
 ## [2.23.1](https://github.com/TheoPoc/laptop_setup/compare/v2.23.0...v2.23.1) (2026-03-16)
 
 ### 🐛 Bug Fixes
