@@ -126,6 +126,7 @@
       when:
         - item is not skipped
         - item.content is defined
+        - item.content | regex_search(item.item.value.version_regex) is not none
 
     - name: Download deb packages
       ansible.builtin.get_url:
