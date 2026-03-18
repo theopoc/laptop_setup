@@ -124,10 +124,7 @@ debian_applications:
   slack:
     enabled: true
     install_method: deb
-    url_pattern: "https://downloads.slack-edge.com/desktop-releases/linux/x64/{version}/slack-desktop-{version}-amd64.deb"
-    version_url: "https://slack.com/downloads/instructions/linux"
-    version_regex: 'desktop-releases/linux/x64/([0-9]+\.[0-9]+\.[0-9]+)'
-    package_name: "slack-desktop"
+    url_pattern: "https://downloads.slack-edge.com/desktop-releases/linux/x64/4.42.127/slack-desktop-4.42.127-amd64.deb"
   postman:
     enabled: true
     install_method: binary

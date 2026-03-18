@@ -66,91 +66,17 @@
 
 # === deb install method ===
 - name: Install applications via .deb packages
-  when:
-    - debian_applications is defined
-    - (debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'deb') | selectattr('value.enabled', 'equalto', true) | list | length) > 0
+  ansible.builtin.apt:
+    deb: "{{ item.value.url_pattern }}"
+    state: present
+  become: true
+  loop: "{{ (debian_applications | default({})) | dict2items | selectattr('value.install_method', 'equalto', 'deb') | selectattr('value.enabled', 'equalto', true) | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: debian_applications is defined
+  # Allow installation to fail in containers (missing dependencies, etc.)
+  failed_when: false
   tags: base-tools, desktop-apps
-  block:
-    - name: Set list of deb applications
-      ansible.builtin.set_fact:
-        _deb_apps: "{{ debian_applications | dict2items | selectattr('value.install_method', 'equalto', 'deb') | selectattr('value.enabled', 'equalto', true) | list }}"
-
-    - name: Check if deb applications are already installed
-      ansible.builtin.command: "dpkg -s {{ item.value.package_name }}"
-      register: _deb_installed
-      loop: "{{ _deb_apps }}"
-      failed_when: false
-      changed_when: false
-      check_mode: false
-
-    - name: Check if deb files already exist
-      ansible.builtin.stat:
-        path: "/tmp/{{ item.value.package_name }}.deb"
-      register: _deb_file_stat
-      loop: "{{ _deb_apps }}"
-
-    - name: Build list of deb applications to download
-      ansible.builtin.set_fact:
-        _deb_to_process: >-
-          {{ _deb_to_process | default([]) +
-             ([_deb_apps[idx]] if _deb_installed.results[idx].rc != 0 and not _deb_file_stat.results[idx].stat.exists else []) }}
-      loop: "{{ range(_deb_apps | length) | list }}"
-      loop_control:
-        loop_var: idx
-
-    - name: Get latest version for deb applications
-      ansible.builtin.uri:
-        url: "{{ item.value.version_url }}"
-        return_content: true
-      register: _deb_version_pages
-      loop: "{{ _deb_to_process | default([]) }}"
-      when:
-        - item.value.version_url is defined
-        - item.value.version_regex is defined
-      check_mode: false
-      retries: 3
-      delay: 5
-      until: _deb_version_pages is succeeded
-
-    - name: Extract versions from pages
-      ansible.builtin.set_fact:
-        _deb_versions: >-
-          {{ _deb_versions | default({}) |
-             combine({item.item.key: (item.content | regex_search(item.item.value.version_regex, '\\1') or [''])[0]}) }}
-      loop: "{{ _deb_version_pages.results | default([]) }}"
-      when:
-        - item is not skipped
-        - item.content is defined
-        - item.content | regex_search(item.item.value.version_regex) is not none
-
-    - name: Download deb packages
-      ansible.builtin.get_url:
-        url: "{{ item.value.url_pattern | replace('{version}', (_deb_versions | default({}))[item.key] | default('')) }}"
-        dest: "/tmp/{{ item.value.package_name }}.deb"
-        mode: "0644"
-      register: _deb_downloads
-      loop: "{{ _deb_to_process | default([]) }}"
-      retries: 3
-      delay: 5
-      until: _deb_downloads is succeeded
-      # Allow downloads to fail in containers (network restrictions, old URLs, etc.)
-      failed_when: false
-
-    - name: Install deb packages
-      ansible.builtin.apt:
-        deb: "/tmp/{{ item.item.value.package_name }}.deb"
-        state: present
-      become: true
-      loop: "{{ _deb_downloads.results | default([]) }}"
-      when:
-        - item is not skipped
-        - item.changed is defined
-        - item.changed
-      # Allow installation to fail in containers (missing dependencies, etc.)
-      failed_when: false
-
-# Note: We do NOT cleanup .deb files to maintain idempotence
-# The file presence check prevents re-downloading on subsequent runs
 
 # === binary install method ===
 - name: Install binary applications
