@@ -4,65 +4,16 @@
   gather_facts: true
   tasks:
     - name: Check if git is installed
-      ansible.builtin.command: which git
+      ansible.builtin.command: git --version
       register: git_installed
       changed_when: false
       failed_when: git_installed.rc != 0
 
-    - name: Check if python3 is installed
-      ansible.builtin.command: which python3
-      register: python_installed
-      changed_when: false
-      failed_when: python_installed.rc != 0
-
-    - name: Check if curl is installed
-      ansible.builtin.command: which curl
-      register: curl_installed
-      changed_when: false
-      failed_when: curl_installed.rc != 0
-
-    - name: Check if jq is installed
-      ansible.builtin.command: which jq
-      register: jq_installed
-      changed_when: false
-      failed_when: jq_installed.rc != 0
-
-    - name: Check if ripgrep is installed
-      ansible.builtin.command: which rg
-      register: ripgrep_installed
-      changed_when: false
-      failed_when: ripgrep_installed.rc != 0
-
-    - name: Check if htop is installed
-      ansible.builtin.command: which htop
-      register: htop_installed
-      changed_when: false
-      failed_when: htop_installed.rc != 0
-
-    - name: Check if shellcheck is installed
-      ansible.builtin.command: which shellcheck
-      register: shellcheck_installed
-      changed_when: false
-      failed_when: shellcheck_installed.rc != 0
-
     - name: Check if s5cmd is installed via mise (aqua type)
-      ansible.builtin.command: mise which s5cmd
+      ansible.builtin.command: mise exec s5cmd -- s5cmd version
       register: s5cmd_installed
       changed_when: false
       failed_when: s5cmd_installed.rc != 0
-
-    - name: Check if gopass is installed via mise (github type)
-      ansible.builtin.command: mise which gopass
-      register: gopass_installed
-      changed_when: false
-      failed_when: gopass_installed.rc != 0
-
-    - name: Check if snap is installed
-      ansible.builtin.command: which snap
-      register: snap_installed
-      changed_when: false
-      failed_when: snap_installed.rc != 0
-      when: ansible_facts.distribution == "Ubuntu"
 
     # --- apt_repository install method ---
     - name: Check GPG key was created (apt_repository method)
