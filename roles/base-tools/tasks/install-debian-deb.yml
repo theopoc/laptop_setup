@@ -1,0 +1,68 @@
+---
+# Install an application via direct .deb download (called per-app via include_tasks)
+# Expected variable: app (a dict2items element with app.key and app.value)
+
+- name: "Check if already installed - {{ app.key }}"
+  ansible.builtin.command: "dpkg -s {{ app.value.package_name }}"
+  register: deb_app_installed
+  failed_when: false
+  changed_when: false
+  check_mode: false
+
+- name: "Check if .deb file exists - {{ app.key }}"
+  ansible.builtin.stat:
+    path: "/tmp/{{ app.value.package_name }}.deb"
+  register: deb_app_file_exists
+
+- name: "Get latest version - {{ app.key }}"
+  ansible.builtin.uri:
+    url: "{{ app.value.version_url }}"
+    return_content: true
+  register: deb_app_version_page
+  check_mode: false
+  retries: 3
+  delay: 5
+  until: deb_app_version_page is succeeded
+  when:
+    - app.value.version_url is defined
+    - app.value.version_regex is defined
+    - deb_app_installed.rc != 0
+    - not deb_app_file_exists.stat.exists
+
+- name: "Extract version from page - {{ app.key }}"
+  ansible.builtin.set_fact:
+    deb_app_version: "{{ deb_app_version_page.content | regex_search(app.value.version_regex, '\\1') | first }}"
+  when:
+    - deb_app_version_page is defined
+    - deb_app_version_page.content is defined
+    - deb_app_version_page is not skipped
+
+- name: "Download .deb package - {{ app.key }}"
+  ansible.builtin.get_url:
+    url: "{{ app.value.url_pattern | replace('{version}', deb_app_version | default('')) }}"
+    dest: "/tmp/{{ app.value.package_name }}.deb"
+    mode: "0644"
+  retries: 3
+  delay: 5
+  until: deb_app_download is succeeded
+  when:
+    - deb_app_installed.rc != 0
+    - not deb_app_file_exists.stat.exists
+  # Allow downloads to fail in containers (network restrictions, old URLs, etc.)
+  failed_when: false
+  register: deb_app_download
+
+- name: "Install .deb package - {{ app.key }}"
+  ansible.builtin.apt:
+    deb: "/tmp/{{ app.value.package_name }}.deb"
+    state: present
+  become: true
+  when:
+    - deb_app_download is not skipped
+    - deb_app_download.changed is defined
+    - deb_app_download.changed
+  # Allow installation to fail in containers (missing dependencies, etc.)
+  failed_when: false
+
+# Note: We do NOT cleanup the .deb file to maintain idempotence
+# The file presence check prevents re-downloading on subsequent runs

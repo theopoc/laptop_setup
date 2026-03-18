@@ -106,33 +106,35 @@ ubuntu_apt_packages:
 ubuntu_snap_packages:
   - firefox
 
-debian_apt_repositories:
+debian_applications:
   google_chrome:
     enabled: true
+    install_method: apt_repository
     key_url: "https://dl.google.com/linux/linux_signing_key.pub"
     repo_url: "http://dl.google.com/linux/chrome/deb/ stable main"
     repo_options: "arch=amd64"
     package: "google-chrome-stable"
   spotify:
     enabled: true
+    install_method: apt_repository
     key_url: "https://download.spotify.com/debian/pubkey_5384CE82BA52C83A.asc"
     repo_url: "http://repository.spotify.com stable non-free"
     repo_options: ""
     package: "spotify-client"
-
-debian_deb_applications:
   slack:
     enabled: true
+    install_method: deb
     url_pattern: "https://downloads.slack-edge.com/desktop-releases/linux/x64/{version}/slack-desktop-{version}-amd64.deb"
-    version_url: "https://slack.com/downloads/linux"
+    version_url: "https://slack.com/downloads/instructions/linux"
+    version_regex: 'desktop-releases/linux/x64/([0-9]+\.[0-9]+\.[0-9]+)'
     package_name: "slack-desktop"
-
-debian_binary_applications:
   postman:
     enabled: true
+    install_method: binary
     url: "https://dl.pstmn.io/download/latest/linux64"
     install_dir: "/opt/postman"
     binary_name: "postman"
+    binary_path: "Postman"
 
 # ============================================================================
 # Iterm2 role

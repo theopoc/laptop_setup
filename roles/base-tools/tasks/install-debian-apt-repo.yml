@@ -1,0 +1,34 @@
+---
+# Install an application from a third-party APT repository (called per-app via include_tasks)
+# Expected variable: app (a dict2items element with app.key and app.value)
+
+- name: "Create keyrings directory"
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: "Download and convert GPG key - {{ app.key }}"
+  ansible.builtin.shell: |
+    curl -fsSL --retry 3 --retry-delay 5 "{{ app.value.key_url }}" | gpg --dearmor --yes -o /etc/apt/keyrings/{{ app.key }}.gpg
+    chmod 644 /etc/apt/keyrings/{{ app.key }}.gpg
+  args:
+    creates: "/etc/apt/keyrings/{{ app.key }}.gpg"
+  become: true
+
+- name: "Add APT repository - {{ app.key }}"
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/{{ app.key }}.gpg{{ ' ' + app.value.repo_options if app.value.repo_options else '' }}] {{ app.value.repo_url }}"
+    state: present
+    filename: "{{ app.key }}"
+    update_cache: true
+  become: true
+
+- name: "Install package - {{ app.key }}"
+  ansible.builtin.apt:
+    name: "{{ app.value.package }}"
+    state: present
+  become: true
+  # Allow GUI apps to fail in containers (Chrome, Spotify need X11/Wayland dependencies)
+  failed_when: false
