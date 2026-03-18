@@ -138,13 +138,13 @@
     # --- apt_repository install method ---
     - name: Check GPG key was created (apt_repository method)
       ansible.builtin.stat:
-        path: /etc/apt/keyrings/hashicorp.gpg
+        path: /etc/apt/keyrings/google_chrome.gpg
       register: apt_repo_key
       failed_when: not apt_repo_key.stat.exists
 
     - name: Check APT sources file was created (apt_repository method)
       ansible.builtin.stat:
-        path: /etc/apt/sources.list.d/hashicorp.list
+        path: /etc/apt/sources.list.d/google_chrome.list
       register: apt_repo_sources
       failed_when: not apt_repo_sources.stat.exists
 
