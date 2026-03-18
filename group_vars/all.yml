@@ -417,6 +417,17 @@ warp_workflows:
       - name: command
         description: "command"
         default_value: "sh"
+  - workflow_name: "Git restore specific file on specific commit"
+    workflow_command: !unsafe "git restore --source {{ commit_sha }} {{ filename }}"
+    workflow_tags:
+      - git
+    workflow_description: "Permet de récupérer un fichier tel qu'il était dans un commit spécifique ou sur une autre branche"
+    workflow_arguments:
+      - name: commit_sha
+        description: "commit ou branche"
+      - name: filename
+        description: "nom du fichier"
+        default_value: "default"
 
 ############################### DOCKER / CONTAINER VARIABLES ###########################
 
