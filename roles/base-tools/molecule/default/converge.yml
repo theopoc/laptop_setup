@@ -41,6 +41,30 @@
       "aqua:leg100/pug": latest
       "github:busser/tfautomv": latest
       "aqua:suzuki-shunsuke/tfmv": latest
+    # Test all three debian_applications install methods
+    debian_applications:
+      # apt_repository: adds GPG key + third-party APT repo, installs package
+      mise_repo_test:
+        enabled: true
+        install_method: apt_repository
+        key_url: "https://mise.jdx.dev/gpg-key.pub"
+        repo_url: "https://mise.jdx.dev/deb stable main"
+        repo_options: ""
+        package: "mise"
+      # deb: downloads and installs a .deb package (no version detection)
+      micro:
+        enabled: true
+        install_method: deb
+        url_pattern: "https://github.com/zyedidia/micro/releases/download/v2.0.14/micro-2.0.14-amd64.deb"
+        package_name: "micro"
+      # binary: downloads tarball, extracts to install_dir, creates symlink
+      delta:
+        enabled: true
+        install_method: binary
+        url: "https://github.com/dandavison/delta/releases/download/0.18.2/delta-0.18.2-x86_64-unknown-linux-musl.tar.gz"
+        install_dir: "/opt/delta"
+        binary_name: "delta"
+        binary_path: "delta"
   tasks:
     - name: Include base-tools role
       ansible.builtin.include_role:
