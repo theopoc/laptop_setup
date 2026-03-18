@@ -121,7 +121,7 @@
       ansible.builtin.set_fact:
         _deb_versions: >-
           {{ _deb_versions | default({}) |
-             combine({item.item.key: item.content | regex_search(item.item.value.version_regex, '\\1') | first}) }}
+             combine({item.item.key: (item.content | regex_search(item.item.value.version_regex, '\\1') or [''])[0]}) }}
       loop: "{{ _deb_version_pages.results | default([]) }}"
       when:
         - item is not skipped
