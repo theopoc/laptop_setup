@@ -31,16 +31,8 @@
       - snapd
     mise_tools:
       uv: latest
-      yq: latest
-      lsd: latest
-      dive: latest
       "aqua:peak/s5cmd": latest
       "github:gopasspw/gopass": latest
-      "github:fishi0x01/vsh": latest
-      "github:falcosuessgott/vkv": latest
-      "aqua:leg100/pug": latest
-      "github:busser/tfautomv": latest
-      "aqua:suzuki-shunsuke/tfmv": latest
     # Test all three debian_applications install methods
     debian_applications:
       # apt_repository: adds GPG key + third-party APT repo, installs package
@@ -52,11 +44,11 @@
         repo_options: "arch=amd64"
         package: "google-chrome-stable"
       # deb: downloads and installs a .deb package (no version detection)
-      micro:
+      bat:
         enabled: true
         install_method: deb
-        url_pattern: "https://github.com/zyedidia/micro/releases/download/v2.0.14/micro-2.0.14-amd64.deb"
-        package_name: "micro"
+        url_pattern: "https://github.com/sharkdp/bat/releases/download/v0.24.0/bat_0.24.0_amd64.deb"
+        package_name: "bat"
       # binary: downloads tarball, extracts to install_dir, creates symlink
       delta:
         enabled: true

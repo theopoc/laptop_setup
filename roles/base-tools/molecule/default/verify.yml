@@ -39,94 +39,23 @@
       changed_when: false
       failed_when: htop_installed.rc != 0
 
-    - name: Check if yq is installed via mise
-      ansible.builtin.command: mise which yq
-      register: yq_installed
-      changed_when: false
-      failed_when: yq_installed.rc != 0
-
-    - name: Verify yq version
-      ansible.builtin.shell: |
-        eval "$(mise activate bash)"
-        yq --version
-      args:
-        executable: /bin/bash
-      register: yq_version
-      changed_when: false
-
-    - name: Display yq version
-      ansible.builtin.debug:
-        msg: "yq version: {{ yq_version.stdout }}"
-
     - name: Check if shellcheck is installed
       ansible.builtin.command: which shellcheck
       register: shellcheck_installed
       changed_when: false
       failed_when: shellcheck_installed.rc != 0
 
-    - name: Check if lsd is installed via mise
-      ansible.builtin.command: mise which lsd
-      register: lsd_installed
-      changed_when: false
-      failed_when: lsd_installed.rc != 0
-
-    - name: Check if tldr is installed
-      ansible.builtin.shell: |
-        eval "$(mise activate bash)"
-        uvx tldr tar
-      register: tldr_installed
-      args:
-        executable: /bin/bash
-      changed_when: false
-      failed_when: tldr_installed.rc != 0
-
-    - name: Check if dive is installed via mise
-      ansible.builtin.command: mise which dive
-      register: dive_installed
-      changed_when: false
-      failed_when: dive_installed.rc != 0
-
-    - name: Check if gopass is installed via mise
-      ansible.builtin.command: mise which gopass
-      register: gopass_installed
-      changed_when: false
-      failed_when: gopass_installed.rc != 0
-
-    - name: Check if s5cmd is installed via mise
+    - name: Check if s5cmd is installed via mise (aqua type)
       ansible.builtin.command: mise which s5cmd
       register: s5cmd_installed
       changed_when: false
       failed_when: s5cmd_installed.rc != 0
 
-    - name: Check if vsh is installed via mise
-      ansible.builtin.command: mise which vsh
-      register: vsh_installed
+    - name: Check if gopass is installed via mise (github type)
+      ansible.builtin.command: mise which gopass
+      register: gopass_installed
       changed_when: false
-      failed_when: vsh_installed.rc != 0
-
-    - name: Check if vkv is installed via mise
-      ansible.builtin.command: mise which vkv
-      register: vkv_installed
-      changed_when: false
-      failed_when: vkv_installed.rc != 0
-
-    - name: Check if pug is installed via mise
-      ansible.builtin.command: mise which pug
-      register: pug_installed
-      changed_when: false
-      failed_when: pug_installed.rc != 0
-
-    - name: Check if tfautomv is installed via mise
-      ansible.builtin.command: mise which tfautomv
-      register: tfautomv_installed
-      changed_when: false
-      failed_when: tfautomv_installed.rc != 0
-
-    - name: Check if tfmv is installed via mise
-      ansible.builtin.command: mise which tfmv
-      register: tfmv_installed
-      changed_when: false
-      failed_when: tfmv_installed.rc != 0
+      failed_when: gopass_installed.rc != 0
 
     - name: Check if snap is installed
       ansible.builtin.command: which snap
@@ -149,11 +78,11 @@
       failed_when: not apt_repo_sources.stat.exists
 
     # --- deb install method ---
-    - name: Check micro is installed (deb method)
-      ansible.builtin.command: which micro
-      register: micro_installed
+    - name: Check bat is installed (deb method)
+      ansible.builtin.command: which bat
+      register: bat_installed
       changed_when: false
-      failed_when: micro_installed.rc != 0
+      failed_when: bat_installed.rc != 0
 
     # --- binary install method ---
     - name: Check delta install directory exists (binary method)
