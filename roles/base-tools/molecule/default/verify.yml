@@ -7,43 +7,71 @@
       ansible.builtin.command: git --version
       register: git_installed
       changed_when: false
-      failed_when: git_installed.rc != 0
+
+    - name: Assert git is installed
+      ansible.builtin.assert:
+        that: git_installed.rc == 0
+        fail_msg: "git is not installed"
 
     - name: Check if s5cmd is installed via mise (aqua type)
       ansible.builtin.command: mise exec s5cmd -- s5cmd version
       register: s5cmd_installed
       changed_when: false
-      failed_when: s5cmd_installed.rc != 0
+
+    - name: Assert s5cmd is installed via mise (aqua type)
+      ansible.builtin.assert:
+        that: s5cmd_installed.rc == 0
+        fail_msg: "s5cmd is not installed via mise (aqua type)"
 
     # --- apt_repository install method ---
     - name: Check GPG key was created (apt_repository method)
       ansible.builtin.stat:
         path: /etc/apt/keyrings/google_chrome.gpg
       register: apt_repo_key
-      failed_when: not apt_repo_key.stat.exists
+
+    - name: Assert GPG key was created (apt_repository method)
+      ansible.builtin.assert:
+        that: apt_repo_key.stat.exists
+        fail_msg: "GPG key /etc/apt/keyrings/google_chrome.gpg was not created"
 
     - name: Check APT sources file was created (apt_repository method)
       ansible.builtin.stat:
         path: /etc/apt/sources.list.d/google_chrome.list
       register: apt_repo_sources
-      failed_when: not apt_repo_sources.stat.exists
+
+    - name: Assert APT sources file was created (apt_repository method)
+      ansible.builtin.assert:
+        that: apt_repo_sources.stat.exists
+        fail_msg: "APT sources file /etc/apt/sources.list.d/google_chrome.list was not created"
 
     # --- deb install method ---
     - name: Check bat is installed (deb method)
       ansible.builtin.command: which bat
       register: bat_installed
       changed_when: false
-      failed_when: bat_installed.rc != 0
+
+    - name: Assert bat is installed (deb method)
+      ansible.builtin.assert:
+        that: bat_installed.rc == 0
+        fail_msg: "bat is not installed (deb method)"
 
     # --- binary install method ---
     - name: Check delta install directory exists (binary method)
       ansible.builtin.stat:
         path: /opt/delta
       register: delta_dir
-      failed_when: not delta_dir.stat.exists
+
+    - name: Assert delta install directory exists (binary method)
+      ansible.builtin.assert:
+        that: delta_dir.stat.exists
+        fail_msg: "delta install directory /opt/delta does not exist"
 
     - name: Check delta symlink exists (binary method)
       ansible.builtin.stat:
         path: /usr/local/bin/delta
       register: delta_symlink
-      failed_when: not delta_symlink.stat.exists
+
+    - name: Assert delta symlink exists (binary method)
+      ansible.builtin.assert:
+        that: delta_symlink.stat.exists
+        fail_msg: "delta symlink /usr/local/bin/delta does not exist"
