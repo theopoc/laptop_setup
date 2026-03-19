@@ -18,5 +18,5 @@
   register: curl_install_result
   retries: 3
   delay: 5
-  until: curl_install_result.rc == 0
+  until: curl_install_result is skipped or curl_install_result.rc == 0
   tags: ['claude-code']
