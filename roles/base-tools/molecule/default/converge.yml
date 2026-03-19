@@ -10,6 +10,7 @@
       - git
     ubuntu_apt_packages:
       - git
+      - snapd
     mise_tools:
       uv: latest
       "aqua:peak/s5cmd": latest
