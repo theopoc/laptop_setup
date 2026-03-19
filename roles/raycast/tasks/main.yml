@@ -1,6 +1,0 @@
----
-# Main task file for raycast role
-
-- name: Install Raycast
-  ansible.builtin.include_tasks: install-Darwin.yml
-  tags: raycast

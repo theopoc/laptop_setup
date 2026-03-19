@@ -1,5 +1,0 @@
----
-# defaults file for roles/raycast
-
-raycast_enabled: true
-raycast_cask_name: raycast
