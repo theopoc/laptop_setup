@@ -178,7 +178,7 @@
       args:
         executable: /bin/bash
       register: install_python_cli_tools
-      when: uv_cli_missing | length > 0
+      when: item not in uv_cli_missing.stdout
       changed_when: not "is already installed" in install_python_cli_tools.stderr
       loop:
         - tldr

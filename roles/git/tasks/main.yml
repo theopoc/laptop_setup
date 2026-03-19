@@ -13,14 +13,9 @@
         - "vars"
   tags: git
 
-- name: Install Debian specific installation tasks
-  ansible.builtin.include_tasks: "install-Debian.yml"
-  when: ansible_facts.distribution == "Debian"
-  tags: git
-
-- name: Install Ubuntu specific installation tasks
-  ansible.builtin.include_tasks: "install-Ubuntu.yml"
-  when: ansible_facts.distribution == "Ubuntu"
+- name: Include OS-specific installation tasks
+  ansible.builtin.include_tasks: "install-{{ ansible_facts.os_family }}.yml"
+  when: ansible_facts.os_family == "Debian"
   tags: git
 
 - name: Configure git

@@ -2,7 +2,7 @@
 - name: Install Cursor extensions
   ansible.builtin.command:
     cmd: "{{ cursor_cli_path }} --install-extension {{ item.id | default(item.name) }}"
-  with_items: "{{ cursor_extensions }}"
+  loop: "{{ cursor_extensions }}"
   register: cursor_result
   changed_when: "'already installed' not in cursor_result.stdout"
   when: (item.id | default(item.name)) not in cursor_extensions_exclude

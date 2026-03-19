@@ -11,7 +11,7 @@
 - name: Display Rancher Desktop configuration
   ansible.builtin.debug:
     var: rancher_desktop
-    verbosity: 0
+    verbosity: 1
 
 - name: Get latest Rancher Desktop release info
   ansible.builtin.uri:
