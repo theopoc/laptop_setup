@@ -19,6 +19,8 @@
 - name: Install Claude Code via curl script with retry logic
   ansible.builtin.shell:
     cmd: curl -fsSL {{ claude_code_install_script_url }} | bash
+  args:
+    creates: "{{ claude_code_binary_path }}"
   register: curl_install_result
   retries: 3
   delay: 5
