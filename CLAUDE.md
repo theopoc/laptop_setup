@@ -120,7 +120,6 @@ task destroy cursor        # Clean up cursor role test container
 - iterm2
 - mise
 - rancher-desktop
-- raycast
 - uv
 - vim
 - warp
@@ -130,6 +129,7 @@ task destroy cursor        # Clean up cursor role test container
 
 - rosetta - Rosetta 2 installation for Apple Silicon Macs (requires macOS)
 - macos_settings - macOS system settings configuration (requires macOS)
+- raycast - Raycast launcher installation (requires macOS)
 
 **Important:** Molecule uses Docker as the driver. Tests run in Ubuntu 24.04 (geerlingguy/docker-ubuntu2404-ansible) and Debian 12 (geerlingguy/docker-debian12-ansible) containers. macOS-only roles cannot be tested in containers and are automatically excluded from CI pipeline testing.
 
