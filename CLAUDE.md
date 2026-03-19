@@ -120,6 +120,7 @@ task destroy cursor        # Clean up cursor role test container
 - iterm2
 - mise
 - rancher-desktop
+- raycast
 - uv
 - vim
 - warp

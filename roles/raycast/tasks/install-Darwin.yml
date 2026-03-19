@@ -1,0 +1,15 @@
+---
+# macOS installation tasks for Raycast
+
+- name: Check if Raycast is already installed
+  ansible.builtin.stat:
+    path: /Applications/Raycast.app
+  register: raycast_installed
+  changed_when: false
+
+- name: Install Raycast via Homebrew
+  community.general.homebrew_cask:
+    name: "{{ raycast_cask_name }}"
+    state: present
+    path: "{{ raycast_homebrew_path }}"
+  when: not raycast_installed.stat.exists

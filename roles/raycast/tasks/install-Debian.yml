@@ -1,0 +1,6 @@
+---
+# Raycast is a macOS-only application
+
+- name: Display Raycast unavailability message
+  ansible.builtin.debug:
+    msg: "Raycast is a macOS-only application and cannot be installed on Linux/Debian systems."

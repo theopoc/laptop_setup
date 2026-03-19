@@ -17,6 +17,9 @@
     - role: iterm2
       tags: ["iterm2"]
       when: ansible_facts.os_family == 'Darwin' and iterm2_enabled | bool
+    - role: raycast
+      tags: ["raycast"]
+      when: ansible_facts.os_family == 'Darwin' and raycast_enabled | bool
     - role: warp
       tags: ["warp"]
       when: warp_enabled | bool
