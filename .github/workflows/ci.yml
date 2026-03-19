@@ -177,41 +177,6 @@ jobs:
         env:
           MISE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # Generate documentation
-  documentation:
-    name: Generate Documentation
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: integration-test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Generate role documentation
-        run: |
-          pip install ansible ansible-doc-extractor
-
-          # Generate README for each role
-          for role in roles/*/; do
-            if [ -f "$role/meta/main.yml" ]; then
-              echo "Generating docs for $(basename $role)"
-              # Add your documentation generation logic here
-            fi
-          done
-
-      - name: Check documentation is up to date
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Documentation is out of date. Please regenerate."
-            git diff
-            exit 1
-          fi
-
   # Notify on completion
   notify:
     name: Notify Results
