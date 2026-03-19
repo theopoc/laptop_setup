@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.26.1](https://github.com/TheoPoc/laptop_setup/compare/v2.26.0...v2.26.1) (2026-03-19)
+
+### ♻️ Code Refactoring
+
+* **roles:** reduce duplication and fix bugs across ansible roles ([#124](https://github.com/TheoPoc/laptop_setup/issues/124)) ([b2da1be](https://github.com/TheoPoc/laptop_setup/commit/b2da1be588be1be96943af0eef7fc759b8366e21)), closes [#125](https://github.com/TheoPoc/laptop_setup/issues/125)
+
+### 🔧 Chores
+
+* **deps:** Update dependency uv to v0.10.11 ([#121](https://github.com/TheoPoc/laptop_setup/issues/121)) ([bc067ae](https://github.com/TheoPoc/laptop_setup/commit/bc067ae48552f8ead2da02623f17cd6d1ab0a787))
+* **deps:** Update GitHub Actions ([#122](https://github.com/TheoPoc/laptop_setup/issues/122)) ([1cfd40f](https://github.com/TheoPoc/laptop_setup/commit/1cfd40f24995d2c26e77da88fc9ef0c1760d3c5a))
+
 ## [2.26.0](https://github.com/TheoPoc/laptop_setup/compare/v2.25.1...v2.26.0) (2026-03-19)
 
 ### ✨ Features
