@@ -45,7 +45,6 @@
   ansible.builtin.shell: |
     /usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Normal Font" "{{ iterm2_font_name }} {{ iterm2_font_size }}"' {{ iterm2_plist_path }}
   when: iterm2_current_font.stdout != iterm2_font_name + " " + iterm2_font_size | string
-  changed_when: true
   tags: iterm2, fonts
 
 - name: Configure defaults
@@ -89,5 +88,4 @@
       ansible.builtin.shell: |
         cd /Users/{{ ansible_facts.user_id }}/iterm2/iterm2-color-schemes
         tools/import-scheme.sh 'schemes/{{ iterm2_color_schemes.selected_theme }}.itermcolors'
-      changed_when: true
       tags: iterm2, schemes

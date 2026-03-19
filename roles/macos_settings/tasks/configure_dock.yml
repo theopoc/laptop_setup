@@ -24,12 +24,10 @@
 
     - name: Dock - Remove all items from the Dock
       ansible.builtin.command: "{{ macos_settings_homebrew_path }}/dockutil --remove all"
-      changed_when: true
       notify: Kill Dock
 
     - name: Dock - Set the Dock items
       ansible.builtin.command: "{{ macos_settings_homebrew_path }}/dockutil --add {{ item }} --no-restart"
-      changed_when: true
       with_items: "{{ display_applications }}"
       notify: Kill Dock
 
