@@ -40,6 +40,8 @@ provisioner:
   playbooks:
     converge: converge.yml
     verify: verify.yml
+  options:
+    skip-tags: molecule-notest
   env:
     ANSIBLE_ALLOW_BROKEN_CONDITIONALS: "True"
     ANSIBLE_ROLES_PATH: ../../../
