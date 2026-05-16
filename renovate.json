@@ -51,7 +51,7 @@
       ],
       "groupName": "GitHub Actions",
       "commitMessageTopic": "GitHub Actions",
-      "pinDigests": false
+      "pinDigests": true
     },
     {
       "description": "Group Python dependencies (uv/pyproject.toml) updates",
