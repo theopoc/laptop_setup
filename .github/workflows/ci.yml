@@ -24,20 +24,20 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v26.4.0
+        uses: ansible/ansible-lint@665d9e07a1943254d2910faffc106adaf7ea7294 # v26.8.0
         with:
           requirements_file: requirements.yml
 
       - name: Run yamllint
-        uses: ibiqlik/action-yamllint@v3
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3
         with:
           config_file: .yamllint
 
       - name: Validate Ansible syntax
-        uses: dawidd6/action-ansible-playbook@v9
+        uses: dawidd6/action-ansible-playbook@126642a1c6ce512da255ef2b41e8ee90f0077474 # v9
         with:
           playbook: main.yml
           directory: ./
@@ -56,7 +56,7 @@ jobs:
       filters: ${{ steps.get-roles.outputs.filters }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Discover testable roles and generate filters
         id: get-roles
@@ -95,10 +95,10 @@ jobs:
       roles: ${{ steps.filter.outputs.changes }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Detect changed roles
-        uses: dorny/paths-filter@v4
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
         id: filter
         with:
           filters: ${{ needs.discover-roles.outputs.filters }}
@@ -125,15 +125,15 @@ jobs:
         role: ${{ github.ref == 'refs/heads/main' && fromJSON(needs.discover-roles.outputs.roles) || fromJSON(needs.detect-changes.outputs.roles) }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version-file: .python-version
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
 
       - name: Install dependencies
         run: uv sync
@@ -154,10 +154,10 @@ jobs:
     if: always() && needs.discover-roles.result == 'success' && (needs.detect-changes.result == 'success' || needs.detect-changes.result == 'skipped') && (needs.test-roles.result == 'success' || needs.test-roles.result == 'skipped')
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Cache mise tools
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ~/.local/share/mise
           key: mise-${{ runner.os }}-${{ hashFiles('group_vars/all.yml') }}
@@ -165,7 +165,7 @@ jobs:
             mise-${{ runner.os }}-
 
       - name: Run playbook integration test
-        uses: dawidd6/action-ansible-playbook@v9
+        uses: dawidd6/action-ansible-playbook@126642a1c6ce512da255ef2b41e8ee90f0077474 # v9
         with:
           playbook: main.yml
           directory: ./
@@ -201,7 +201,7 @@ jobs:
 
       - name: Send Telegram notification
         if: always()
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@390cf7345777cd821dba28c72f436a78bce19cc5 # master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
