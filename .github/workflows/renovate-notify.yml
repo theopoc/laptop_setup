@@ -1,0 +1,33 @@
+---
+name: Renovate Approval Notification
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions: {}
+
+jobs:
+  notify:
+    name: Notify Renovate Approval
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.pull_request.user.login == 'renovate[bot]' &&
+      contains(github.event.pull_request.labels.*.name, 'major-update')
+    steps:
+      # Keep this workflow metadata-only: never check out or execute PR code.
+      - name: Send Telegram notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          format: html
+          disable_web_page_preview: true
+          message: |
+            🤖 <b>Renovate approval required</b>
+
+            <b>Repository:</b> <code>${{ github.repository }}</code>
+            <b>Pull Request:</b> #${{ github.event.pull_request.number }}
+            <b>Update:</b> major (manual review required)
+
+            <a href="${{ github.event.pull_request.html_url }}">Review Pull Request</a>

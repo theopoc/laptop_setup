@@ -4,10 +4,12 @@ This guide explains how to configure Telegram notifications for GitHub Actions w
 
 ## Overview
 
-The CI/CD and Release workflows send notifications to Telegram on workflow completion, providing real-time updates about:
-- CI/CD pipeline status (success/failure)
-- New releases
-- New version tags
+Telegram notifications are sent only for:
+- CI/CD pipeline failures on any branch
+- Release workflow failures
+- Renovate major-update pull requests opened or reopened by `renovate[bot]` with the `major-update` label
+
+Successful runs, published releases, cancellations, and PR updates are silent. Renovate approval and auto-merge policies remain unchanged.
 
 ## Prerequisites
 
@@ -73,28 +75,20 @@ The CI/CD and Release workflows send notifications to Telegram on workflow compl
 
 ### 4. Test the Setup
 
-1. Make a commit and push to trigger the CI/CD workflow:
-   ```bash
-   git commit --allow-empty -m "test: trigger CI notification"
-   git push
-   ```
+1. After merging the workflows, confirm that a successful CI run sends no notification.
+2. On a temporary branch, introduce a deliberate lint failure and push. Confirm that Telegram receives a failure message linking to the run, then remove the deliberate failure.
+3. Confirm that cancelled runs remain silent.
+4. When Renovate next opens or reopens a major-update PR, confirm that one approval notification links to the PR. Ordinary PR updates should remain silent.
+5. Release failures send a notification; successful releases do not. Do not publish a test tag or deliberately break production releases to test notifications.
 
-2. Check Telegram - you should receive a notification when the workflow completes
-
-3. To test release notifications, create a test tag:
-   ```bash
-   git tag v0.0.1-test
-   git push origin v0.0.1-test
-   ```
+The Renovate notification workflow uses `pull_request_target` to access Telegram secrets. It reads event metadata only and never checks out PR code. It becomes active after merging into the default branch.
 
 ## Notification Examples
 
-### CI/CD Pipeline Notification
+### CI/CD Pipeline Failure
 
-When a CI/CD workflow runs, you'll receive a message like:
-
-```
-✅ CI/CD Pipeline success
+```text
+❌ CI/CD Pipeline failure
 
 Repository: username/laptop_setup
 Branch: main
@@ -103,41 +97,35 @@ Commit: abc1234
 Author: username
 
 Job Results:
-• Lint: ✅
-• Test Roles: ✅
-• Integration Test: ✅
+• Lint: ❌
+• Test Roles: ⏭️
+• Integration Test: ❌
 
 View Workflow Run
 ```
 
-### Release Notification
+### Release Failure
 
-When a new release is published:
-
-```
-🚀 New Release Published!
+```text
+❌ Release Failed
 
 Repository: username/laptop_setup
-Version: v1.2.3
+Branch: main
 Author: username
 
-View Release
-View Changelog
+View Workflow Run
 ```
 
-### Tag Creation Notification
+### Renovate Approval
 
-When a new version tag is created:
-
-```
-🏷️ New Tag Created
+```text
+🤖 Renovate approval required
 
 Repository: username/laptop_setup
-New Version: v1.2.3
-Bump Type: minor
-Author: username
+Pull Request: #123
+Update: major (manual review required)
 
-The release workflow will be triggered automatically.
+Review Pull Request
 ```
 
 ## Troubleshooting
@@ -145,9 +133,10 @@ The release workflow will be triggered automatically.
 ### Not Receiving Notifications
 
 1. **Check bot token**: Ensure `TELEGRAM_BOT_TOKEN` is correct
-2. **Check chat ID**: Ensure `TELEGRAM_CHAT_ID` is correct
-3. **Start bot**: Send `/start` to your bot in Telegram
-4. **Group permissions**: If using a group, ensure the bot is a member and has permission to send messages
+2. **Check notification conditions**: Successful runs and cancellations intentionally send nothing
+3. **Check chat ID**: Ensure `TELEGRAM_CHAT_ID` is correct
+4. **Start bot**: Send `/start` to your bot in Telegram
+5. **Group permissions**: If using a group, ensure the bot is a member and has permission to send messages
 
 ### Workflow Fails with "Forbidden" Error
 
@@ -173,8 +162,9 @@ If you see an error like `Bad Request: can't parse entities`:
 ## Customizing Notifications
 
 To modify notification content, edit the workflow files:
-- CI/CD notifications: `.github/workflows/ci.yml` (line 198-220)
-- Release notifications: `.github/workflows/release.yml` (line 105-120 and 180-196)
+- CI/CD notifications: `.github/workflows/ci.yml`
+- Release notifications: `.github/workflows/release.yml`
+- Renovate approvals: `.github/workflows/renovate-notify.yml`
 
 The notifications use Telegram's HTML format for better reliability. See [Telegram Bot API documentation](https://core.telegram.org/bots/api#html-style) for formatting options.
 
